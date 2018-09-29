@@ -34,8 +34,6 @@ namespace Suplex.UI.Wpf
             List<Type> rightTypes = EnumUtilities.GetRightTypes();
             cmdNewDaclAce.DropDownContent = rightTypes;
             cmdNewSaclAce.DropDownContent = rightTypes;
-
-            DragDropManager.AddDragDropCompletedHandler( tvwSecureObjects, tvwSecureObjects_DropCompleted );
         }
 
         public IDataAccessLayer SplxDal { get; set; } = null;
@@ -107,12 +105,5 @@ namespace Suplex.UI.Wpf
         {
             SplxDal.UpsertSecureObject( CurrentSecureObject );
         }
-
-        #region drag/drop
-        private void tvwSecureObjects_DropCompleted(object sender, DragDropCompletedEventArgs e)
-        {
-            //e.
-        }
-        #endregion
     }
 }

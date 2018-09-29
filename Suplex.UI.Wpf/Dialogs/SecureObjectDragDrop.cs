@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Windows;
+
 using Telerik.Windows.Controls;
 using Telerik.Windows.Controls.TreeListView;
 using Telerik.Windows.DragDrop;
-using Telerik.Windows.DragDrop.Behaviors;
+
+using Suplex.Security.AclModel;
 
 namespace Suplex.UI.Wpf
 {
@@ -109,12 +110,9 @@ namespace Suplex.UI.Wpf
 
                 var draggedItem = sourceRow.Item;
 
-                DragDropPayloadManager.SetData( dataObject, __dragSource, new Collection<object>() { draggedItem } );
+                DragDropPayloadManager.SetData( dataObject, __dragSource, draggedItem );
                 e.Data = dataObject;
 
-                //var screenshotVisualProvider = new ScreenshotDragVisualProvider();
-                //e.DragVisual = screenshotVisualProvider.CreateDragVisual( new DragVisualProviderState( e.RelativeStartPoint, new List<object>() { draggedItem }, new List<DependencyObject>() { sourceRow }, sender as FrameworkElement ) );
-                //e.DragVisualOffset = new Point( 0, 0 );
                 _originalSource = sourceRow.Item;
                 SourceCollection = sourceRow.ParentRow != null ? (IList)sourceRow.ParentRow.Items.SourceCollection : (IList)sourceRow.GridViewDataControl.ItemsSource;
             }
@@ -122,17 +120,15 @@ namespace Suplex.UI.Wpf
 
         private void OnDragOver(object sender, Telerik.Windows.DragDrop.DragEventArgs e)
         {
-            object sourceItem = null;
-            if( DragDropPayloadManager.GetDataFromObject( e.Data, __dragSource ) is Collection<object> payload && payload.Count > 0 )
-                sourceItem = payload[0];
+            object sourceItem = DragDropPayloadManager.GetDataFromObject( e.Data, __dragSource );
 
-            var destinationRow = (e.OriginalSource as TreeListViewRow) ?? (e.OriginalSource as FrameworkElement).ParentOfType<TreeListViewRow>();
+            TreeListViewRow destinationRow = (e.OriginalSource as TreeListViewRow) ?? (e.OriginalSource as FrameworkElement).ParentOfType<TreeListViewRow>();
             if( destinationRow != null && destinationRow.Item != sourceItem )
             {
                 object targetItem = destinationRow.Item;
                 e.Effects = !IsChildOf( destinationRow, _originalSource ) ? DragDropEffects.Move : DragDropEffects.None;
                 if( e.Effects == DragDropEffects.Move )
-                    DragDropPayloadManager.SetData( e.Data, __dragTarget, new Collection<object>() { targetItem } );
+                    DragDropPayloadManager.SetData( e.Data, __dragTarget, targetItem );
             }
             else
                 e.Effects = DragDropEffects.None;
@@ -160,12 +156,11 @@ namespace Suplex.UI.Wpf
         {
             if( e.Data != null && e.AllowedEffects != DragDropEffects.None )
             {
-                Collection<object> payload = DragDropPayloadManager.GetDataFromObject( e.Data, __dragSource ) as Collection<object>;
+                SecureObject sourceItem = DragDropPayloadManager.GetDataFromObject( e.Data, __dragSource ) as SecureObject;
+                SecureObject targetItem = DragDropPayloadManager.GetDataFromObject( e.Data, __dragTarget ) as SecureObject;
+                IList<SecureObject> storeList = AssociatedTreeListView.DataContext as IList<SecureObject>;
+                sourceItem.ChangeParent( targetItem, storeList );
             }
-        }
-
-        private void OnDragDropCompleted(object sender, DragDropCompletedEventArgs e)
-        {
         }
     }
 }
