@@ -96,6 +96,7 @@
     <Compile Include="Dialogs\SecureObjectDlg.xaml.cs">
       <DependentUpon>SecureObjectDlg.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\SecureObjectDragDrop.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

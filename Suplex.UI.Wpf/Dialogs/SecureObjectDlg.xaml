@@ -15,8 +15,9 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <telerik:RadTreeListView x:Name="tvwSecureObjects" GroupRenderMode="Flat" IsDragDropEnabled="True"
-                                 AutoGenerateColumns="False" AutoExpandItems="True" HorizontalAlignment="Stretch"
+        <telerik:RadTreeListView x:Name="tvwSecureObjects" AutoGenerateColumns="False"
+                                 GroupRenderMode="Flat" AutoExpandItems="True"
+                                 IsDragDropEnabled="True" local:SecureObjectDragDrop.IsEnabled="True"
                                  ItemsSource="{Binding}" IsReadOnly="True"
                                  SelectionChanged="tvwSecureObjects_SelectionChanged">
             <telerik:RadTreeListView.ChildTableDefinitions>
