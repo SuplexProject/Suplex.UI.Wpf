@@ -1,13 +1,15 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Windows;
 
 using Telerik.Windows.Controls;
+using Telerik.Windows.Controls.GridView;
 using Telerik.Windows.Controls.TreeListView;
 using Telerik.Windows.DragDrop;
+using Telerik.Windows.DragDrop.Behaviors;
 
 using Suplex.Security.AclModel;
+
 
 namespace Suplex.UI.Wpf
 {
@@ -15,8 +17,7 @@ namespace Suplex.UI.Wpf
     {
         const string __dragSource = "DragSource";
         const string __dragTarget = "DragTarget";
-        private object _originalSource = null;
-        private static Dictionary<RadTreeListView, SecureObjectDragDrop> _instances;
+        static Dictionary<RadTreeListView, SecureObjectDragDrop> _instances;
 
         static SecureObjectDragDrop()
         {
@@ -57,7 +58,6 @@ namespace Suplex.UI.Wpf
         {
             DragDropManager.AddDragInitializeHandler( AssociatedTreeListView, OnDragInitialize, true );
             DragDropManager.AddDropHandler( AssociatedTreeListView, OnDrop, true );
-            DragDropManager.AddDragDropCompletedHandler( AssociatedTreeListView, OnDragDropCompleted, true );
             DragDropManager.AddDragOverHandler( AssociatedTreeListView, OnDragOver, true );
 
             AssociatedTreeListView.DataLoaded += RadTreeListView_DataLoaded;
@@ -67,7 +67,6 @@ namespace Suplex.UI.Wpf
         {
             DragDropManager.RemoveDragInitializeHandler( AssociatedTreeListView, OnDragInitialize );
             DragDropManager.RemoveDropHandler( AssociatedTreeListView, OnDrop );
-            DragDropManager.RemoveDragDropCompletedHandler( AssociatedTreeListView, OnDragDropCompleted );
             DragDropManager.RemoveDragOverHandler( AssociatedTreeListView, OnDragOver );
 
             AssociatedTreeListView.DataLoaded -= RadTreeListView_DataLoaded;
@@ -82,19 +81,15 @@ namespace Suplex.UI.Wpf
 
 
         #region public props
-        public IList SourceCollection { get; set; } = null;
-
         public RadTreeListView AssociatedTreeListView { get; set; }
 
         public static SecureObjectDragDrop GetAttachedBehavior(RadTreeListView gridview)
         {
             if( !_instances.ContainsKey( gridview ) )
-            {
                 _instances[gridview] = new SecureObjectDragDrop
                 {
                     AssociatedTreeListView = gridview
                 };
-            }
 
             return _instances[gridview];
         }
@@ -103,18 +98,12 @@ namespace Suplex.UI.Wpf
 
         private void OnDragInitialize(object sender, DragInitializeEventArgs e)
         {
-            var sourceRow = (e.OriginalSource as TreeListViewRow) ?? (e.OriginalSource as FrameworkElement).ParentOfType<TreeListViewRow>();
+            TreeListViewRow sourceRow = (e.OriginalSource as TreeListViewRow) ?? (e.OriginalSource as FrameworkElement).ParentOfType<TreeListViewRow>();
             if( sourceRow != null )
             {
-                var dataObject = DragDropPayloadManager.GeneratePayload( null );
-
-                var draggedItem = sourceRow.Item;
-
-                DragDropPayloadManager.SetData( dataObject, __dragSource, draggedItem );
+                IDragPayload dataObject = DragDropPayloadManager.GeneratePayload( null );
+                DragDropPayloadManager.SetData( dataObject, __dragSource, sourceRow.Item );
                 e.Data = dataObject;
-
-                _originalSource = sourceRow.Item;
-                SourceCollection = sourceRow.ParentRow != null ? (IList)sourceRow.ParentRow.Items.SourceCollection : (IList)sourceRow.GridViewDataControl.ItemsSource;
             }
         }
 
@@ -123,12 +112,17 @@ namespace Suplex.UI.Wpf
             object sourceItem = DragDropPayloadManager.GetDataFromObject( e.Data, __dragSource );
 
             TreeListViewRow destinationRow = (e.OriginalSource as TreeListViewRow) ?? (e.OriginalSource as FrameworkElement).ParentOfType<TreeListViewRow>();
+            GridViewScrollViewer destinationTree = (e.OriginalSource as GridViewScrollViewer) ?? (e.OriginalSource as FrameworkElement).ParentOfType<GridViewScrollViewer>();
+
             if( destinationRow != null && destinationRow.Item != sourceItem )
             {
-                object targetItem = destinationRow.Item;
-                e.Effects = !IsChildOf( destinationRow, _originalSource ) ? DragDropEffects.Move : DragDropEffects.None;
+                e.Effects = !IsChildOf( destinationRow, sourceItem ) ? DragDropEffects.Move : DragDropEffects.None;
                 if( e.Effects == DragDropEffects.Move )
-                    DragDropPayloadManager.SetData( e.Data, __dragTarget, targetItem );
+                    DragDropPayloadManager.SetData( e.Data, __dragTarget, destinationRow.Item );
+            }
+            else if( destinationTree != null )
+            {
+                DragDropPayloadManager.SetData( e.Data, __dragTarget, string.Empty );
             }
             else
                 e.Effects = DragDropEffects.None;
@@ -138,13 +132,11 @@ namespace Suplex.UI.Wpf
 
         private bool IsChildOf(TreeListViewRow dropTarget, object originalSource)
         {
-            var currentElement = dropTarget;
+            TreeListViewRow currentElement = dropTarget;
             while( currentElement != null )
             {
                 if( currentElement.Item == originalSource )
-                {
                     return true;
-                }
 
                 currentElement = currentElement.ParentRow;
             }
@@ -159,7 +151,12 @@ namespace Suplex.UI.Wpf
                 SecureObject sourceItem = DragDropPayloadManager.GetDataFromObject( e.Data, __dragSource ) as SecureObject;
                 SecureObject targetItem = DragDropPayloadManager.GetDataFromObject( e.Data, __dragTarget ) as SecureObject;
                 IList<SecureObject> storeList = AssociatedTreeListView.DataContext as IList<SecureObject>;
-                sourceItem.ChangeParent( targetItem, storeList );
+
+                if( sourceItem != null && storeList != null )
+                    sourceItem.ChangeParent( targetItem, storeList );
+
+                if( targetItem == null )
+                    AssociatedTreeListView.Rebind();
             }
         }
     }
