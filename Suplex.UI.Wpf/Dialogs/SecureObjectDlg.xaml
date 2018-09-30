@@ -17,7 +17,48 @@
 
         <GroupBox>
             <GroupBox.Header>
-                <TextBlock Text="Secure Objects" Style="{DynamicResource Header}" Margin="0,9" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="Secure Objects" Style="{DynamicResource Header}"/>
+
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <telerik:RadDropDownButton Name="cmdNewSecureObject"
+                                                   Content="New" Width="75" Margin="7,5,5,5">
+                            <telerik:RadDropDownButton.DropDownContentTemplate>
+                                <DataTemplate>
+                                    <ListBox SelectionChanged="cmdNewSecureObject_SelectionChanged">
+                                        <ListBoxItem Content="New Root" Tag="Root" />
+                                        <ListBoxItem Content="New Child" Tag="Child" />
+                                    </ListBox>
+                                </DataTemplate>
+                            </telerik:RadDropDownButton.DropDownContentTemplate>
+                        </telerik:RadDropDownButton>
+
+                        <telerik:RadDropDownButton Name="cmdDeleteSecureObject"
+                                                   Content="Delete" Width="75" Margin="5">
+                            <telerik:RadDropDownButton.DropDownContentTemplate>
+                                <DataTemplate>
+                                    <ListBox ItemsSource="{Binding}"
+                                             SelectionChanged="cmdDeleteSecureObject_SelectionChanged">
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="Delete " />
+                                                    <TextBlock Text="{Binding UniqueName}" />
+                                                    <TextBlock Text="?" />
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                </DataTemplate>
+                            </telerik:RadDropDownButton.DropDownContentTemplate>
+                        </telerik:RadDropDownButton>
+                    </StackPanel>
+                </Grid>
             </GroupBox.Header>
 
             <telerik:RadTreeListView x:Name="tvwSecureObjects" AutoGenerateColumns="False"
@@ -126,8 +167,8 @@
                             <CheckBox Style="{DynamicResource SliderCheckBox}" Margin="8"
                                       IsChecked="{Binding Security.DaclAllowInherit}"/>
 
-                            <telerik:RadDropDownButton Name="cmdNewDaclAce" Grid.Column="1"
-                                                    Content="New Permission" Width="150" Margin="7,5,5,5">
+                            <telerik:RadDropDownButton Name="cmdNewDaclAce"
+                                                       Content="New Permission" Width="150" Margin="7,5,5,5">
                                 <telerik:RadDropDownButton.DropDownContentTemplate>
                                     <DataTemplate>
                                         <ListBox ItemsSource="{Binding}"
@@ -183,8 +224,8 @@
                             <CheckBox Style="{DynamicResource SliderCheckBox}" Margin="8"
                                       IsChecked="{Binding Security.SaclAllowInherit}"/>
 
-                            <telerik:RadDropDownButton Name="cmdNewSaclAce" Grid.Column="1"
-                                                    Content="New Audit" Width="150" Margin="7,5,5,5">
+                            <telerik:RadDropDownButton Name="cmdNewSaclAce"
+                                                       Content="New Audit" Width="150" Margin="7,5,5,5">
                                 <telerik:RadDropDownButton.DropDownContentTemplate>
                                     <DataTemplate>
                                         <ListBox ItemsSource="{Binding}"

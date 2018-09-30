@@ -54,6 +54,45 @@ namespace Suplex.UI.Wpf
             }
         }
 
+        private void cmdNewSecureObject_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if( sender is ListBox listBox && listBox.SelectedItem is ListBoxItem item )
+            {
+                SecureObject secureObject = new SecureObject { UniqueName = "New Root" };
+
+                if( item.Tag.ToString() == "Root" )
+                    Store.SecureObjects.Add( secureObject );
+                else if( tvwSecureObjects.SelectedItem is SecureObject parent )
+                {
+                    secureObject.UniqueName = "New Child";
+                    secureObject.ChangeParent( parent, Store.SecureObjects ); ;
+                }
+
+                SplxDal.UpsertSecureObject( secureObject );
+
+                listBox.SelectedItem = null;
+                cmdNewSecureObject.IsOpen = false;
+                tvwSecureObjects.Rebind();
+            }
+        }
+
+        private void cmdDeleteSecureObject_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if( sender is ListBox listBox && listBox.SelectedItem is SecureObject secureObject )
+            {
+                if( secureObject.Parent == null )
+                    Store.SecureObjects.Remove( secureObject );
+                else
+                    secureObject.Parent.Children.Remove( secureObject );
+
+                SplxDal.DeleteSecureObject( secureObject.UId );
+
+                listBox.SelectedItem = null;
+                cmdDeleteSecureObject.IsOpen = false;
+                tvwSecureObjects.Rebind();
+            }
+        }
+
         private SecureObject CachedSecureObject { get; set; }
         public SecureObject CurrentSecureObject { get { return pnlDetail.DataContext as SecureObject; } set { pnlDetail.DataContext = value; } }
 
@@ -66,6 +105,7 @@ namespace Suplex.UI.Wpf
         {
             CurrentSecureObject = CachedSecureObject?.Clone( shallow: false );
             CurrentSecureObject?.EnableIsDirty();
+            cmdDeleteSecureObject.DropDownContent = new List<SecureObject> { CurrentSecureObject };
         }
 
         private void cmdNewDaclAce_SelectionChanged(object sender, SelectionChangedEventArgs e)
