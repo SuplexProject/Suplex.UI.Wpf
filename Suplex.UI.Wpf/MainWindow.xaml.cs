@@ -47,20 +47,20 @@ namespace Suplex.UI.Wpf
 
             GroupMembershipItem mx = new GroupMembershipItem
             {
-                GroupUId = groups[0].UId.Value,
-                MemberUId = users[0].UId.Value,
+                GroupUId = groups[0].UId,
+                MemberUId = users[0].UId,
                 IsMemberUser = true
             };
             GroupMembershipItem my = new GroupMembershipItem
             {
-                GroupUId = groups[0].UId.Value,
-                MemberUId = users[1].UId.Value,
+                GroupUId = groups[0].UId,
+                MemberUId = users[1].UId,
                 IsMemberUser = true
             };
             GroupMembershipItem mz = new GroupMembershipItem
             {
-                GroupUId = groups[0].UId.Value,
-                MemberUId = groups[1].UId.Value,
+                GroupUId = groups[0].UId,
+                MemberUId = groups[1].UId,
                 IsMemberUser = false
             };
             List<GroupMembershipItem> gm = new List<GroupMembershipItem>
@@ -72,9 +72,9 @@ namespace Suplex.UI.Wpf
             SecureObject child = new SecureObject() { UniqueName = "child" };
             DiscretionaryAcl childdacl = new DiscretionaryAcl
             {
-                new AccessControlEntry<FileSystemRight> { TrusteeUId = groups[0].UId.Value, Allowed = true, Right = FileSystemRight.FullControl },
-                new AccessControlEntry<FileSystemRight> { TrusteeUId = groups[1].UId.Value, Allowed = false, Right = FileSystemRight.Execute | FileSystemRight.List, Inheritable = false },
-                new AccessControlEntry<UIRight> { TrusteeUId = groups[2].UId.Value, Right= UIRight.Operate | UIRight.Visible }
+                new AccessControlEntry<FileSystemRight> { TrusteeUId = groups[0].UId, Allowed = true, Right = FileSystemRight.FullControl },
+                new AccessControlEntry<FileSystemRight> { TrusteeUId = groups[1].UId, Allowed = false, Right = FileSystemRight.Execute | FileSystemRight.List, Inheritable = false },
+                new AccessControlEntry<UIRight> { TrusteeUId = groups[2].UId, Right= UIRight.Operate | UIRight.Visible }
             };
             child.Security.Dacl = childdacl;
 
@@ -82,15 +82,15 @@ namespace Suplex.UI.Wpf
             SecureObject top = new SecureObject() { UniqueName = "top" };
             DiscretionaryAcl topdacl = new DiscretionaryAcl
             {
-                new AccessControlEntry<FileSystemRight> { TrusteeUId = groups[0].UId.Value, Allowed = true, Right = FileSystemRight.FullControl },
-                new AccessControlEntry<FileSystemRight> { TrusteeUId = groups[1].UId.Value, Allowed = false, Right = FileSystemRight.Execute | FileSystemRight.List, Inheritable = false },
-                new AccessControlEntry<UIRight> { TrusteeUId = groups[2].UId.Value, Right= UIRight.Operate | UIRight.Visible }
+                new AccessControlEntry<FileSystemRight> { TrusteeUId = groups[0].UId, Allowed = true, Right = FileSystemRight.FullControl },
+                new AccessControlEntry<FileSystemRight> { TrusteeUId = groups[1].UId, Allowed = false, Right = FileSystemRight.Execute | FileSystemRight.List, Inheritable = false },
+                new AccessControlEntry<UIRight> { TrusteeUId = groups[2].UId, Right= UIRight.Operate | UIRight.Visible }
             };
             SystemAcl topsacl = new SystemAcl
             {
-                new AccessControlEntryAudit<UIRight> { TrusteeUId = groups[0].UId.Value, Allowed = true, Right = UIRight.FullControl, Inheritable = false },
-                new AccessControlEntryAudit<FileSystemRight> { TrusteeUId = groups[1].UId.Value, Allowed = true, Right = FileSystemRight.Execute | FileSystemRight.ReadPermissions, Inheritable = false },
-                new AccessControlEntryAudit<FileSystemRight> { TrusteeUId = groups[2].UId.Value, Allowed = true, Right = FileSystemRight.Execute | FileSystemRight.List, Inheritable = false }
+                new AccessControlEntryAudit<UIRight> { TrusteeUId = groups[0].UId, Allowed = true, Right = UIRight.FullControl, Inheritable = false },
+                new AccessControlEntryAudit<FileSystemRight> { TrusteeUId = groups[1].UId, Allowed = true, Right = FileSystemRight.Execute | FileSystemRight.ReadPermissions, Inheritable = false },
+                new AccessControlEntryAudit<FileSystemRight> { TrusteeUId = groups[2].UId, Allowed = true, Right = FileSystemRight.Execute | FileSystemRight.List, Inheritable = false }
             };
             top.Security.Dacl = topdacl;
             top.Security.DaclAllowInherit = false;

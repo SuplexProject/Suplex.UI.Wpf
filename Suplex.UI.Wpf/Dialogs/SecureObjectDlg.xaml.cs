@@ -15,9 +15,8 @@ using System.Windows.Shapes;
 
 using Suplex.Security.AclModel;
 using Suplex.Security.AclModel.DataAccess;
+
 using Telerik.Windows.Controls;
-using Telerik.Windows.Controls.GridView;
-using Telerik.Windows.DragDrop;
 
 namespace Suplex.UI.Wpf
 {
@@ -55,12 +54,18 @@ namespace Suplex.UI.Wpf
             }
         }
 
+        private SecureObject CachedSecureObject { get; set; }
         public SecureObject CurrentSecureObject { get { return pnlDetail.DataContext as SecureObject; } set { pnlDetail.DataContext = value; } }
 
         private void tvwSecureObjects_SelectionChanged(object sender, SelectionChangeEventArgs e)
         {
-            SecureObject secureObject = tvwSecureObjects.SelectedItem as SecureObject;
-            CurrentSecureObject = secureObject?.Clone( shallow: false );
+            CachedSecureObject = tvwSecureObjects.SelectedItem as SecureObject;
+            CloneCachedToCurrent();
+        }
+        void CloneCachedToCurrent()
+        {
+            CurrentSecureObject = CachedSecureObject?.Clone( shallow: false );
+            CurrentSecureObject?.EnableIsDirty();
         }
 
         private void cmdNewDaclAce_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -79,6 +84,8 @@ namespace Suplex.UI.Wpf
 
                 listBox.SelectedItem = null;
                 cmdNewDaclAce.IsOpen = false;
+
+                CurrentSecureObject.IsDirty = true;
             }
         }
 
@@ -104,6 +111,19 @@ namespace Suplex.UI.Wpf
         private void cmdSave_Click(object sender, RoutedEventArgs e)
         {
             SplxDal.UpsertSecureObject( CurrentSecureObject );
+            CurrentSecureObject.IsDirty = false;
+        }
+
+        private void cmdDiscard_Click(object sender, RoutedEventArgs e)
+        {
+            CloneCachedToCurrent();
+        }
+
+        // CurrentSecureObject.EnableIsDirty() doesn't cover updating an object in a collection,
+        // this is a work-around to set IsDirty
+        private void Acl_RowEditEnded(object sender, GridViewRowEditEndedEventArgs e)
+        {
+            CurrentSecureObject.IsDirty = true;
         }
     }
 }
