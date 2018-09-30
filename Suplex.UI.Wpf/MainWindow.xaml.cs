@@ -125,6 +125,9 @@ namespace Suplex.UI.Wpf
             dlgSecureObjects.Store = f;
             dlgSecureObjects.SplxDal = f.Dal;
 
+            dlgSecurityPrincipals.Store = f;
+            dlgSecurityPrincipals.SplxDal = f.Dal;
+
             //dlgSecureObjects.DataContext = f.SecureObjects;
         }
     }

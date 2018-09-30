@@ -9,6 +9,13 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <local:SecureObjectDlg x:Name="dlgSecureObjects" />
+        <TabControl>
+            <TabItem Header="Secure Objects">
+                <local:SecureObjectDlg x:Name="dlgSecureObjects" />
+            </TabItem>
+            <TabItem Header="Security Principals" IsSelected="True">
+                <local:SecurityPrincipalDlg x:Name="dlgSecurityPrincipals" />
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>

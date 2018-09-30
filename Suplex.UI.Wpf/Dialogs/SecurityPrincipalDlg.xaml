@@ -1,0 +1,136 @@
+﻿<UserControl x:Class="Suplex.UI.Wpf.SecurityPrincipalDlg"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Suplex.UI.Wpf"
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <GroupBox>
+            <GroupBox.Header>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="Security Principals" Style="{DynamicResource Header}"/>
+
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <telerik:RadDropDownButton Name="cmdNewPrincipal"
+                                                   Content="New" Width="75" Margin="7,5,5,5">
+                            <telerik:RadDropDownButton.DropDownContentTemplate>
+                                <DataTemplate>
+                                    <ListBox SelectionChanged="cmdNewPrincipal_SelectionChanged">
+                                        <ListBoxItem Content="New User" Tag="Root" />
+                                        <ListBoxItem Content="New Group" Tag="Child" />
+                                    </ListBox>
+                                </DataTemplate>
+                            </telerik:RadDropDownButton.DropDownContentTemplate>
+                        </telerik:RadDropDownButton>
+
+                        <telerik:RadDropDownButton Name="cmdDeletePrincipal"
+                                                   Content="Delete" Width="75" Margin="5">
+                            <telerik:RadDropDownButton.DropDownContentTemplate>
+                                <DataTemplate>
+                                    <ListBox ItemsSource="{Binding}"
+                                             SelectionChanged="cmdDeletePrincipal_SelectionChanged">
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="Delete " />
+                                                    <TextBlock Text="{Binding Name}" />
+                                                    <TextBlock Text="?" />
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                </DataTemplate>
+                            </telerik:RadDropDownButton.DropDownContentTemplate>
+                        </telerik:RadDropDownButton>
+                    </StackPanel>
+                </Grid>
+            </GroupBox.Header>
+
+            <telerik:RadGridView x:Name="grdPrincipals" AutoGenerateColumns="False"
+                                 ItemsSource="{Binding}" IsReadOnly="True">
+                <telerik:RadGridView.Columns>
+                    <telerik:GridViewDataColumn Header="Name" Width="Auto" DataMemberBinding="{Binding Name}" />
+                    <telerik:GridViewDataColumn Header="Description" Width="Auto" DataMemberBinding="{Binding Description}" />
+                    <telerik:GridViewDataColumn Header="IsLocal" Width="Auto" DataMemberBinding="{Binding IsLocal}" />
+                </telerik:RadGridView.Columns>
+            </telerik:RadGridView>
+        </GroupBox>
+
+
+        <GridSplitter Grid.Column="1" BorderThickness=".5" BorderBrush="DarkGray" Background="Gray" Width="5"
+                      ResizeDirection="Columns" HorizontalAlignment="Center" />
+
+
+        <Grid Grid.Column="2" Name="pnlDetail">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+
+            <!--   Properties, Save/Discard   -->
+
+            <GroupBox>
+                <GroupBox.Header>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="Properties" Style="{DynamicResource Header}" />
+
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                            <telerik:RadButton Name="cmdSave" Content="Save"
+                                       Width="100" Margin="5"
+                                       Click="cmdSave_Click" IsEnabled="{Binding IsDirty}" />
+
+                            <telerik:RadButton Name="cmdDiscard" Content="Discard"
+                                       Width="100" Margin="5"
+                                       Click="cmdDiscard_Click" IsEnabled="{Binding IsDirty}" />
+                        </StackPanel>
+                    </Grid>
+                </GroupBox.Header>
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Margin="5,0,0,0"
+                               Text="UniqueName" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    <TextBox Grid.Row="0" Grid.Column="1" Margin="8" Padding="3"
+                             Text="{Binding UniqueName, UpdateSourceTrigger=PropertyChanged}" />
+
+                    <TextBlock Grid.Row="1" Grid.Column="0"
+                               Text="Enabled" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    <CheckBox Grid.Row="1" Grid.Column="1"
+                              Style="{DynamicResource SliderCheckBox}" Margin="8"
+                              IsChecked="{Binding IsEnabled}" />
+                </Grid>
+            </GroupBox>
+
+
+            <!--   Dacl   -->
+
+            <TextBlock Grid.Row="1" Text="details placeholder" />
+        </Grid>
+    </Grid>
+</UserControl>
