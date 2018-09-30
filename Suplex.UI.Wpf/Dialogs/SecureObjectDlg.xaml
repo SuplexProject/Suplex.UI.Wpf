@@ -62,10 +62,10 @@
             </GroupBox.Header>
 
             <telerik:RadTreeListView x:Name="tvwSecureObjects" AutoGenerateColumns="False"
-                                 GroupRenderMode="Flat" AutoExpandItems="True"
-                                 IsDragDropEnabled="True" local:SecureObjectDragDrop.IsEnabled="True"
-                                 ItemsSource="{Binding}" IsReadOnly="True"
-                                 SelectionChanged="tvwSecureObjects_SelectionChanged">
+                                     GroupRenderMode="Flat" AutoExpandItems="True"
+                                     IsDragDropEnabled="True" local:SecureObjectDragDrop.IsEnabled="True"
+                                     ItemsSource="{Binding}" IsReadOnly="True"
+                                     SelectionChanged="tvwSecureObjects_SelectionChanged">
                 <telerik:RadTreeListView.ChildTableDefinitions>
                     <telerik:TreeListViewTableDefinition ItemsSource="{Binding Children}" />
                 </telerik:RadTreeListView.ChildTableDefinitions>
@@ -168,7 +168,7 @@
                                       IsChecked="{Binding Security.DaclAllowInherit}"/>
 
                             <telerik:RadDropDownButton Name="cmdNewDaclAce"
-                                                       Content="New Permission" Width="150" Margin="7,5,5,5">
+                                                       Content="New Permission" Width="125" Margin="7,5,5,5">
                                 <telerik:RadDropDownButton.DropDownContentTemplate>
                                     <DataTemplate>
                                         <ListBox ItemsSource="{Binding}"
@@ -225,7 +225,7 @@
                                       IsChecked="{Binding Security.SaclAllowInherit}"/>
 
                             <telerik:RadDropDownButton Name="cmdNewSaclAce"
-                                                       Content="New Audit" Width="150" Margin="7,5,5,5">
+                                                       Content="New Audit" Width="125" Margin="7,5,5,5">
                                 <telerik:RadDropDownButton.DropDownContentTemplate>
                                     <DataTemplate>
                                         <ListBox ItemsSource="{Binding}"

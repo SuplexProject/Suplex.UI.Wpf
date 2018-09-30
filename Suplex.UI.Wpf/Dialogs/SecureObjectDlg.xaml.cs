@@ -94,7 +94,15 @@ namespace Suplex.UI.Wpf
         }
 
         private SecureObject CachedSecureObject { get; set; }
-        public SecureObject CurrentSecureObject { get { return pnlDetail.DataContext as SecureObject; } set { pnlDetail.DataContext = value; } }
+        public SecureObject CurrentSecureObject
+        {
+            get { return pnlDetail.DataContext as SecureObject; }
+            set
+            {
+                pnlDetail.DataContext = value;
+                pnlDetail.IsEnabled = value != null;
+            }
+        }
 
         private void tvwSecureObjects_SelectionChanged(object sender, SelectionChangeEventArgs e)
         {
@@ -124,8 +132,6 @@ namespace Suplex.UI.Wpf
 
                 listBox.SelectedItem = null;
                 cmdNewDaclAce.IsOpen = false;
-
-                CurrentSecureObject.IsDirty = true;
             }
         }
 
