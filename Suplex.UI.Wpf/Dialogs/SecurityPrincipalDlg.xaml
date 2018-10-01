@@ -41,11 +41,7 @@
                                              SelectionChanged="cmdDeletePrincipal_SelectionChanged">
                                         <ListBox.ItemTemplate>
                                             <DataTemplate>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <TextBlock Text="Delete " />
-                                                    <TextBlock Text="{Binding Name}" />
-                                                    <TextBlock Text="?" />
-                                                </StackPanel>
+                                                <TextBlock Text="{local:FormattedBinding Name, FormatString='Delete [\{0\}]?'}" />
                                             </DataTemplate>
                                         </ListBox.ItemTemplate>
                                     </ListBox>
@@ -57,7 +53,8 @@
             </GroupBox.Header>
 
             <telerik:RadGridView x:Name="grdPrincipals" AutoGenerateColumns="False"
-                                 ItemsSource="{Binding}" IsReadOnly="True">
+                                 ItemsSource="{Binding}" IsReadOnly="True"
+                                 SelectionChanged="grdPrincipals_SelectionChanged">
                 <telerik:RadGridView.Columns>
                     <telerik:GridViewDataColumn Header="Name" Width="Auto" DataMemberBinding="{Binding Name}" />
                     <telerik:GridViewDataColumn Header="Description" Width="Auto" DataMemberBinding="{Binding Description}" />
@@ -120,7 +117,7 @@
                     <TextBlock Grid.Row="0" Grid.Column="0" Margin="5,0,0,0"
                                Text="UniqueName" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                     <TextBox Grid.Row="0" Grid.Column="1" Margin="8" Padding="3"
-                             Text="{Binding UniqueName, UpdateSourceTrigger=PropertyChanged}" />
+                             Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
 
                     <TextBlock Grid.Row="1" Grid.Column="0"
                                Text="Description" HorizontalAlignment="Right" VerticalAlignment="Center"/>
@@ -136,10 +133,12 @@
                     <TextBlock Grid.Row="3" Grid.Column="0"
                                Text="Type" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                     <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" Margin="8">
-                        <RadioButton Content="Local (Suplex)" VerticalAlignment="Center" GroupName="GroupType"
+                        <RadioButton Content="Local (Suplex)" GroupName="GroupType"
+                                     VerticalAlignment="Center"
                                      IsChecked="{Binding Path=IsLocal}"/>
-                        <RadioButton Content="External (AD, LDAP, etc.)" VerticalAlignment="Center" GroupName="GroupType"
-                                     IsChecked="{Binding Path=IsLocal}"/>
+                        <RadioButton Content="External (AD, LDAP, etc.)" GroupName="GroupType"
+                                     VerticalAlignment="Center" Margin="8,0,0,0"
+                                     IsChecked="{local:FormattedBinding Path=IsLocal, ValueIfTrue=False, ValueIfFalse=True}"/>
                     </StackPanel>
                 </Grid>
             </GroupBox>

@@ -96,6 +96,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Code\FormattedBinding.cs" />
     <Compile Include="Controls\AceRightsListBox.cs" />
     <Compile Include="Dialogs\SecureObjectDlg.xaml.cs">
       <DependentUpon>SecureObjectDlg.xaml</DependentUpon>

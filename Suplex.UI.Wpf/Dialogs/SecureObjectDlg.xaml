@@ -46,11 +46,7 @@
                                              SelectionChanged="cmdDeleteSecureObject_SelectionChanged">
                                         <ListBox.ItemTemplate>
                                             <DataTemplate>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <TextBlock Text="Delete " />
-                                                    <TextBlock Text="{Binding UniqueName}" />
-                                                    <TextBlock Text="?" />
-                                                </StackPanel>
+                                                <TextBlock Text="{local:FormattedBinding UniqueName, FormatString='Delete [\{0\}]?'}" />
                                             </DataTemplate>
                                         </ListBox.ItemTemplate>
                                     </ListBox>

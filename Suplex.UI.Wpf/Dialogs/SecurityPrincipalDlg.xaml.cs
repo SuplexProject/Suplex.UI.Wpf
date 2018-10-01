@@ -67,6 +67,7 @@ namespace Suplex.UI.Wpf
         }
         void CloneCachedToCurrent()
         {
+            CurrentSecureObject = CachedSecureObject;
             //CurrentSecureObject = CachedSecureObject?.Clone( shallow: false );
             //CurrentSecureObject?.EnableIsDirty();
             //cmdDeleteSecureObject.DropDownContent = new List<SecureObject> { CurrentSecureObject };
