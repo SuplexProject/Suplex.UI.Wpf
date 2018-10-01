@@ -1,5 +1,4 @@
-﻿using Suplex.Security.AclModel.DataAccess;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +12,12 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+
+using Suplex.Security.AclModel.DataAccess;
+using Suplex.Security.Principal;
+
+using Telerik.Windows.Controls;
+
 
 namespace Suplex.UI.Wpf
 {
@@ -42,6 +47,29 @@ namespace Suplex.UI.Wpf
                     DataContext = value?.Groups;
                 }
             }
+        }
+
+        private ISecurityPrincipal CachedSecureObject { get; set; }
+        public ISecurityPrincipal CurrentSecureObject
+        {
+            get { return pnlDetail.DataContext as ISecurityPrincipal; }
+            set
+            {
+                pnlDetail.DataContext = value;
+                pnlDetail.IsEnabled = value != null;
+            }
+        }
+
+        private void grdPrincipals_SelectionChanged(object sender, SelectionChangeEventArgs e)
+        {
+            CachedSecureObject = grdPrincipals.SelectedItem as ISecurityPrincipal;
+            CloneCachedToCurrent();
+        }
+        void CloneCachedToCurrent()
+        {
+            //CurrentSecureObject = CachedSecureObject?.Clone( shallow: false );
+            //CurrentSecureObject?.EnableIsDirty();
+            //cmdDeleteSecureObject.DropDownContent = new List<SecureObject> { CurrentSecureObject };
         }
 
         private void cmdSave_Click(object sender, RoutedEventArgs e)
