@@ -31,6 +31,8 @@ namespace Suplex.UI.Wpf
         public SecurityPrincipalDlg()
         {
             InitializeComponent();
+
+            CurrentSecurityPrincipal = null;
         }
 
         public IDataAccessLayer SplxDal { get; set; } = null;
@@ -49,10 +51,10 @@ namespace Suplex.UI.Wpf
             }
         }
 
-        private ISecurityPrincipal CachedSecureObject { get; set; }
-        public ISecurityPrincipal CurrentSecureObject
+        private SecurityPrincipalBase CachedSecurityPrincipal { get; set; }
+        public SecurityPrincipalBase CurrentSecurityPrincipal
         {
-            get { return pnlDetail.DataContext as ISecurityPrincipal; }
+            get { return pnlDetail.DataContext as SecurityPrincipalBase; }
             set
             {
                 pnlDetail.DataContext = value;
@@ -62,25 +64,25 @@ namespace Suplex.UI.Wpf
 
         private void grdPrincipals_SelectionChanged(object sender, SelectionChangeEventArgs e)
         {
-            CachedSecureObject = grdPrincipals.SelectedItem as ISecurityPrincipal;
+            CachedSecurityPrincipal = grdPrincipals.SelectedItem as SecurityPrincipalBase;
             CloneCachedToCurrent();
         }
         void CloneCachedToCurrent()
         {
-            CurrentSecureObject = CachedSecureObject;
-            //CurrentSecureObject = CachedSecureObject?.Clone( shallow: false );
-            //CurrentSecureObject?.EnableIsDirty();
-            //cmdDeleteSecureObject.DropDownContent = new List<SecureObject> { CurrentSecureObject };
+            CurrentSecurityPrincipal = CachedSecurityPrincipal?.Clone( shallow: false ) as SecurityPrincipalBase;
+            CurrentSecurityPrincipal?.EnableIsDirty();
+            cmdDeletePrincipal.DropDownContent = new List<SecurityPrincipalBase> { CurrentSecurityPrincipal };
         }
 
         private void cmdSave_Click(object sender, RoutedEventArgs e)
         {
-
+            SplxDal.UpsertGroup( CurrentSecurityPrincipal as Group );
+            CurrentSecurityPrincipal.IsDirty = false;
         }
 
         private void cmdDiscard_Click(object sender, RoutedEventArgs e)
         {
-
+            CloneCachedToCurrent();
         }
 
         private void cmdNewPrincipal_SelectionChanged(object sender, SelectionChangedEventArgs e)
