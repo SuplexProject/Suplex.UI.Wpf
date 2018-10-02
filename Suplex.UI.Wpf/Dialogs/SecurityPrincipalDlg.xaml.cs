@@ -47,6 +47,7 @@ namespace Suplex.UI.Wpf
                     _store = value;
 
                     DataContext = value?.Groups;
+                    txtGroupLookup.ItemsSource = value?.Groups;
                 }
             }
         }
@@ -72,6 +73,10 @@ namespace Suplex.UI.Wpf
             CurrentSecurityPrincipal = CachedSecurityPrincipal?.Clone( shallow: false ) as SecurityPrincipalBase;
             CurrentSecurityPrincipal?.EnableIsDirty();
             cmdDeletePrincipal.DropDownContent = new List<SecurityPrincipalBase> { CurrentSecurityPrincipal };
+
+            IEnumerable<GroupMembershipItem> items = SplxDal.GetGroupMembers( CurrentSecurityPrincipal.UId, includeDisabledMembership: true );
+            items.Resolve( Store.Groups, Store.Users );
+            lstGroupMembership.DataContext = items;
         }
 
         private void cmdSave_Click(object sender, RoutedEventArgs e)
@@ -93,6 +98,14 @@ namespace Suplex.UI.Wpf
         private void cmdDeletePrincipal_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
+        }
+
+        private void cmdAddGroupMembers_Click(object sender, RoutedEventArgs e)
+        {
+            foreach( Group g in txtGroupLookup.SelectedItems )
+                lstGroupMembership.Items.Add( g );
+
+            txtGroupLookup.SelectedItems = null;
         }
     }
 }

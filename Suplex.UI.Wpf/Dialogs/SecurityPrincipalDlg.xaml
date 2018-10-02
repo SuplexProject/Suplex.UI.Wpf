@@ -140,6 +140,34 @@
                                      VerticalAlignment="Center" Margin="8,0,0,0"
                                      IsChecked="{local:FormattedBinding Path=IsLocal, ValueIfTrue=False, ValueIfFalse=True}"/>
                     </StackPanel>
+
+                    <StackPanel Grid.Row="4" Grid.Column="0" VerticalAlignment="Top">
+                        <TextBlock Text="Group" HorizontalAlignment="Right"/>
+                        <TextBlock Text="Membership" HorizontalAlignment="Right"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Vertical" Margin="8,4,8,8">
+                        <Grid Margin="0,0,0,4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <telerik:RadAutoCompleteBox Grid.Column="0" x:Name="txtGroupLookup"
+                                                        DisplayMemberPath="Name" SelectionMode="Multiple"
+                                                        AutoCompleteMode="Suggest"/>
+                            <telerik:RadButton Grid.Column="1" Name="cmdAddGroupMembers"
+                                               Content="Add" Margin="4,0,0,0"
+                                               Click="cmdAddGroupMembers_Click"/>
+                        </Grid>
+                        <ListBox Name="lstGroupMembership" MinHeight="300"
+                                 ItemsSource="{Binding}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding}" Foreground="{local:FormattedBinding Member.IsMemberUser, ValueIfTrue=Blue, ValueIfFalse=Black, FallbackValue=Black}" />
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </StackPanel>
                 </Grid>
             </GroupBox>
 

@@ -44,6 +44,8 @@ namespace Suplex.UI.Wpf
                 new Group{ Name = "gy", IsEnabled = true, IsLocal = false },
                 new Group{ Name = "gz", IsEnabled = true, IsLocal = false }
             };
+            for( int i = 0; i < 50; i++ )
+                groups.Add( new Group { Name = $"Group_{i}" } );
 
             GroupMembershipItem mx = new GroupMembershipItem
             {
@@ -112,6 +114,9 @@ namespace Suplex.UI.Wpf
                 Groups = groups,
                 GroupMembership = gm
             };
+
+            for( int i = 0; i < 50; i++ )
+                store.SecureObjects.Add( new SecureObject { UniqueName = $"UniqueName_{i}" } );
 
             //User ux = store.Users.GetByName<User>( "x" );
 
