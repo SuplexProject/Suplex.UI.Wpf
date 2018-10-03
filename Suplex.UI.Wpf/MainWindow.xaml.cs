@@ -40,7 +40,7 @@ namespace Suplex.UI.Wpf
 
             List<Group> groups = new List<Group>
             {
-                new Group{ Name = "gx", IsEnabled = true, IsLocal = false },
+                new Group{ Name = "gx", IsEnabled = true, IsLocal = true },
                 new Group{ Name = "gy", IsEnabled = true, IsLocal = false },
                 new Group{ Name = "gz", IsEnabled = true, IsLocal = false }
             };

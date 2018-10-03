@@ -59,8 +59,17 @@
                     <telerik:GridViewDataColumn Header="Name" Width="Auto" DataMemberBinding="{Binding Name}" />
                     <telerik:GridViewDataColumn Header="Description" Width="Auto" DataMemberBinding="{Binding Description}" />
                     <telerik:GridViewDataColumn Header="IsLocal" Width="Auto" DataMemberBinding="{Binding IsLocal}" />
+                    <telerik:GridViewDataColumn Header="IsUser" Width="Auto" DataMemberBinding="{Binding IsUser}" />
                 </telerik:RadGridView.Columns>
             </telerik:RadGridView>
+            <!--<ListBox Name="grdPrincipals" MinHeight="300"
+                     ItemsSource="{Binding}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}" Foreground="{local:FormattedBinding IsMemberUser, ValueIfTrue=Blue, ValueIfFalse=Black, FallbackValue=Green}" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>-->
         </GroupBox>
 
 
@@ -70,9 +79,6 @@
 
         <Grid Grid.Column="2" Name="pnlDetail">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
@@ -131,8 +137,10 @@
                               IsChecked="{Binding IsEnabled}" />
 
                     <TextBlock Grid.Row="3" Grid.Column="0"
-                               Text="Type" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                    <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" Margin="8">
+                               Text="Type" HorizontalAlignment="Right" VerticalAlignment="Center"
+                               Visibility="{local:FormattedBinding IsUser, ValueIfTrue=Collapsed, ValueIfFalse=Visible}"/>
+                    <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" Margin="8"
+                                Visibility="{local:FormattedBinding IsUser, ValueIfTrue=Collapsed, ValueIfFalse=Visible}">
                         <RadioButton Content="Local (Suplex)" GroupName="GroupType"
                                      VerticalAlignment="Center"
                                      IsChecked="{Binding Path=IsLocal}"/>
@@ -141,11 +149,13 @@
                                      IsChecked="{local:FormattedBinding Path=IsLocal, ValueIfTrue=False, ValueIfFalse=True}"/>
                     </StackPanel>
 
-                    <StackPanel Grid.Row="4" Grid.Column="0" VerticalAlignment="Top">
+                    <StackPanel Grid.Row="4" Grid.Column="0" VerticalAlignment="Top"
+                                Visibility="{local:FormattedBinding IsUserOrLocalGroup, ValueIfTrue=Visible, ValueIfFalse=Collapsed, Mode=OneWay}">
                         <TextBlock Text="Group" HorizontalAlignment="Right"/>
                         <TextBlock Text="Membership" HorizontalAlignment="Right"/>
                     </StackPanel>
-                    <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Vertical" Margin="8,4,8,8">
+                    <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Vertical" Margin="8,4,8,8"
+                                Visibility="{local:FormattedBinding IsUserOrLocalGroup, ValueIfTrue=Visible, ValueIfFalse=Collapsed, Mode=OneWay}">
                         <Grid Margin="0,0,0,4">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
@@ -163,18 +173,13 @@
                                  ItemsSource="{Binding}">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding}" Foreground="{local:FormattedBinding Member.IsMemberUser, ValueIfTrue=Blue, ValueIfFalse=Black, FallbackValue=Black}" />
+                                    <TextBlock Text="{Binding DisplayItem.Name}" Foreground="{local:FormattedBinding IsMemberUser, ValueIfTrue=Blue, ValueIfFalse=Black, FallbackValue=Green}" />
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
                     </StackPanel>
                 </Grid>
             </GroupBox>
-
-
-            <!--   Dacl   -->
-
-            <TextBlock Grid.Row="1" Text="details placeholder" />
         </Grid>
     </Grid>
 </UserControl>
