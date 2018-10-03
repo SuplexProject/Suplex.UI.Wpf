@@ -50,8 +50,8 @@ namespace Suplex.UI.Wpf
 
                     Principals = new CompositeCollection
                     {
-                        new CollectionContainer{ Collection = value.Users },
-                        new CollectionContainer{ Collection = value.Groups }
+                        new CollectionContainer{ Collection = _store.Users },
+                        new CollectionContainer{ Collection = _store.Groups }
                     };
                     PrincipalsCvs = new CollectionViewSource
                     {
@@ -59,7 +59,7 @@ namespace Suplex.UI.Wpf
                     };
 
                     DataContext = PrincipalsCvs.View;
-                    txtGroupLookup.ItemsSource = value?.Groups;
+                    txtGroupLookup.ItemsSource = _store?.Groups;
                 }
             }
         }
@@ -122,7 +122,14 @@ namespace Suplex.UI.Wpf
 
         private void cmdSave_Click(object sender, RoutedEventArgs e)
         {
-            SplxDal.UpsertGroup( CurrentSecurityPrincipal as Group );
+            if( CurrentSecurityPrincipal.IsUser )
+                SplxDal.UpsertUser( CurrentSecurityPrincipal as User );
+            else
+                SplxDal.UpsertGroup( CurrentSecurityPrincipal as Group );
+
+            foreach( GroupMembershipItemWrapper gm in CurrentSecurityPrincipalMembership )
+                SplxDal.UpsertGroupMembership( gm );
+
             CurrentSecurityPrincipal.IsDirty = false;
         }
 
@@ -133,12 +140,49 @@ namespace Suplex.UI.Wpf
 
         private void cmdNewPrincipal_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if( sender is ListBox listBox && listBox.SelectedItem is ListBoxItem item )
+            {
+                SecurityPrincipalBase sp = null;
+                if( item.Tag.ToString() == "User" )
+                {
+                    User user = SplxDal.UpsertUser( new User { Name = "New User" } );
+                    sp = user;
+                    if( !Store.Users.Contains( user ) )
+                        Store.Users.Add( user );
+                }
+                else
+                {
+                    Group group = SplxDal.UpsertGroup( new Group { Name = "New Group" } );
+                    sp = group;
+                    if( !Store.Groups.Contains( group ) )
+                        Store.Groups.Add( group );
+                }
 
+                PrincipalsCvs.View.Refresh();
+                listBox.SelectedItem = null;
+                cmdNewPrincipal.IsOpen = false;
+                grdPrincipals.SelectedItem = sp;
+            }
         }
 
         private void cmdDeletePrincipal_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if( sender is ListBox listBox && listBox.SelectedItem is SecurityPrincipalBase securityPrincipal )
+            {
+                if( securityPrincipal.IsUser )
+                {
+                    Store.Users.Remove( securityPrincipal as User );
+                    SplxDal.DeleteUser( securityPrincipal.UId );
+                }
+                else
+                {
+                    Store.Groups.Remove( securityPrincipal as Group );
+                    SplxDal.DeleteGroup( securityPrincipal.UId );
+                }
 
+                listBox.SelectedItem = null;
+                cmdNewPrincipal.IsOpen = false;
+            }
         }
 
         private void cmdAddGroupMembers_Click(object sender, RoutedEventArgs e)
@@ -146,13 +190,18 @@ namespace Suplex.UI.Wpf
             GroupMembershipItemWrapper item = null;
 
             foreach( Group g in txtGroupLookup.SelectedItems )
+            {
                 if( CurrentSecurityPrincipal is Group )
-                    CurrentSecurityPrincipalMembership.Add(
-                        new GroupMembershipItemWrapper( new GroupMembershipItem( CurrentSecurityPrincipal as Group, g ), true ) );
+                    item = new GroupMembershipItemWrapper( new GroupMembershipItem( CurrentSecurityPrincipal as Group, g ), true );
                 else
-                    CurrentSecurityPrincipalMembership.Add(
-                        new GroupMembershipItemWrapper( new GroupMembershipItem( g, CurrentSecurityPrincipal ), false ) );
+                    item = new GroupMembershipItemWrapper( new GroupMembershipItem( g, CurrentSecurityPrincipal ), false );
 
+                if( !CurrentSecurityPrincipalMembership.ContainsItem( item ) )
+                {
+                    CurrentSecurityPrincipalMembership.Add( item );
+                    CurrentSecurityPrincipal.IsDirty = true;
+                }
+            }
 
             txtGroupLookup.SelectedItems = null;
         }

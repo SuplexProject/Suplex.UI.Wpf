@@ -26,8 +26,8 @@
                             <telerik:RadDropDownButton.DropDownContentTemplate>
                                 <DataTemplate>
                                     <ListBox SelectionChanged="cmdNewPrincipal_SelectionChanged">
-                                        <ListBoxItem Content="New User" Tag="Root" />
-                                        <ListBoxItem Content="New Group" Tag="Child" />
+                                        <ListBoxItem Content="New User" Tag="User" />
+                                        <ListBoxItem Content="New Group" Tag="Group" />
                                     </ListBox>
                                 </DataTemplate>
                             </telerik:RadDropDownButton.DropDownContentTemplate>
@@ -93,7 +93,8 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Text="Properties" Style="{DynamicResource Header}" />
+                        <TextBlock Text="{local:FormattedBinding IsUser, ValueIfTrue=User, ValueIfFalse=Group, FormatString='\{0\} Properties'}"
+                                   Style="{DynamicResource Header}" />
 
                         <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                             <telerik:RadButton Name="cmdSave" Content="Save"
