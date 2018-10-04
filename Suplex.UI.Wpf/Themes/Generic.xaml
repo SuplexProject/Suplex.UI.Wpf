@@ -26,7 +26,7 @@
             <Image Margin="0,0,4,0" Height="18" Width="18">
                 <Image.Source>
                     <MultiBinding Converter="{StaticResource securityPrincipalTypeConverter}"
-                                                              ConverterParameter="/Suplex.UI.Wpf;component/Resources/,user_internal.png,group_internal.png,group_external.png">
+                                  ConverterParameter="/Suplex.UI.Wpf;component/Resources/,user_internal.png,group_internal.png,group_external.png">
                         <Binding Path="IsMemberUser" />
                         <Binding Path="DisplayItem.IsLocal" />
                     </MultiBinding>
@@ -36,6 +36,7 @@
         </StackPanel>
     </DataTemplate>
 
+    
     <!--   TextBlock Styles   -->
     
     <Style x:Key="Header" TargetType="{x:Type TextBlock}">

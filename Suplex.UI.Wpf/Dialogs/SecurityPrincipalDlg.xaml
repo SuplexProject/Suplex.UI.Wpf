@@ -175,24 +175,8 @@
                                                Click="cmdAddGroupMembers_Click"/>
                         </Grid>
                         <ListBox Name="lstGroupMemberOf" MinHeight="200" MaxHeight="350"
-                                 ItemsSource="{Binding}">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal" Opacity="{local:FormattedBinding Path=DisplayItem.IsEnabled, ValueIfTrue=1, ValueIfFalse=.5}">
-                                        <Image Margin="0,0,4,0" Height="18" Width="18">
-                                            <Image.Source>
-                                                <MultiBinding Converter="{StaticResource securityPrincipalTypeConverter}"
-                                                              ConverterParameter="/Suplex.UI.Wpf;component/Resources/,user_internal.png,group_internal.png,group_external.png">
-                                                    <Binding Path="IsMemberUser" />
-                                                    <Binding Path="DisplayItem.IsLocal" />
-                                                </MultiBinding>
-                                            </Image.Source>
-                                        </Image>
-                                        <TextBlock Text="{Binding DisplayItem.Name}" Foreground="{local:FormattedBinding IsMemberUser, ValueIfTrue=Blue, ValueIfFalse=Black, FallbackValue=Green}" />
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
+                                 ItemsSource="{Binding}"
+                                 ItemTemplate="{DynamicResource groupMembershipItemIconTemplate}"/>
                     </StackPanel>
 
 
@@ -228,24 +212,8 @@
                                                Click="cmdAddGroupMembers_Click"/>
                         </Grid>
                         <ListBox Name="lstGroupMembership" MinHeight="200" MaxHeight="350"
-                                 ItemsSource="{Binding}">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal" Opacity="{local:FormattedBinding Path=DisplayItem.IsEnabled, ValueIfTrue=1, ValueIfFalse=.5}">
-                                        <Image Margin="0,0,4,0" Height="18" Width="18">
-                                            <Image.Source>
-                                                <MultiBinding Converter="{StaticResource securityPrincipalTypeConverter}"
-                                                              ConverterParameter="/Suplex.UI.Wpf;component/Resources/,user_internal.png,group_internal.png,group_external.png">
-                                                    <Binding Path="IsMemberUser" />
-                                                    <Binding Path="DisplayItem.IsLocal" />
-                                                </MultiBinding>
-                                            </Image.Source>
-                                        </Image>
-                                        <TextBlock Text="{Binding DisplayItem.Name}" Foreground="{local:FormattedBinding IsMemberUser, ValueIfTrue=Blue, ValueIfFalse=Black, FallbackValue=Green}" />
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
+                                 ItemsSource="{Binding}"
+                                 ItemTemplate="{DynamicResource groupMembershipItemIconTemplate}"/>
                     </StackPanel>
                 </Grid>
             </GroupBox>
