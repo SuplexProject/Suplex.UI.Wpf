@@ -207,12 +207,12 @@ namespace Suplex.UI.Wpf
         {
             GroupMembershipItemWrapper item = null;
 
-            foreach( Group g in txtGroupLookup.SelectedItems )
+            foreach( SecurityPrincipalBase sp in txtGroupLookup.SelectedItems )
             {
                 if( CurrentSecurityPrincipal is Group )
-                    item = new GroupMembershipItemWrapper( new GroupMembershipItem( CurrentSecurityPrincipal as Group, g ), true );
+                    item = new GroupMembershipItemWrapper( new GroupMembershipItem( CurrentSecurityPrincipal as Group, sp ), true );
                 else
-                    item = new GroupMembershipItemWrapper( new GroupMembershipItem( g, CurrentSecurityPrincipal ), false );
+                    item = new GroupMembershipItemWrapper( new GroupMembershipItem( sp as Group, CurrentSecurityPrincipal ), false );
 
                 if( !CurrentSecurityPrincipalMembership.ContainsItem( item ) )
                 {

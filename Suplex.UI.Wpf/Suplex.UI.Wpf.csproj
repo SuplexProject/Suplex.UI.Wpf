@@ -34,6 +34,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>suplex.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Suplex.Security.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Suplex.Security.Core.1.0.18181\lib\net45\Suplex.Security.Core.dll</HintPath>
@@ -97,6 +100,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Code\FormattedBinding.cs" />
+    <Compile Include="Code\LocalGroupVisibilityConverter.cs" />
     <Compile Include="Controls\AceRightsListBox.cs" />
     <Compile Include="Dialogs\SecureObjectDlg.xaml.cs">
       <DependentUpon>SecureObjectDlg.xaml</DependentUpon>
@@ -142,7 +146,9 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="suplex.ico" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\group_external.png" />
     <Resource Include="Resources\group_internal.png" />

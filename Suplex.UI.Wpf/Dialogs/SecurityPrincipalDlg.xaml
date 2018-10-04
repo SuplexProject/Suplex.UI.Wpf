@@ -115,6 +115,7 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
@@ -142,21 +143,76 @@
                                Visibility="{local:FormattedBinding IsUser, ValueIfTrue=Collapsed, ValueIfFalse=Visible}"/>
                     <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" Margin="8"
                                 Visibility="{local:FormattedBinding IsUser, ValueIfTrue=Collapsed, ValueIfFalse=Visible}">
+                        <Image Margin="0,0,4,0" Height="18" Width="18"
+                               Source="/Suplex.UI.Wpf;component/Resources/group_internal.png"/>
                         <RadioButton Content="Local (Suplex)" GroupName="GroupType"
                                      VerticalAlignment="Center"
                                      IsChecked="{Binding Path=IsLocal}"/>
+                        <Image Margin="12,0,4,0" Height="18" Width="18"
+                               Source="/Suplex.UI.Wpf;component/Resources/group_external.png"/>
                         <RadioButton Content="External (AD, LDAP, etc.)" GroupName="GroupType"
-                                     VerticalAlignment="Center" Margin="8,0,0,0"
+                                     VerticalAlignment="Center"
                                      IsChecked="{local:FormattedBinding Path=IsLocal, ValueIfTrue=False, ValueIfFalse=True}"/>
                     </StackPanel>
 
-                    <StackPanel Grid.Row="4" Grid.Column="0" VerticalAlignment="Top"
-                                Visibility="{local:FormattedBinding IsUserOrLocalGroup, ValueIfTrue=Visible, ValueIfFalse=Collapsed, Mode=OneWay}">
-                        <TextBlock Text="Group" HorizontalAlignment="Right"/>
-                        <TextBlock Text="Membership" HorizontalAlignment="Right"/>
+
+                    <!--   Member Of   -->
+
+                    <TextBlock Grid.Row="4" Grid.Column="0" Text="Member Of" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,9" />
+                    <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Vertical" Margin="8,4,8,8">
+                        <Grid Margin="0,0,0,4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <telerik:RadAutoCompleteBox Grid.Column="0" x:Name="txtLookupLocalGroups"
+                                                        DisplayMemberPath="Name" SelectionMode="Multiple"
+                                                        DropDownItemTemplate="{DynamicResource securityPrincipalNameIconTemplate}"
+                                                        AutoCompleteMode="Suggest"/>
+                            <telerik:RadButton Grid.Column="1" Name="cmdAddGroupMemberOf"
+                                               Content="Add" Margin="4,0,0,0"
+                                               Click="cmdAddGroupMembers_Click"/>
+                        </Grid>
+                        <ListBox Name="lstGroupMemberOf" MinHeight="200" MaxHeight="350"
+                                 ItemsSource="{Binding}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" Opacity="{local:FormattedBinding Path=DisplayItem.IsEnabled, ValueIfTrue=1, ValueIfFalse=.5}">
+                                        <Image Margin="0,0,4,0" Height="18" Width="18">
+                                            <Image.Source>
+                                                <MultiBinding Converter="{StaticResource securityPrincipalTypeConverter}"
+                                                              ConverterParameter="/Suplex.UI.Wpf;component/Resources/,user_internal.png,group_internal.png,group_external.png">
+                                                    <Binding Path="IsMemberUser" />
+                                                    <Binding Path="DisplayItem.IsLocal" />
+                                                </MultiBinding>
+                                            </Image.Source>
+                                        </Image>
+                                        <TextBlock Text="{Binding DisplayItem.Name}" Foreground="{local:FormattedBinding IsMemberUser, ValueIfTrue=Blue, ValueIfFalse=Black, FallbackValue=Green}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
                     </StackPanel>
-                    <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Vertical" Margin="8,4,8,8"
-                                Visibility="{local:FormattedBinding IsUserOrLocalGroup, ValueIfTrue=Visible, ValueIfFalse=Collapsed, Mode=OneWay}">
+
+
+                    <!--   Members   -->
+
+                    <TextBlock Grid.Row="5" Grid.Column="0" Text="Members" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,9">
+                        <TextBlock.Visibility>
+                            <MultiBinding Converter="{StaticResource localGroupVisibilityConverter}">
+                                <Binding Path="IsUser" />
+                                <Binding Path="IsLocal" />
+                            </MultiBinding>
+                        </TextBlock.Visibility>
+                    </TextBlock>
+                    <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Vertical" Margin="8,4,8,8">
+                        <StackPanel.Visibility>
+                            <MultiBinding Converter="{StaticResource localGroupVisibilityConverter}">
+                                <Binding Path="IsUser" />
+                                <Binding Path="IsLocal" />
+                            </MultiBinding>
+                        </StackPanel.Visibility>
                         <Grid Margin="0,0,0,4">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
@@ -165,18 +221,26 @@
 
                             <telerik:RadAutoCompleteBox Grid.Column="0" x:Name="txtGroupLookup"
                                                         DisplayMemberPath="Name" SelectionMode="Multiple"
+                                                        DropDownItemTemplate="{DynamicResource securityPrincipalNameIconTemplate}"
                                                         AutoCompleteMode="Suggest"/>
                             <telerik:RadButton Grid.Column="1" Name="cmdAddGroupMembers"
                                                Content="Add" Margin="4,0,0,0"
                                                Click="cmdAddGroupMembers_Click"/>
                         </Grid>
-                        <ListBox Name="lstGroupMembership" MinHeight="300"
+                        <ListBox Name="lstGroupMembership" MinHeight="200" MaxHeight="350"
                                  ItemsSource="{Binding}">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <StackPanel>
-                                        <Image Margin="0,0,4,0" Height="20" Width="20"
-                                               Source="{local:FormattedBinding Path=IsMemberUser, ValueIfTrue=/SuplexAdmin;component/Resources/Security/users-16x16.png, ValueIfFalse=/SuplexAdmin;component/Resources/Security/users-16x16_disabled.png}"/>
+                                    <StackPanel Orientation="Horizontal" Opacity="{local:FormattedBinding Path=DisplayItem.IsEnabled, ValueIfTrue=1, ValueIfFalse=.5}">
+                                        <Image Margin="0,0,4,0" Height="18" Width="18">
+                                            <Image.Source>
+                                                <MultiBinding Converter="{StaticResource securityPrincipalTypeConverter}"
+                                                              ConverterParameter="/Suplex.UI.Wpf;component/Resources/,user_internal.png,group_internal.png,group_external.png">
+                                                    <Binding Path="IsMemberUser" />
+                                                    <Binding Path="DisplayItem.IsLocal" />
+                                                </MultiBinding>
+                                            </Image.Source>
+                                        </Image>
                                         <TextBlock Text="{Binding DisplayItem.Name}" Foreground="{local:FormattedBinding IsMemberUser, ValueIfTrue=Blue, ValueIfFalse=Black, FallbackValue=Green}" />
                                     </StackPanel>
                                 </DataTemplate>

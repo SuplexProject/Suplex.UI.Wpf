@@ -3,11 +3,12 @@
                     xmlns:local="clr-namespace:Suplex.UI.Wpf"
                     xmlns:splxPrin="clr-namespace:Suplex.Security.Principal;assembly=Suplex.Security.Core">
 
+    <local:LocalGroupVisibilityConverter x:Key="localGroupVisibilityConverter" />
     <local:SecurityPrincipalTypeConverter x:Key="securityPrincipalTypeConverter" />
 
     <DataTemplate DataType="{x:Type splxPrin:SecurityPrincipalBase}" x:Key="securityPrincipalNameIconTemplate">
-        <StackPanel Orientation="Horizontal" Opacity="{local:FormattedBinding Path=IsEnabled, ValueIfTrue=1, ValueIfFalse=.6}">
-            <Image Margin="0,0,4,0" Height="16" Width="16">
+        <StackPanel Orientation="Horizontal" Opacity="{local:FormattedBinding Path=IsEnabled, ValueIfTrue=1, ValueIfFalse=.5}">
+            <Image Margin="0,0,4,0" Height="18" Width="18">
                 <Image.Source>
                     <MultiBinding Converter="{StaticResource securityPrincipalTypeConverter}"
                                   ConverterParameter="/Suplex.UI.Wpf;component/Resources/,user_internal.png,group_internal.png,group_external.png">
@@ -20,6 +21,20 @@
         </StackPanel>
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type local:GroupMembershipItemWrapper}" x:Key="groupMembershipItemIconTemplate">
+        <StackPanel Orientation="Horizontal" Opacity="{local:FormattedBinding Path=DisplayItem.IsEnabled, ValueIfTrue=1, ValueIfFalse=.5}">
+            <Image Margin="0,0,4,0" Height="18" Width="18">
+                <Image.Source>
+                    <MultiBinding Converter="{StaticResource securityPrincipalTypeConverter}"
+                                                              ConverterParameter="/Suplex.UI.Wpf;component/Resources/,user_internal.png,group_internal.png,group_external.png">
+                        <Binding Path="IsMemberUser" />
+                        <Binding Path="DisplayItem.IsLocal" />
+                    </MultiBinding>
+                </Image.Source>
+            </Image>
+            <TextBlock Text="{Binding DisplayItem.Name}" Foreground="{local:FormattedBinding IsMemberUser, ValueIfTrue=Blue, ValueIfFalse=Black, FallbackValue=Green}" />
+        </StackPanel>
+    </DataTemplate>
 
     <!--   TextBlock Styles   -->
     
