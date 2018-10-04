@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 using Suplex.Security.AclModel.DataAccess;
 using Suplex.Security.Principal;
@@ -48,24 +40,44 @@ namespace Suplex.UI.Wpf
                 {
                     _store = value;
 
-                    Principals = new CompositeCollection
+                    AllPrincipalsCvs = new CollectionViewSource
                     {
-                        new CollectionContainer{ Collection = _store.Users },
-                        new CollectionContainer{ Collection = _store.Groups }
+                        Source = new CompositeCollection
+                        {
+                            new CollectionContainer{ Collection = _store.Users },
+                            new CollectionContainer{ Collection = _store.Groups }
+                        }
+                        //,CollectionViewType = typeof( ListCollectionView )
                     };
-                    PrincipalsCvs = new CollectionViewSource
+                    //AllPrincipalsCvs.View.Filter = item =>
+                    //{
+                    //    if( !(item is SecurityPrincipalBase sp) ) return false;
+                    //    if( !sp.IsEnabled ) return false;
+                    //    return true;
+                    //};
+
+                    LocalGroupsCvs = new CollectionViewSource { Source = _store.Groups };
+                    LocalGroupsCvs.View.Filter = item =>
                     {
-                        Source = Principals
+                        if( !(item is Group g) ) return false;
+                        if( !g.IsLocal ) return false; //!g.IsEnabled || 
+                        return true;
                     };
 
-                    DataContext = PrincipalsCvs.View;
-                    txtGroupLookup.ItemsSource = _store?.Groups;
+                    DataContext = AllPrincipalsCvs.View;
+                    txtGroupLookup.ItemsSource = null;
                 }
             }
         }
+        private bool UserFilter(object item)
+        {
+            if( !(item is SecurityPrincipalBase sp) ) return false;
+            if( !sp.IsEnabled ) return false;
+            return true;
+        }
 
-        public CompositeCollection Principals { get; set; }
-        public CollectionViewSource PrincipalsCvs { get; set; }
+        public CollectionViewSource AllPrincipalsCvs { get; set; }
+        public CollectionViewSource LocalGroupsCvs { get; set; }
 
 
         #region data context
@@ -106,6 +118,9 @@ namespace Suplex.UI.Wpf
                     item.Resolve( Store.Groups, Store.Users );
                     CurrentSecurityPrincipalMembership.Add( new GroupMembershipItemWrapper( item, true ) );
                 }
+
+                AllPrincipalsCvs.View.Refresh();
+                txtGroupLookup.ItemsSource = AllPrincipalsCvs.View;
             }
             else if( CurrentSecurityPrincipal is User user )
             {
@@ -115,6 +130,9 @@ namespace Suplex.UI.Wpf
                     item.Resolve( Store.Groups, Store.Users );
                     CurrentSecurityPrincipalMembership.Add( new GroupMembershipItemWrapper( item, false ) );
                 }
+
+                LocalGroupsCvs.View.Refresh();
+                txtGroupLookup.ItemsSource = LocalGroupsCvs.View;
             }
         }
         #endregion
@@ -158,7 +176,7 @@ namespace Suplex.UI.Wpf
                         Store.Groups.Add( group );
                 }
 
-                PrincipalsCvs.View.Refresh();
+                AllPrincipalsCvs.View.Refresh();
                 listBox.SelectedItem = null;
                 cmdNewPrincipal.IsOpen = false;
                 grdPrincipals.SelectedItem = sp;
@@ -206,6 +224,7 @@ namespace Suplex.UI.Wpf
             txtGroupLookup.SelectedItems = null;
         }
     }
+
 
 
     //world's cheapest excuse for a view model:

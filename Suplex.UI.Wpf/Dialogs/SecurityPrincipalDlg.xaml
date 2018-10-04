@@ -56,7 +56,7 @@
                                  ItemsSource="{Binding}" IsReadOnly="True"
                                  SelectionChanged="grdPrincipals_SelectionChanged">
                 <telerik:RadGridView.Columns>
-                    <telerik:GridViewDataColumn Header="Name" Width="Auto" DataMemberBinding="{Binding Name}" />
+                    <telerik:GridViewDataColumn Header="Name" Width="Auto" DataMemberBinding="{Binding Name}" CellTemplate="{DynamicResource securityPrincipalNameIconTemplate}"/>
                     <telerik:GridViewDataColumn Header="Description" Width="Auto" DataMemberBinding="{Binding Description}" />
                     <telerik:GridViewDataColumn Header="IsLocal" Width="Auto" DataMemberBinding="{Binding IsLocal}" />
                     <telerik:GridViewDataColumn Header="IsUser" Width="Auto" DataMemberBinding="{Binding IsUser}" />
@@ -174,7 +174,11 @@
                                  ItemsSource="{Binding}">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding DisplayItem.Name}" Foreground="{local:FormattedBinding IsMemberUser, ValueIfTrue=Blue, ValueIfFalse=Black, FallbackValue=Green}" />
+                                    <StackPanel>
+                                        <Image Margin="0,0,4,0" Height="20" Width="20"
+                                               Source="{local:FormattedBinding Path=IsMemberUser, ValueIfTrue=/SuplexAdmin;component/Resources/Security/users-16x16.png, ValueIfFalse=/SuplexAdmin;component/Resources/Security/users-16x16_disabled.png}"/>
+                                        <TextBlock Text="{Binding DisplayItem.Name}" Foreground="{local:FormattedBinding IsMemberUser, ValueIfTrue=Blue, ValueIfFalse=Black, FallbackValue=Green}" />
+                                    </StackPanel>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>

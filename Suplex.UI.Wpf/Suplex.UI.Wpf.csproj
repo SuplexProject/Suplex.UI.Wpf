@@ -105,6 +105,7 @@
     <Compile Include="Dialogs\SecurityPrincipalDlg.xaml.cs">
       <DependentUpon>SecurityPrincipalDlg.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Code\SecurityPrincipalTypeConverter.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -141,8 +142,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Resources\" />
+    <Resource Include="Resources\group_external.png" />
+    <Resource Include="Resources\group_internal.png" />
+    <Resource Include="Resources\user_internal.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
