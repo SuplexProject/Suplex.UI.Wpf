@@ -154,5 +154,8 @@
     <Resource Include="Resources\group_internal.png" />
     <Resource Include="Resources\user_internal.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\close_16x16_grey.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

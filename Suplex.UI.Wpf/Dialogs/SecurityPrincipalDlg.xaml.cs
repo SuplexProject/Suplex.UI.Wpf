@@ -198,8 +198,9 @@ namespace Suplex.UI.Wpf
                     SplxDal.DeleteGroup( securityPrincipal.UId );
                 }
 
+                AllPrincipalsCvs.View.Refresh();
                 listBox.SelectedItem = null;
-                cmdNewPrincipal.IsOpen = false;
+                cmdDeletePrincipal.IsOpen = false;
             }
         }
 

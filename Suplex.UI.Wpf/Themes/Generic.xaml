@@ -36,7 +36,19 @@
         </StackPanel>
     </DataTemplate>
 
-    
+    <DataTemplate x:Key="DeleteButton">
+        <Button Command="Delete" CommandParameter="{Binding}" Cursor="Hand"
+				VerticalAlignment="Center" HorizontalContentAlignment="Center" ToolTip="Delete">
+            <Button.Template>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Image Height="14" Width="14" HorizontalAlignment="Center"
+						   Source="/Suplex.UI.Wpf;component/Resources/close_16x16_grey.png" />
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+    </DataTemplate>
+
+
     <!--   TextBlock Styles   -->
     
     <Style x:Key="Header" TargetType="{x:Type TextBlock}">

@@ -2,7 +2,8 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Suplex.UI.Wpf"
-             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation">
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+             xmlns:splxPrin="clr-namespace:Suplex.Security.Principal;assembly=Suplex.Security.Core">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
@@ -211,9 +212,22 @@
                                                Content="Add" Margin="4,0,0,0"
                                                Click="cmdAddGroupMembers_Click"/>
                         </Grid>
-                        <ListBox Name="lstGroupMembership" MinHeight="200" MaxHeight="350"
-                                 ItemsSource="{Binding}"
-                                 ItemTemplate="{DynamicResource groupMembershipItemIconTemplate}"/>
+                        <ListView Name="lstGroupMembership" MinHeight="200" MaxHeight="350"
+                                 ItemsSource="{Binding}">
+                            <ListView.View>
+                                <GridView AllowsColumnReorder="true">
+                                    <GridViewColumn Header="Name" CellTemplate="{DynamicResource groupMembershipItemIconTemplate}" />
+                                    <GridViewColumn Header="Description" Width="Auto">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate DataType="{x:Type splxPrin:SecurityPrincipalBase}">
+                                                <TextBlock Text="{Binding Path=Description}" Foreground="{local:FormattedBinding Path=IsEnabled, ValueIfTrue=Black, ValueIfFalse=Gray}" VerticalAlignment="Center"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="x" CellTemplate="{StaticResource ResourceKey=DeleteButton}" />
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
                     </StackPanel>
                 </Grid>
             </GroupBox>
