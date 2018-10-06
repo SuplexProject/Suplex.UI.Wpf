@@ -23,6 +23,8 @@ namespace Suplex.UI.Wpf
     {
         SuplexStore _store = null;
 
+
+        #region ctor
         public SecurityPrincipalDlg()
         {
             InitializeComponent();
@@ -45,7 +47,10 @@ namespace Suplex.UI.Wpf
 
             base.OnApplyTemplate();
         }
+        #endregion
 
+
+        #region public props
         public IDataAccessLayer SplxDal { get; set; } = null;
 
         public SuplexStore Store
@@ -82,7 +87,9 @@ namespace Suplex.UI.Wpf
                     };
 
                     DataContext = AllPrincipalsCvs.View;
-                    txtGroupMembersLookup.ItemsSource = null;
+
+                    txtGroupMembersLookup.ItemsSource = AllPrincipalsCvs.View;
+                    txtGroupMemberOfLookup.ItemsSource = LocalGroupsCvs.View;
                 }
             }
         }
@@ -95,6 +102,7 @@ namespace Suplex.UI.Wpf
 
         public CollectionViewSource AllPrincipalsCvs { get; set; }
         public CollectionViewSource LocalGroupsCvs { get; set; }
+        #endregion
 
 
         #region data context
@@ -137,6 +145,10 @@ namespace Suplex.UI.Wpf
             CurrentSecurityPrincipalMemberOf.Clear();
             CurrentSecurityPrincipalMembers.Clear();
             CurrentSecurityPrincipalDeletedMembership.Clear();
+            txtGroupMemberOfLookup.SelectedItems = null;
+            txtGroupMemberOfLookup.SearchText = string.Empty;
+            txtGroupMembersLookup.SelectedItems = null;
+            txtGroupMembersLookup.SearchText = string.Empty;
 
             if( CurrentSecurityPrincipal is User || (CurrentSecurityPrincipal is Group g && !g.IsLocal) )
             {
@@ -146,9 +158,8 @@ namespace Suplex.UI.Wpf
                     item.Resolve( Store.Groups, Store.Users );
                     CurrentSecurityPrincipalMemberOf.Add( new GroupMembershipItemWrapper( item, false ) );
                 }
-
-                txtGroupMemberOfLookup.ItemsSource = LocalGroupsCvs.View;
             }
+
             if( CurrentSecurityPrincipal is Group group && group.IsLocal )
             {
                 IEnumerable<GroupMembershipItem> groupMembershipItems = SplxDal.GetGroupMembers( CurrentSecurityPrincipal.UId, includeDisabledMembership: true );
@@ -157,13 +168,12 @@ namespace Suplex.UI.Wpf
                     item.Resolve( Store.Groups, Store.Users );
                     CurrentSecurityPrincipalMembers.Add( new GroupMembershipItemWrapper( item, true ) );
                 }
-
-                txtGroupMembersLookup.ItemsSource = AllPrincipalsCvs.View;
             }
         }
         #endregion
 
 
+        #region save/discard
         private void cmdSave_Click(object sender, RoutedEventArgs e)
         {
             if( CurrentSecurityPrincipal.IsUser )
@@ -171,6 +181,11 @@ namespace Suplex.UI.Wpf
             else
                 SplxDal.UpsertGroup( CurrentSecurityPrincipal as Group );
 
+            //process deletes before adds in case a deleted item is re-added
+            foreach( GroupMembershipItemWrapper gm in CurrentSecurityPrincipalDeletedMembership )
+                SplxDal.DeleteGroupMembership( gm );
+            foreach( GroupMembershipItemWrapper gm in CurrentSecurityPrincipalMemberOf )
+                SplxDal.UpsertGroupMembership( gm );
             foreach( GroupMembershipItemWrapper gm in CurrentSecurityPrincipalMembers )
                 SplxDal.UpsertGroupMembership( gm );
 
@@ -184,7 +199,10 @@ namespace Suplex.UI.Wpf
         {
             CloneCachedToCurrent();
         }
+        #endregion
 
+
+        #region new/delete securityPrincipal
         private void cmdNewPrincipal_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if( sender is ListBox listBox && listBox.SelectedItem is ListBoxItem item )
@@ -232,22 +250,25 @@ namespace Suplex.UI.Wpf
                 cmdDeletePrincipal.IsOpen = false;
             }
         }
+        #endregion
 
+
+        #region group membership
         private void cmdAddGroupMemberOf_Click(object sender, RoutedEventArgs e)
         {
             GroupMembershipItemWrapper item = null;
 
             foreach( SecurityPrincipalBase sp in txtGroupMemberOfLookup.SelectedItems )
             {
-                if( CurrentSecurityPrincipal is Group )
-                    item = new GroupMembershipItemWrapper( new GroupMembershipItem( CurrentSecurityPrincipal as Group, sp ), true );
-                else
+                if( CurrentSecurityPrincipal.UId != sp.UId )
+                {
                     item = new GroupMembershipItemWrapper( new GroupMembershipItem( sp as Group, CurrentSecurityPrincipal ), false );
 
-                if( !CurrentSecurityPrincipalMemberOf.ContainsItem( item ) && CurrentSecurityPrincipal.UId != item.GroupUId )
-                {
-                    CurrentSecurityPrincipalMemberOf.Add( item );
-                    CurrentSecurityPrincipal.IsDirty = true;
+                    if( !CurrentSecurityPrincipalMemberOf.ContainsItem( item ) )
+                    {
+                        CurrentSecurityPrincipalMemberOf.Add( item );
+                        CurrentSecurityPrincipal.IsDirty = true;
+                    }
                 }
             }
 
@@ -260,15 +281,15 @@ namespace Suplex.UI.Wpf
 
             foreach( SecurityPrincipalBase sp in txtGroupMembersLookup.SelectedItems )
             {
-                if( CurrentSecurityPrincipal is Group )
-                    item = new GroupMembershipItemWrapper( new GroupMembershipItem( CurrentSecurityPrincipal as Group, sp ), true );
-                else
-                    item = new GroupMembershipItemWrapper( new GroupMembershipItem( sp as Group, CurrentSecurityPrincipal ), false );
-
-                if( !CurrentSecurityPrincipalMembers.ContainsItem( item ) )
+                if( CurrentSecurityPrincipal.UId != sp.UId )
                 {
-                    CurrentSecurityPrincipalMembers.Add( item );
-                    CurrentSecurityPrincipal.IsDirty = true;
+                    item = new GroupMembershipItemWrapper( new GroupMembershipItem( CurrentSecurityPrincipal as Group, sp ), true );
+
+                    if( !CurrentSecurityPrincipalMembers.ContainsItem( item ) )
+                    {
+                        CurrentSecurityPrincipalMembers.Add( item );
+                        CurrentSecurityPrincipal.IsDirty = true;
+                    }
                 }
             }
 
@@ -283,6 +304,7 @@ namespace Suplex.UI.Wpf
                 CurrentSecurityPrincipalDeletedMembership.Add( gmi );
             }
         }
+        #endregion
     }
 
 
