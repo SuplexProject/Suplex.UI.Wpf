@@ -138,10 +138,6 @@ namespace Suplex.UI.Wpf
         }
         void CloneCachedToCurrent()
         {
-            CurrentSecurityPrincipal = CachedSecurityPrincipal?.Clone( shallow: false ) as SecurityPrincipalBase;
-            CurrentSecurityPrincipal?.EnableIsDirty();
-            cmdDeletePrincipal.DropDownContent = new List<SecurityPrincipalBase> { CurrentSecurityPrincipal };
-
             CurrentSecurityPrincipalMemberOf.Clear();
             CurrentSecurityPrincipalMembers.Clear();
             CurrentSecurityPrincipalDeletedMembership.Clear();
@@ -150,14 +146,16 @@ namespace Suplex.UI.Wpf
             txtGroupMembersLookup.SelectedItems = null;
             txtGroupMembersLookup.SearchText = string.Empty;
 
-            if( CurrentSecurityPrincipal is User || (CurrentSecurityPrincipal is Group g && !g.IsLocal) )
+
+            CurrentSecurityPrincipal = CachedSecurityPrincipal?.Clone( shallow: false ) as SecurityPrincipalBase;
+            CurrentSecurityPrincipal?.EnableIsDirty();
+            cmdDeletePrincipal.DropDownContent = new List<SecurityPrincipalBase> { CurrentSecurityPrincipal };
+
+            IEnumerable<GroupMembershipItem> groupMemberOf = SplxDal.GetGroupMemberOf( CurrentSecurityPrincipal.UId, includeDisabledMembership: true );
+            foreach( GroupMembershipItem item in groupMemberOf )
             {
-                IEnumerable<GroupMembershipItem> groupMembershipItems = SplxDal.GetGroupMembership( CurrentSecurityPrincipal.UId, includeDisabledMembership: true );
-                foreach( GroupMembershipItem item in groupMembershipItems )
-                {
-                    item.Resolve( Store.Groups, Store.Users );
-                    CurrentSecurityPrincipalMemberOf.Add( new GroupMembershipItemWrapper( item, false ) );
-                }
+                item.Resolve( Store.Groups, Store.Users );
+                CurrentSecurityPrincipalMemberOf.Add( new GroupMembershipItemWrapper( item, displayMember: false ) );
             }
 
             if( CurrentSecurityPrincipal is Group group && group.IsLocal )
@@ -166,38 +164,9 @@ namespace Suplex.UI.Wpf
                 foreach( GroupMembershipItem item in groupMembershipItems )
                 {
                     item.Resolve( Store.Groups, Store.Users );
-                    CurrentSecurityPrincipalMembers.Add( new GroupMembershipItemWrapper( item, true ) );
+                    CurrentSecurityPrincipalMembers.Add( new GroupMembershipItemWrapper( item, displayMember: true ) );
                 }
             }
-        }
-        #endregion
-
-
-        #region save/discard
-        private void cmdSave_Click(object sender, RoutedEventArgs e)
-        {
-            if( CurrentSecurityPrincipal.IsUser )
-                SplxDal.UpsertUser( CurrentSecurityPrincipal as User );
-            else
-                SplxDal.UpsertGroup( CurrentSecurityPrincipal as Group );
-
-            //process deletes before adds in case a deleted item is re-added
-            foreach( GroupMembershipItemWrapper gm in CurrentSecurityPrincipalDeletedMembership )
-                SplxDal.DeleteGroupMembership( gm );
-            foreach( GroupMembershipItemWrapper gm in CurrentSecurityPrincipalMemberOf )
-                SplxDal.UpsertGroupMembership( gm );
-            foreach( GroupMembershipItemWrapper gm in CurrentSecurityPrincipalMembers )
-                SplxDal.UpsertGroupMembership( gm );
-
-            AllPrincipalsCvs.View.Refresh();
-            LocalGroupsCvs.View.Refresh();
-
-            CurrentSecurityPrincipal.IsDirty = false;
-        }
-
-        private void cmdDiscard_Click(object sender, RoutedEventArgs e)
-        {
-            CloneCachedToCurrent();
         }
         #endregion
 
@@ -262,7 +231,7 @@ namespace Suplex.UI.Wpf
             {
                 if( CurrentSecurityPrincipal.UId != sp.UId )
                 {
-                    item = new GroupMembershipItemWrapper( new GroupMembershipItem( sp as Group, CurrentSecurityPrincipal ), false );
+                    item = new GroupMembershipItemWrapper( new GroupMembershipItem( sp as Group, CurrentSecurityPrincipal ), displayMember: false );
 
                     if( !CurrentSecurityPrincipalMemberOf.ContainsItem( item ) )
                     {
@@ -273,6 +242,7 @@ namespace Suplex.UI.Wpf
             }
 
             txtGroupMemberOfLookup.SelectedItems = null;
+            txtGroupMemberOfLookup.SearchText = string.Empty;
         }
 
         private void cmdAddGroupMembers_Click(object sender, RoutedEventArgs e)
@@ -283,7 +253,7 @@ namespace Suplex.UI.Wpf
             {
                 if( CurrentSecurityPrincipal.UId != sp.UId )
                 {
-                    item = new GroupMembershipItemWrapper( new GroupMembershipItem( CurrentSecurityPrincipal as Group, sp ), true );
+                    item = new GroupMembershipItemWrapper( new GroupMembershipItem( CurrentSecurityPrincipal as Group, sp ), displayMember: true );
 
                     if( !CurrentSecurityPrincipalMembers.ContainsItem( item ) )
                     {
@@ -294,6 +264,7 @@ namespace Suplex.UI.Wpf
             }
 
             txtGroupMembersLookup.SelectedItems = null;
+            txtGroupMembersLookup.SearchText = string.Empty;
         }
 
         private void cmdDeleteGroupMembers_Command(object sender, ExecutedRoutedEventArgs e)
@@ -303,6 +274,35 @@ namespace Suplex.UI.Wpf
                 CurrentSecurityPrincipalMembers.Remove( gmi );
                 CurrentSecurityPrincipalDeletedMembership.Add( gmi );
             }
+        }
+        #endregion
+
+
+        #region save/discard
+        private void cmdSave_Click(object sender, RoutedEventArgs e)
+        {
+            if( CurrentSecurityPrincipal.IsUser )
+                SplxDal.UpsertUser( CurrentSecurityPrincipal as User );
+            else
+                SplxDal.UpsertGroup( CurrentSecurityPrincipal as Group );
+
+            //process deletes before adds in case a deleted item is re-added
+            foreach( GroupMembershipItemWrapper gm in CurrentSecurityPrincipalDeletedMembership )
+                SplxDal.DeleteGroupMembership( gm );
+            foreach( GroupMembershipItemWrapper gm in CurrentSecurityPrincipalMemberOf )
+                SplxDal.UpsertGroupMembership( gm );
+            foreach( GroupMembershipItemWrapper gm in CurrentSecurityPrincipalMembers )
+                SplxDal.UpsertGroupMembership( gm );
+
+            AllPrincipalsCvs.View.Refresh();
+            LocalGroupsCvs.View.Refresh();
+
+            CurrentSecurityPrincipal.IsDirty = false;
+        }
+
+        private void cmdDiscard_Click(object sender, RoutedEventArgs e)
+        {
+            CloneCachedToCurrent();
         }
         #endregion
     }

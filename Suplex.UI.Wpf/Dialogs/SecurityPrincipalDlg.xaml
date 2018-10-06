@@ -130,30 +130,37 @@
                     <TextBlock Grid.Row="1" Grid.Column="0"
                                Text="Description" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                     <TextBox Grid.Row="1" Grid.Column="1" Margin="8" Padding="3"
-                             Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" />
+                             Text="{Binding UId, UpdateSourceTrigger=PropertyChanged}" />
 
                     <TextBlock Grid.Row="2" Grid.Column="0"
                                Text="Enabled" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                    <CheckBox Grid.Row="2" Grid.Column="1"
-                              Style="{DynamicResource SliderCheckBox}" Margin="8"
-                              IsChecked="{Binding IsEnabled}" />
+                    <Grid Grid.Row="2" Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
 
-                    <TextBlock Grid.Row="3" Grid.Column="0"
-                               Text="Type" HorizontalAlignment="Right" VerticalAlignment="Center"
-                               Visibility="{local:FormattedBinding IsUser, ValueIfTrue=Collapsed, ValueIfFalse=Visible}"/>
-                    <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" Margin="8"
-                                Visibility="{local:FormattedBinding IsUser, ValueIfTrue=Collapsed, ValueIfFalse=Visible}">
-                        <Image Margin="0,0,4,0" Height="18" Width="18"
-                               Source="/Suplex.UI.Wpf;component/Resources/group_internal.png"/>
-                        <RadioButton Content="Local (Suplex)" GroupName="GroupType"
-                                     VerticalAlignment="Center"
-                                     IsChecked="{Binding Path=IsLocal}"/>
-                        <Image Margin="12,0,4,0" Height="18" Width="18"
-                               Source="/Suplex.UI.Wpf;component/Resources/group_external.png"/>
-                        <RadioButton Content="External (AD, LDAP, etc.)" GroupName="GroupType"
-                                     VerticalAlignment="Center"
-                                     IsChecked="{local:FormattedBinding Path=IsLocal, ValueIfTrue=False, ValueIfFalse=True}"/>
-                    </StackPanel>
+                        <CheckBox Style="{DynamicResource SliderCheckBox}" Margin="8"
+                                  IsChecked="{Binding IsEnabled}" />
+
+                        <StackPanel Grid.Column="1" Margin="25,0" Orientation="Horizontal"
+                                    Visibility="{local:FormattedBinding IsUser, ValueIfTrue=Collapsed, ValueIfFalse=Visible}">
+                            <TextBlock Text="Type" VerticalAlignment="Center" />
+
+                            <StackPanel Orientation="Horizontal" Margin="8">
+                                <Image Margin="0,0,4,0" Height="18" Width="18"
+                                       Source="/Suplex.UI.Wpf;component/Resources/group_internal.png"/>
+                                <RadioButton Content="Local (Suplex)" GroupName="GroupType"
+                                             VerticalAlignment="Center"
+                                             IsChecked="{Binding Path=IsLocal}"/>
+                                <Image Margin="12,0,4,0" Height="18" Width="18"
+                                       Source="/Suplex.UI.Wpf;component/Resources/group_external.png"/>
+                                <RadioButton Content="External (AD, LDAP, etc.)" GroupName="GroupType"
+                                             VerticalAlignment="Center"
+                                             IsChecked="{local:FormattedBinding Path=IsLocal, ValueIfTrue=False, ValueIfFalse=True}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
 
 
                     <!--   Member Of   -->
