@@ -26,8 +26,20 @@
                             <telerik:RadDropDownButton.DropDownContentTemplate>
                                 <DataTemplate>
                                     <ListBox SelectionChanged="cmdNewPrincipal_SelectionChanged">
-                                        <ListBoxItem Content="New User" Tag="User" />
-                                        <ListBoxItem Content="New Group" Tag="Group" />
+                                        <ListBoxItem Tag="User">
+                                            <StackPanel Orientation="Horizontal" Margin="8,4">
+                                                <Image Margin="0,0,4,0" Height="18" Width="18"
+                                                       Source="/Suplex.UI.Wpf;component/Resources/user_internal.png"/>
+                                                <TextBlock Text="New User"/>
+                                            </StackPanel>
+                                        </ListBoxItem>
+                                        <ListBoxItem Tag="Group">
+                                            <StackPanel Orientation="Horizontal" Margin="8,4">
+                                                <Image Margin="0,0,4,0" Height="18" Width="18"
+                                                       Source="/Suplex.UI.Wpf;component/Resources/group_internal.png"/>
+                                                <TextBlock Text="New Group"/>
+                                            </StackPanel>
+                                        </ListBoxItem>
                                     </ListBox>
                                 </DataTemplate>
                             </telerik:RadDropDownButton.DropDownContentTemplate>
@@ -43,13 +55,13 @@
                                             Content="{Binding}">
                                         <Button.Template>
                                             <ControlTemplate TargetType="{x:Type Button}">
-                                                <Border x:Name="IconBorder"  Padding="4">
+                                                <Border x:Name="IconBorder" Padding="10,7">
                                                     <StackPanel Orientation="Horizontal">
                                                         <TextBlock Text="Delete [ " VerticalAlignment="Center"
-                                                                   FontWeight="Bold" Foreground="Maroon"/>
+                                                                   FontWeight="Bold" Foreground="#ff800000"/>
                                                         <ContentPresenter ContentTemplate="{StaticResource securityPrincipalNameIconTemplate}" />
                                                         <TextBlock Text=" ]?" VerticalAlignment="Center"
-                                                                   FontWeight="Bold" Foreground="Maroon" />
+                                                                   FontWeight="Bold" Foreground="#ff800000" />
                                                     </StackPanel>
                                                 </Border>
                                                 <ControlTemplate.Triggers>
@@ -138,7 +150,8 @@
 
                     <TextBlock Grid.Row="0" Grid.Column="0" Margin="5,0,0,0"
                                Text="UniqueName" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                    <TextBox Grid.Row="0" Grid.Column="1" Margin="8" Padding="3"
+                    <TextBox Grid.Row="0" Grid.Column="1" Name="txtPrincipalName"
+                             Margin="8" Padding="3"
                              Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
 
                     <TextBlock Grid.Row="1" Grid.Column="0"

@@ -212,6 +212,9 @@ namespace Suplex.UI.Wpf
                 listBox.SelectedItem = null;
                 cmdNewPrincipal.IsOpen = false;
                 grdPrincipals.SelectedItem = sp;
+
+                txtPrincipalName.Focus();
+                txtPrincipalName.SelectAll();
             }
         }
 
