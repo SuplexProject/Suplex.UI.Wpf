@@ -87,12 +87,13 @@ namespace Suplex.UI.Wpf
                 {
                     _store = value;
 
+                    //note: must add SortDescriptions *before* View.Filter or filter doesn't work
                     _usersCvs_Filtered = new CollectionViewSource { Source = _store.Users };
-                    _usersCvs_Filtered.View.Filter = SecurityPrincipalFilter;
                     _usersCvs_Filtered.SortDescriptions.Add( new SortDescription( "Name", ListSortDirection.Ascending ) );
+                    _usersCvs_Filtered.View.Filter = SecurityPrincipalFilter;
                     _groupsCvs_Filtered = new CollectionViewSource { Source = _store.Groups };
-                    _groupsCvs_Filtered.View.Filter = SecurityPrincipalFilter;
                     _groupsCvs_Filtered.SortDescriptions.Add( new SortDescription( "Name", ListSortDirection.Ascending ) );
+                    _groupsCvs_Filtered.View.Filter = SecurityPrincipalFilter;
                     _allPrincipalsCvs_Filtered = new CollectionViewSource
                     {
                         Source = new CompositeCollection
@@ -101,6 +102,9 @@ namespace Suplex.UI.Wpf
                             new CollectionContainer{ Collection = _groupsCvs_Filtered.View }
                         }
                     };
+
+                    DataContext = _allPrincipalsCvs_Filtered.View;
+
 
                     _usersCvs_Unfiltered = new CollectionViewSource { Source = _store.Users };
                     _usersCvs_Unfiltered.SortDescriptions.Add( new SortDescription( "Name", ListSortDirection.Ascending ) );
@@ -115,6 +119,9 @@ namespace Suplex.UI.Wpf
                         }
                     };
 
+                    txtGroupMembersLookup.ItemsSource = _allPrincipalsCvs_Unfiltered.View;
+
+
                     _localGroupsCvs = new CollectionViewSource { Source = _store.Groups };
                     _localGroupsCvs.View.Filter = item =>
                     {
@@ -123,9 +130,6 @@ namespace Suplex.UI.Wpf
                         return true;
                     };
 
-                    DataContext = _allPrincipalsCvs_Filtered.View;
-
-                    txtGroupMembersLookup.ItemsSource = _allPrincipalsCvs_Unfiltered.View;
                     txtGroupMemberOfLookup.ItemsSource = _localGroupsCvs.View;
                 }
             }
@@ -135,6 +139,7 @@ namespace Suplex.UI.Wpf
         {
             _usersCvs_Filtered.View.Refresh();
             _groupsCvs_Filtered.View.Refresh();
+            _allPrincipalsCvs_Filtered.View.Refresh();
         }
         private bool SecurityPrincipalFilter(object item)
         {
@@ -195,23 +200,29 @@ namespace Suplex.UI.Wpf
                 CurrentSecurityPrincipal.EnableIsDirty();
 
                 IEnumerable<GroupMembershipItem> groupMemberOf = SplxDal.GetGroupMemberOf( CurrentSecurityPrincipal.UId, includeDisabledMembership: true );
+                List<GroupMembershipItemWrapper> tmp = new List<GroupMembershipItemWrapper>();
                 foreach( GroupMembershipItem item in groupMemberOf )
                 {
                     item.Resolve( Store.Groups, Store.Users );
-                    CurrentSecurityPrincipalMemberOf.Add( new GroupMembershipItemWrapper( item, displayMember: false ) );
+                    tmp.Add( new GroupMembershipItemWrapper( item, displayMember: false ) );
                 }
-                CurrentSecurityPrincipalMemberOf.OrderBy( gmi => gmi.Group.Name );
+                tmp.Sort( (x, y) => x.GroupItem.Name.CompareTo( y.GroupItem.Name ) );
+                CurrentSecurityPrincipalMemberOf = new ObservableCollection<GroupMembershipItemWrapper>( tmp );
 
+                tmp.Clear();
                 if( CurrentSecurityPrincipal is Group group && group.IsLocal )
                 {
                     IEnumerable<GroupMembershipItem> groupMembers = SplxDal.GetGroupMembers( CurrentSecurityPrincipal.UId, includeDisabledMembership: true );
                     foreach( GroupMembershipItem item in groupMembers )
                     {
                         item.Resolve( Store.Groups, Store.Users );
-                        CurrentSecurityPrincipalMembers.Add( new GroupMembershipItemWrapper( item, displayMember: true ) );
+                        tmp.Add( new GroupMembershipItemWrapper( item, displayMember: true ) );
                     }
-                    CurrentSecurityPrincipalMembers.OrderBy( gmi => gmi.Member.Name );
+                    tmp.Sort( (x, y) => x.MemberItem.Name.CompareTo( y.MemberItem.Name ) );
+                    CurrentSecurityPrincipalMembers = new ObservableCollection<GroupMembershipItemWrapper>( tmp );
                 }
+
+                tmp = null;
             }
         }
         #endregion
@@ -275,7 +286,6 @@ namespace Suplex.UI.Wpf
         {
             GroupMembershipItemWrapper item = null;
 
-            bool added = false;
             foreach( SecurityPrincipalBase sp in txtGroupMemberOfLookup.SelectedItems )
             {
                 if( CurrentSecurityPrincipal.UId != sp.UId )
@@ -285,15 +295,9 @@ namespace Suplex.UI.Wpf
                     if( !CurrentSecurityPrincipalMemberOf.ContainsItem( item ) )
                     {
                         CurrentSecurityPrincipalMemberOf.Add( item );
-                        added = true;
+                        CurrentSecurityPrincipal.IsDirty = true;
                     }
                 }
-            }
-
-            if( added )
-            {
-                CurrentSecurityPrincipal.IsDirty = true;
-                CurrentSecurityPrincipalMemberOf.OrderBy( gmi => gmi.Group.Name );
             }
 
             txtGroupMemberOfLookup.SelectedItems = null;
@@ -304,7 +308,6 @@ namespace Suplex.UI.Wpf
         {
             GroupMembershipItemWrapper item = null;
 
-            bool added = false;
             foreach( SecurityPrincipalBase sp in txtGroupMembersLookup.SelectedItems )
             {
                 if( CurrentSecurityPrincipal.UId != sp.UId )
@@ -314,15 +317,9 @@ namespace Suplex.UI.Wpf
                     if( !CurrentSecurityPrincipalMembers.ContainsItem( item ) )
                     {
                         CurrentSecurityPrincipalMembers.Add( item );
-                        added = true;
+                        CurrentSecurityPrincipal.IsDirty = true;
                     }
                 }
-            }
-
-            if( added )
-            {
-                CurrentSecurityPrincipal.IsDirty = true;
-                CurrentSecurityPrincipalMemberOf.OrderBy( gmi => gmi.Member.Name );
             }
 
             txtGroupMembersLookup.SelectedItems = null;
@@ -355,6 +352,7 @@ namespace Suplex.UI.Wpf
             else
                 SplxDal.UpsertGroup( CurrentSecurityPrincipal as Group );
 
+
             //process deletes before adds in case a deleted item is re-added
             foreach( GroupMembershipItemWrapper gm in CurrentSecurityPrincipalDeletedMembership )
                 SplxDal.DeleteGroupMembership( gm );
@@ -362,6 +360,12 @@ namespace Suplex.UI.Wpf
                 SplxDal.UpsertGroupMembership( gm );
             foreach( GroupMembershipItemWrapper gm in CurrentSecurityPrincipalMembers )
                 SplxDal.UpsertGroupMembership( gm );
+
+            //refresh the display
+            CurrentSecurityPrincipalMemberOf =
+                new ObservableCollection<GroupMembershipItemWrapper>( CurrentSecurityPrincipalMemberOf.OrderBy( gmi => gmi.GroupItem.Name ) );
+            CurrentSecurityPrincipalMembers =
+                new ObservableCollection<GroupMembershipItemWrapper>( CurrentSecurityPrincipalMembers.OrderBy( gmi => gmi.MemberItem.Name ) );
 
             RefreshViews();
 
