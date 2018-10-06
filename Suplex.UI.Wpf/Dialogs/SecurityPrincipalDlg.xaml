@@ -18,7 +18,7 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Text="Security Principals" Style="{DynamicResource Header}"/>
+                    <TextBlock Text="Security Principals" Style="{StaticResource Header}"/>
 
                     <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                         <telerik:RadDropDownButton Name="cmdNewPrincipal"
@@ -56,7 +56,7 @@
                                  ItemsSource="{Binding}" IsReadOnly="True"
                                  SelectionChanged="grdPrincipals_SelectionChanged">
                 <telerik:RadGridView.Columns>
-                    <telerik:GridViewDataColumn Header="Name" Width="Auto" DataMemberBinding="{Binding Name}" CellTemplate="{DynamicResource securityPrincipalNameIconTemplate}"/>
+                    <telerik:GridViewDataColumn Header="Name" Width="Auto" DataMemberBinding="{Binding Name}" CellTemplate="{StaticResource securityPrincipalNameIconTemplate}"/>
                     <telerik:GridViewDataColumn Header="Description" Width="Auto" DataMemberBinding="{Binding Description}" />
                     <telerik:GridViewDataColumn Header="IsLocal" Width="Auto" DataMemberBinding="{Binding IsLocal}" />
                     <telerik:GridViewDataColumn Header="IsUser" Width="Auto" DataMemberBinding="{Binding IsUser}" />
@@ -94,7 +94,7 @@
                         </Grid.ColumnDefinitions>
 
                         <TextBlock Text="{local:FormattedBinding IsUser, ValueIfTrue=User, ValueIfFalse=Group, FormatString='\{0\} Properties'}"
-                                   Style="{DynamicResource Header}" />
+                                   Style="{StaticResource Header}" />
 
                         <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                             <telerik:RadButton Name="cmdSave" Content="Save"
@@ -130,7 +130,7 @@
                     <TextBlock Grid.Row="1" Grid.Column="0"
                                Text="Description" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                     <TextBox Grid.Row="1" Grid.Column="1" Margin="8" Padding="3"
-                             Text="{Binding UId, UpdateSourceTrigger=PropertyChanged}" />
+                             Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" />
 
                     <TextBlock Grid.Row="2" Grid.Column="0"
                                Text="Enabled" HorizontalAlignment="Right" VerticalAlignment="Center"/>
@@ -140,7 +140,7 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
-                        <CheckBox Style="{DynamicResource SliderCheckBox}" Margin="8"
+                        <CheckBox Style="{StaticResource SliderCheckBox}" Margin="8"
                                   IsChecked="{Binding IsEnabled}" />
 
                         <StackPanel Grid.Column="1" Margin="25,0" Orientation="Horizontal"
@@ -175,7 +175,7 @@
 
                             <telerik:RadAutoCompleteBox Grid.Column="0" x:Name="txtGroupMemberOfLookup"
                                                         DisplayMemberPath="Name" SelectionMode="Multiple"
-                                                        DropDownItemTemplate="{DynamicResource securityPrincipalNameIconTemplate}"
+                                                        DropDownItemTemplate="{StaticResource securityPrincipalNameIconTemplate}"
                                                         AutoCompleteMode="Suggest"/>
                             <telerik:RadButton Grid.Column="1" Name="cmdAddGroupMemberOf"
                                                Content="Add" Margin="4,0,0,0"
@@ -183,7 +183,7 @@
                         </Grid>
                         <ListBox Name="lstGroupMemberOf" MinHeight="200" MaxHeight="350"
                                  ItemsSource="{Binding}"
-                                 ItemTemplate="{DynamicResource groupMembershipItemIconTemplate}"
+                                 ItemTemplate="{StaticResource groupMembershipItemIconTemplate}"
                                  ItemContainerStyle="{StaticResource groupMembershipItemContainer}"/>
                     </StackPanel>
 
@@ -213,7 +213,7 @@
 
                             <telerik:RadAutoCompleteBox Grid.Column="0" x:Name="txtGroupMembersLookup"
                                                         DisplayMemberPath="Name" SelectionMode="Multiple"
-                                                        DropDownItemTemplate="{DynamicResource securityPrincipalNameIconTemplate}"
+                                                        DropDownItemTemplate="{StaticResource securityPrincipalNameIconTemplate}"
                                                         AutoCompleteMode="Suggest"/>
                             <telerik:RadButton Grid.Column="1" Name="cmdAddGroupMembers"
                                                Content="Add" Margin="4,0,0,0"
@@ -221,7 +221,7 @@
                         </Grid>
                         <ListBox Name="lstGroupMembers" MinHeight="200" MaxHeight="350"
                                  ItemsSource="{Binding}"
-                                 ItemTemplate="{DynamicResource groupMembershipItemIconTemplate}"
+                                 ItemTemplate="{StaticResource groupMembershipItemIconTemplate}"
                                  ItemContainerStyle="{StaticResource groupMembershipItemContainer}"/>
                     </StackPanel>
                 </Grid>

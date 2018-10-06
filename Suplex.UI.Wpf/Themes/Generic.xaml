@@ -6,6 +6,9 @@
     <local:LocalGroupVisibilityConverter x:Key="localGroupVisibilityConverter" />
     <local:SecurityPrincipalTypeConverter x:Key="securityPrincipalTypeConverter" />
 
+
+    <!--   SecurityPrincipalBase   -->
+
     <DataTemplate DataType="{x:Type splxPrin:SecurityPrincipalBase}" x:Key="securityPrincipalNameIconTemplate">
         <StackPanel Orientation="Horizontal" Opacity="{local:FormattedBinding Path=IsEnabled, ValueIfTrue=1, ValueIfFalse=.5}">
             <Image Margin="0,0,4,0" Height="18" Width="18">
@@ -20,6 +23,9 @@
             <TextBlock Text="{Binding Path=Name}" VerticalAlignment="Center"/>
         </StackPanel>
     </DataTemplate>
+
+
+    <!--   GroupMembershipItem   -->
 
     <DataTemplate DataType="{x:Type local:GroupMembershipItemWrapper}" x:Key="groupMembershipItemIconTemplate">
         <Grid HorizontalAlignment="Stretch">

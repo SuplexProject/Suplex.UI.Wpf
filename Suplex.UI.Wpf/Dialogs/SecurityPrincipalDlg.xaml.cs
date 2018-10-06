@@ -149,6 +149,7 @@ namespace Suplex.UI.Wpf
 
             CurrentSecurityPrincipal = CachedSecurityPrincipal?.Clone( shallow: false ) as SecurityPrincipalBase;
             CurrentSecurityPrincipal?.EnableIsDirty();
+
             cmdDeletePrincipal.DropDownContent = new List<SecurityPrincipalBase> { CurrentSecurityPrincipal };
 
             IEnumerable<GroupMembershipItem> groupMemberOf = SplxDal.GetGroupMemberOf( CurrentSecurityPrincipal.UId, includeDisabledMembership: true );
@@ -271,8 +272,15 @@ namespace Suplex.UI.Wpf
         {
             if( e.Parameter is GroupMembershipItemWrapper gmi )
             {
-                CurrentSecurityPrincipalMembers.Remove( gmi );
+                int index = CurrentSecurityPrincipalMembers.IndexOf( gmi );
+                if( index > -1 )
+                    CurrentSecurityPrincipalMembers.RemoveAt( index );
+                else
+                    CurrentSecurityPrincipalMemberOf.Remove( gmi );
+
                 CurrentSecurityPrincipalDeletedMembership.Add( gmi );
+
+                CurrentSecurityPrincipal.IsDirty = true;
             }
         }
         #endregion
