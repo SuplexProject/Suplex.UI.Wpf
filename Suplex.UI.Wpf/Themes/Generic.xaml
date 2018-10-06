@@ -22,7 +22,13 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type local:GroupMembershipItemWrapper}" x:Key="groupMembershipItemIconTemplate">
-        <StackPanel Orientation="Horizontal" Opacity="{local:FormattedBinding Path=DisplayItem.IsEnabled, ValueIfTrue=1, ValueIfFalse=.5}">
+        <Grid HorizontalAlignment="Stretch"
+              Opacity="{local:FormattedBinding Path=DisplayItem.IsEnabled, ValueIfTrue=1, ValueIfFalse=.5}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
             <Image Margin="0,0,4,0" Height="18" Width="18">
                 <Image.Source>
                     <MultiBinding Converter="{StaticResource securityPrincipalTypeConverter}"
@@ -32,9 +38,40 @@
                     </MultiBinding>
                 </Image.Source>
             </Image>
-            <TextBlock Text="{Binding DisplayItem.Name}" Foreground="{local:FormattedBinding IsMemberUser, ValueIfTrue=Blue, ValueIfFalse=Black, FallbackValue=Green}" />
-        </StackPanel>
+            <TextBlock Grid.Column="1" Text="{Binding DisplayItem.Name}"
+                       Foreground="{local:FormattedBinding IsMemberUser, ValueIfTrue=Blue, ValueIfFalse=Black, FallbackValue=Green}" />
+            <!--<Image Grid.Column="2" Margin="10,0,2,0" Source="/Suplex.UI.Wpf;component/Resources/close_16x16_grey.png" MaxHeight="14" MaxWidth="14" />-->
+            <Button Grid.Column="2" Command="Delete" CommandParameter="{Binding}" Cursor="Hand"
+                    VerticalAlignment="Center" HorizontalContentAlignment="Center" ToolTip="Delete">
+                <Button.Template>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Image Height="14" Width="14" HorizontalAlignment="Center"
+                               Source="/Suplex.UI.Wpf;component/Resources/close_16x16_grey.png" />
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+        </Grid>
     </DataTemplate>
+
+    <Style x:Key="groupMembershipItemContainer" TargetType="{x:Type ListBoxItem}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                    <Border x:Name="IconBorder" Margin="0" Padding="4" >
+                        <ContentPresenter />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="true">
+                            <Setter TargetName="IconBorder" Property="Background" Value="#77D3D3D3"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter TargetName="IconBorder" Property="Background" Value="#FFD3D3D3"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
     <DataTemplate x:Key="DeleteButton">
         <Button Command="Delete" CommandParameter="{Binding}" Cursor="Hand"

@@ -44,8 +44,12 @@ namespace Suplex.UI.Wpf
                 new Group{ Name = "gy", IsEnabled = true, IsLocal = false },
                 new Group{ Name = "gz", IsEnabled = true, IsLocal = false }
             };
+            bool isLocal = false;
             for( int i = 0; i < 50; i++ )
-                groups.Add( new Group { Name = $"Group_{i}" } );
+            {
+                isLocal = !isLocal;
+                groups.Add( new Group { Name = $"Group_{i}", IsLocal = isLocal } );
+            }
 
             GroupMembershipItem mx = new GroupMembershipItem
             {
