@@ -83,6 +83,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Controls\FilterTextBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Dialogs\SecureObjectDlg.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -102,6 +106,9 @@
     <Compile Include="Code\FormattedBinding.cs" />
     <Compile Include="Code\LocalGroupVisibilityConverter.cs" />
     <Compile Include="Controls\AceRightsListBox.cs" />
+    <Compile Include="Controls\FilterTextBox.xaml.cs">
+      <DependentUpon>FilterTextBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Dialogs\SecureObjectDlg.xaml.cs">
       <DependentUpon>SecureObjectDlg.xaml</DependentUpon>
     </Compile>

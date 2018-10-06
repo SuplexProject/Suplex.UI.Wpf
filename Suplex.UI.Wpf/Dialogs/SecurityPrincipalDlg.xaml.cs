@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -16,9 +16,6 @@ using Telerik.Windows.Controls;
 
 namespace Suplex.UI.Wpf
 {
-    /// <summary>
-    /// Interaction logic for SecurityPrincipalDlg.xaml
-    /// </summary>
     public partial class SecurityPrincipalDlg : UserControl
     {
         SuplexStore _store = null;
@@ -64,6 +61,23 @@ namespace Suplex.UI.Wpf
         #region public props
         public IDataAccessLayer SplxDal { get; set; } = null;
 
+        CollectionViewSource _usersCvs_Filtered = null;
+        CollectionViewSource _groupsCvs_Filtered = null;
+        CollectionViewSource _usersCvs_Unfiltered = null;
+        CollectionViewSource _groupsCvs_Unfiltered = null;
+        CollectionViewSource _allPrincipalsCvs_Filtered = null;
+        CollectionViewSource _allPrincipalsCvs_Unfiltered = null;
+        CollectionViewSource _localGroupsCvs = null;
+
+        void RefreshViews()
+        {
+            _usersCvs_Filtered.View.Refresh();
+            _groupsCvs_Filtered.View.Refresh();
+            _allPrincipalsCvs_Filtered.View.Refresh();
+            _allPrincipalsCvs_Unfiltered.View.Refresh();
+            _localGroupsCvs.View.Refresh();
+        }
+
         public SuplexStore Store
         {
             get => _store;
@@ -73,46 +87,60 @@ namespace Suplex.UI.Wpf
                 {
                     _store = value;
 
-                    AllPrincipalsCvs = new CollectionViewSource
+                    _usersCvs_Filtered = new CollectionViewSource { Source = _store.Users };
+                    _usersCvs_Filtered.View.Filter = SecurityPrincipalFilter;
+                    _usersCvs_Filtered.SortDescriptions.Add( new SortDescription( "Name", ListSortDirection.Ascending ) );
+                    _groupsCvs_Filtered = new CollectionViewSource { Source = _store.Groups };
+                    _groupsCvs_Filtered.View.Filter = SecurityPrincipalFilter;
+                    _groupsCvs_Filtered.SortDescriptions.Add( new SortDescription( "Name", ListSortDirection.Ascending ) );
+                    _allPrincipalsCvs_Filtered = new CollectionViewSource
                     {
                         Source = new CompositeCollection
                         {
-                            new CollectionContainer{ Collection = _store.Users },
-                            new CollectionContainer{ Collection = _store.Groups }
+                            new CollectionContainer{ Collection = _usersCvs_Filtered.View },
+                            new CollectionContainer{ Collection = _groupsCvs_Filtered.View }
                         }
-                        //,CollectionViewType = typeof( ListCollectionView )
                     };
-                    //AllPrincipalsCvs.View.Filter = item =>
-                    //{
-                    //    if( !(item is SecurityPrincipalBase sp) ) return false;
-                    //    if( !sp.IsEnabled ) return false;
-                    //    return true;
-                    //};
 
-                    LocalGroupsCvs = new CollectionViewSource { Source = _store.Groups };
-                    LocalGroupsCvs.View.Filter = item =>
+                    _usersCvs_Unfiltered = new CollectionViewSource { Source = _store.Users };
+                    _usersCvs_Unfiltered.SortDescriptions.Add( new SortDescription( "Name", ListSortDirection.Ascending ) );
+                    _groupsCvs_Unfiltered = new CollectionViewSource { Source = _store.Groups };
+                    _groupsCvs_Unfiltered.SortDescriptions.Add( new SortDescription( "Name", ListSortDirection.Ascending ) );
+                    _allPrincipalsCvs_Unfiltered = new CollectionViewSource
+                    {
+                        Source = new CompositeCollection
+                        {
+                            new CollectionContainer{ Collection = _usersCvs_Unfiltered.View },
+                            new CollectionContainer{ Collection = _groupsCvs_Unfiltered.View }
+                        }
+                    };
+
+                    _localGroupsCvs = new CollectionViewSource { Source = _store.Groups };
+                    _localGroupsCvs.View.Filter = item =>
                     {
                         if( !(item is Group g) ) return false;
                         if( !g.IsLocal ) return false; //!g.IsEnabled || 
                         return true;
                     };
 
-                    DataContext = AllPrincipalsCvs.View;
+                    DataContext = _allPrincipalsCvs_Filtered.View;
 
-                    txtGroupMembersLookup.ItemsSource = AllPrincipalsCvs.View;
-                    txtGroupMemberOfLookup.ItemsSource = LocalGroupsCvs.View;
+                    txtGroupMembersLookup.ItemsSource = _allPrincipalsCvs_Unfiltered.View;
+                    txtGroupMemberOfLookup.ItemsSource = _localGroupsCvs.View;
                 }
             }
         }
-        private bool UserFilter(object item)
+
+        private void txtFilter_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            _usersCvs_Filtered.View.Refresh();
+            _groupsCvs_Filtered.View.Refresh();
+        }
+        private bool SecurityPrincipalFilter(object item)
         {
             if( !(item is SecurityPrincipalBase sp) ) return false;
-            if( !sp.IsEnabled ) return false;
-            return true;
+            return sp.Name.IndexOf( txtFilter.Text, StringComparison.OrdinalIgnoreCase ) >= 0;
         }
-
-        public CollectionViewSource AllPrincipalsCvs { get; set; }
-        public CollectionViewSource LocalGroupsCvs { get; set; }
         #endregion
 
 
@@ -172,15 +200,17 @@ namespace Suplex.UI.Wpf
                     item.Resolve( Store.Groups, Store.Users );
                     CurrentSecurityPrincipalMemberOf.Add( new GroupMembershipItemWrapper( item, displayMember: false ) );
                 }
+                CurrentSecurityPrincipalMemberOf.OrderBy( gmi => gmi.Group.Name );
 
                 if( CurrentSecurityPrincipal is Group group && group.IsLocal )
                 {
-                    IEnumerable<GroupMembershipItem> groupMembershipItems = SplxDal.GetGroupMembers( CurrentSecurityPrincipal.UId, includeDisabledMembership: true );
-                    foreach( GroupMembershipItem item in groupMembershipItems )
+                    IEnumerable<GroupMembershipItem> groupMembers = SplxDal.GetGroupMembers( CurrentSecurityPrincipal.UId, includeDisabledMembership: true );
+                    foreach( GroupMembershipItem item in groupMembers )
                     {
                         item.Resolve( Store.Groups, Store.Users );
                         CurrentSecurityPrincipalMembers.Add( new GroupMembershipItemWrapper( item, displayMember: true ) );
                     }
+                    CurrentSecurityPrincipalMembers.OrderBy( gmi => gmi.Member.Name );
                 }
             }
         }
@@ -208,7 +238,7 @@ namespace Suplex.UI.Wpf
                         Store.Groups.Add( group );
                 }
 
-                AllPrincipalsCvs.View.Refresh();
+                RefreshViews();
                 listBox.SelectedItem = null;
                 cmdNewPrincipal.IsOpen = false;
                 grdPrincipals.SelectedItem = sp;
@@ -233,7 +263,7 @@ namespace Suplex.UI.Wpf
                     SplxDal.DeleteGroup( securityPrincipal.UId );
                 }
 
-                AllPrincipalsCvs.View.Refresh();
+                RefreshViews();
                 cmdDeletePrincipal.IsOpen = false;
             }
         }
@@ -245,6 +275,7 @@ namespace Suplex.UI.Wpf
         {
             GroupMembershipItemWrapper item = null;
 
+            bool added = false;
             foreach( SecurityPrincipalBase sp in txtGroupMemberOfLookup.SelectedItems )
             {
                 if( CurrentSecurityPrincipal.UId != sp.UId )
@@ -254,9 +285,15 @@ namespace Suplex.UI.Wpf
                     if( !CurrentSecurityPrincipalMemberOf.ContainsItem( item ) )
                     {
                         CurrentSecurityPrincipalMemberOf.Add( item );
-                        CurrentSecurityPrincipal.IsDirty = true;
+                        added = true;
                     }
                 }
+            }
+
+            if( added )
+            {
+                CurrentSecurityPrincipal.IsDirty = true;
+                CurrentSecurityPrincipalMemberOf.OrderBy( gmi => gmi.Group.Name );
             }
 
             txtGroupMemberOfLookup.SelectedItems = null;
@@ -267,6 +304,7 @@ namespace Suplex.UI.Wpf
         {
             GroupMembershipItemWrapper item = null;
 
+            bool added = false;
             foreach( SecurityPrincipalBase sp in txtGroupMembersLookup.SelectedItems )
             {
                 if( CurrentSecurityPrincipal.UId != sp.UId )
@@ -276,9 +314,15 @@ namespace Suplex.UI.Wpf
                     if( !CurrentSecurityPrincipalMembers.ContainsItem( item ) )
                     {
                         CurrentSecurityPrincipalMembers.Add( item );
-                        CurrentSecurityPrincipal.IsDirty = true;
+                        added = true;
                     }
                 }
+            }
+
+            if( added )
+            {
+                CurrentSecurityPrincipal.IsDirty = true;
+                CurrentSecurityPrincipalMemberOf.OrderBy( gmi => gmi.Member.Name );
             }
 
             txtGroupMembersLookup.SelectedItems = null;
@@ -319,8 +363,7 @@ namespace Suplex.UI.Wpf
             foreach( GroupMembershipItemWrapper gm in CurrentSecurityPrincipalMembers )
                 SplxDal.UpsertGroupMembership( gm );
 
-            AllPrincipalsCvs.View.Refresh();
-            LocalGroupsCvs.View.Refresh();
+            RefreshViews();
 
             CurrentSecurityPrincipal.IsDirty = false;
         }
