@@ -37,15 +37,26 @@ namespace Suplex.UI.Wpf
             txtGroupMembersLookup.SelectedItems = null;
             txtGroupMembersLookup.SearchText = string.Empty;
         }
+        #endregion
 
+
+        #region delete setup
         public override void OnApplyTemplate()
         {
             CommandBinding removeItem = new CommandBinding();
             removeItem.Command = ApplicationCommands.Delete;
-            removeItem.Executed += cmdDeleteGroupMembers_Command;
+            removeItem.Executed += DeleteItem_Command;
             CommandBindings.Add( removeItem );
 
             base.OnApplyTemplate();
+        }
+
+        private void DeleteItem_Command(object sender, ExecutedRoutedEventArgs e)
+        {
+            if( e.Parameter is SecurityPrincipalBase securityPrincipal )
+                DeletePrincipal( securityPrincipal );
+            else if( e.Parameter is GroupMembershipItemWrapper gmi )
+                DeleteGroupMembershipItem( gmi );
         }
         #endregion
 
@@ -148,24 +159,28 @@ namespace Suplex.UI.Wpf
 
 
             CurrentSecurityPrincipal = CachedSecurityPrincipal?.Clone( shallow: false ) as SecurityPrincipalBase;
-            CurrentSecurityPrincipal?.EnableIsDirty();
 
-            cmdDeletePrincipal.DropDownContent = new List<SecurityPrincipalBase> { CurrentSecurityPrincipal };
+            cmdDeletePrincipal.DropDownContent = CurrentSecurityPrincipal;
 
-            IEnumerable<GroupMembershipItem> groupMemberOf = SplxDal.GetGroupMemberOf( CurrentSecurityPrincipal.UId, includeDisabledMembership: true );
-            foreach( GroupMembershipItem item in groupMemberOf )
+            if( CurrentSecurityPrincipal != null )
             {
-                item.Resolve( Store.Groups, Store.Users );
-                CurrentSecurityPrincipalMemberOf.Add( new GroupMembershipItemWrapper( item, displayMember: false ) );
-            }
+                CurrentSecurityPrincipal.EnableIsDirty();
 
-            if( CurrentSecurityPrincipal is Group group && group.IsLocal )
-            {
-                IEnumerable<GroupMembershipItem> groupMembershipItems = SplxDal.GetGroupMembers( CurrentSecurityPrincipal.UId, includeDisabledMembership: true );
-                foreach( GroupMembershipItem item in groupMembershipItems )
+                IEnumerable<GroupMembershipItem> groupMemberOf = SplxDal.GetGroupMemberOf( CurrentSecurityPrincipal.UId, includeDisabledMembership: true );
+                foreach( GroupMembershipItem item in groupMemberOf )
                 {
                     item.Resolve( Store.Groups, Store.Users );
-                    CurrentSecurityPrincipalMembers.Add( new GroupMembershipItemWrapper( item, displayMember: true ) );
+                    CurrentSecurityPrincipalMemberOf.Add( new GroupMembershipItemWrapper( item, displayMember: false ) );
+                }
+
+                if( CurrentSecurityPrincipal is Group group && group.IsLocal )
+                {
+                    IEnumerable<GroupMembershipItem> groupMembershipItems = SplxDal.GetGroupMembers( CurrentSecurityPrincipal.UId, includeDisabledMembership: true );
+                    foreach( GroupMembershipItem item in groupMembershipItems )
+                    {
+                        item.Resolve( Store.Groups, Store.Users );
+                        CurrentSecurityPrincipalMembers.Add( new GroupMembershipItemWrapper( item, displayMember: true ) );
+                    }
                 }
             }
         }
@@ -200,9 +215,9 @@ namespace Suplex.UI.Wpf
             }
         }
 
-        private void cmdDeletePrincipal_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void DeletePrincipal(SecurityPrincipalBase securityPrincipal)
         {
-            if( sender is ListBox listBox && listBox.SelectedItem is SecurityPrincipalBase securityPrincipal )
+            if( securityPrincipal != null )
             {
                 if( securityPrincipal.IsUser )
                 {
@@ -216,7 +231,6 @@ namespace Suplex.UI.Wpf
                 }
 
                 AllPrincipalsCvs.View.Refresh();
-                listBox.SelectedItem = null;
                 cmdDeletePrincipal.IsOpen = false;
             }
         }
@@ -268,9 +282,9 @@ namespace Suplex.UI.Wpf
             txtGroupMembersLookup.SearchText = string.Empty;
         }
 
-        private void cmdDeleteGroupMembers_Command(object sender, ExecutedRoutedEventArgs e)
+        private void DeleteGroupMembershipItem(GroupMembershipItemWrapper gmi)
         {
-            if( e.Parameter is GroupMembershipItemWrapper gmi )
+            if( gmi != null )
             {
                 int index = CurrentSecurityPrincipalMembers.IndexOf( gmi );
                 if( index > -1 )

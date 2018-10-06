@@ -37,15 +37,29 @@
                                                    Content="Delete" Width="75" Margin="5">
                             <telerik:RadDropDownButton.DropDownContentTemplate>
                                 <DataTemplate>
-                                    <ListBox ItemsSource="{Binding}"
-                                             SelectionChanged="cmdDeletePrincipal_SelectionChanged">
-                                        <ListBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{local:FormattedBinding Name, FormatString='Delete [\{0\}]?'}" />
-                                            </DataTemplate>
-                                        </ListBox.ItemTemplate>
-                                    </ListBox>
-                                </DataTemplate>
+                                    <Button Grid.Column="2" Command="Delete" Cursor="Hand" ToolTip="This action cannot be undone."
+                                            VerticalAlignment="Center" HorizontalContentAlignment="Center"
+                                            CommandParameter="{Binding}"
+                                            Content="{Binding}">
+                                        <Button.Template>
+                                            <ControlTemplate TargetType="{x:Type Button}">
+                                                <Border x:Name="IconBorder"  Padding="4">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="Delete [ " VerticalAlignment="Center"
+                                                                   FontWeight="Bold" Foreground="Maroon"/>
+                                                        <ContentPresenter ContentTemplate="{StaticResource securityPrincipalNameIconTemplate}" />
+                                                        <TextBlock Text=" ]?" VerticalAlignment="Center"
+                                                                   FontWeight="Bold" Foreground="Maroon" />
+                                                    </StackPanel>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="true">
+                                                        <Setter TargetName="IconBorder" Property="Background" Value="#44800000"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Button.Template>
+                                    </Button>                                </DataTemplate>
                             </telerik:RadDropDownButton.DropDownContentTemplate>
                         </telerik:RadDropDownButton>
                     </StackPanel>
