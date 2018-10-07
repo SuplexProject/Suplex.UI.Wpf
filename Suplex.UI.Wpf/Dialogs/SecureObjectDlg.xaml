@@ -123,181 +123,183 @@
         </GroupBox>
 
 
-        <GridSplitter Grid.Column="1" BorderThickness=".5" BorderBrush="DarkGray" Background="Gray" Width="5"
-                      ResizeDirection="Columns" HorizontalAlignment="Center" />
+        <GridSplitter Grid.Column="1" BorderThickness=".5" BorderBrush="DarkGray" Background="#0D1A40" Width="5"
+                      ResizeDirection="Columns" HorizontalAlignment="Center" Margin="0,5" />
 
-        
-        <Grid Grid.Column="2" Name="pnlDetail">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+        <Border Grid.Column="2" Name="pnlDetail"
+                BorderBrush="#80000000" BorderThickness="1.25,0,1.25,1.25">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-            
-            <!--   Properties, Save/Discard   -->
 
-            <GroupBox>
-                <GroupBox.Header>
+                <!--   Properties, Save/Discard   -->
+
+                <GroupBox>
+                    <GroupBox.Header>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="Properties" Style="{DynamicResource Header}" />
+
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                                <telerik:RadButton Name="cmdSave" Content="Save"
+                                           Width="100" Margin="5"
+                                           Click="cmdSave_Click" IsEnabled="{Binding IsDirty}" />
+
+                                <telerik:RadButton Name="cmdDiscard" Content="Discard"
+                                           Width="100" Margin="5"
+                                           Click="cmdDiscard_Click" IsEnabled="{Binding IsDirty}" />
+                            </StackPanel>
+                        </Grid>
+                    </GroupBox.Header>
+
                     <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Text="Properties" Style="{DynamicResource Header}" />
+                        <TextBlock Grid.Row="0" Grid.Column="0" Margin="5,0,0,0"
+                                   Text="UniqueName" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        <TextBox Grid.Row="0" Grid.Column="1" Name="txtUniqueName"
+                                 Margin="8" Padding="3"
+                                 Text="{Binding UniqueName, UpdateSourceTrigger=PropertyChanged}" />
 
-                        <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                            <telerik:RadButton Name="cmdSave" Content="Save"
-                                       Width="100" Margin="5"
-                                       Click="cmdSave_Click" IsEnabled="{Binding IsDirty}" />
-
-                            <telerik:RadButton Name="cmdDiscard" Content="Discard"
-                                       Width="100" Margin="5"
-                                       Click="cmdDiscard_Click" IsEnabled="{Binding IsDirty}" />
-                        </StackPanel>
+                        <TextBlock Grid.Row="1" Grid.Column="0"
+                                   Text="Enabled" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        <CheckBox Grid.Row="1" Grid.Column="1"
+                                  Style="{DynamicResource SliderCheckBox}" Margin="8"
+                                  IsChecked="{Binding IsEnabled}" />
                     </Grid>
-                </GroupBox.Header>
+                </GroupBox>
 
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
 
-                    <TextBlock Grid.Row="0" Grid.Column="0" Margin="5,0,0,0"
-                               Text="UniqueName" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                    <TextBox Grid.Row="0" Grid.Column="1" Name="txtUniqueName"
-                             Margin="8" Padding="3"
-                             Text="{Binding UniqueName, UpdateSourceTrigger=PropertyChanged}" />
+                <!--   Dacl   -->
 
-                    <TextBlock Grid.Row="1" Grid.Column="0"
-                               Text="Enabled" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                    <CheckBox Grid.Row="1" Grid.Column="1"
-                              Style="{DynamicResource SliderCheckBox}" Margin="8"
-                              IsChecked="{Binding IsEnabled}" />
-                </Grid>
-            </GroupBox>
+                <GroupBox Grid.Row="1" Margin="0,10">
+                    <GroupBox.Header>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
 
-            
-            <!--   Dacl   -->
+                            <TextBlock Text="Permissions" Style="{DynamicResource Header}" />
 
-            <GroupBox Grid.Row="1" Margin="0,10">
-                <GroupBox.Header>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                                <TextBlock Text="Inherit Permissions" VerticalAlignment="Center"/>
+                                <CheckBox Style="{DynamicResource SliderCheckBox}" Margin="8"
+                                          IsChecked="{Binding Security.DaclAllowInherit}"/>
 
-                        <TextBlock Text="Permissions" Style="{DynamicResource Header}" />
-
-                        <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                            <TextBlock Text="Inherit Permissions" VerticalAlignment="Center"/>
-                            <CheckBox Style="{DynamicResource SliderCheckBox}" Margin="8"
-                                      IsChecked="{Binding Security.DaclAllowInherit}"/>
-
-                            <telerik:RadDropDownButton Name="cmdNewDaclAce"
+                                <telerik:RadDropDownButton Name="cmdNewDaclAce"
                                                        Content="New Permission" Width="125" Margin="7,5,5,5">
-                                <telerik:RadDropDownButton.DropDownContentTemplate>
-                                    <DataTemplate>
-                                        <ListBox ItemsSource="{Binding}"
+                                    <telerik:RadDropDownButton.DropDownContentTemplate>
+                                        <DataTemplate>
+                                            <ListBox ItemsSource="{Binding}"
                                                  SelectionChanged="cmdNewDaclAce_SelectionChanged">
-                                            <ListBox.ItemTemplate>
-                                                <DataTemplate>
-                                                    <TextBlock Text="{Binding Name}" />
-                                                </DataTemplate>
-                                            </ListBox.ItemTemplate>
-                                        </ListBox>
-                                    </DataTemplate>
-                                </telerik:RadDropDownButton.DropDownContentTemplate>
-                            </telerik:RadDropDownButton>
-                        </StackPanel>
-                    </Grid>
-                </GroupBox.Header>
+                                                <ListBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding Name}" />
+                                                    </DataTemplate>
+                                                </ListBox.ItemTemplate>
+                                            </ListBox>
+                                        </DataTemplate>
+                                    </telerik:RadDropDownButton.DropDownContentTemplate>
+                                </telerik:RadDropDownButton>
+                            </StackPanel>
+                        </Grid>
+                    </GroupBox.Header>
 
-                <telerik:RadGridView x:Name="grdDacl" AutoGenerateColumns="False" ShowGroupPanel="False"
+                    <telerik:RadGridView x:Name="grdDacl" AutoGenerateColumns="False" ShowGroupPanel="False"
                                      ItemsSource="{Binding Security.Dacl}"
                                      RowEditEnded="Acl_RowEditEnded">
-                    <telerik:RadGridView.Columns>
-                        <telerik:GridViewComboBoxColumn Header="Group" UniqueName="Groups"
-                                                        SelectedValueMemberPath="UId" DisplayMemberPath="Name"
-                                                        DataMemberBinding="{Binding TrusteeUId}" />
-                        <telerik:GridViewDataColumn Header="Right" Width="Auto" DataMemberBinding="{Binding Right}" CellTemplate="{StaticResource aceRight}">
-                            <telerik:GridViewDataColumn.CellEditTemplate>
-                                <DataTemplate>
-                                    <local:AceRightsListBox Margin="3" MinWidth="250" BorderThickness="0" Ace="{Binding}"/>
-                                </DataTemplate>
-                            </telerik:GridViewDataColumn.CellEditTemplate>
-                        </telerik:GridViewDataColumn>
-                        <telerik:GridViewDataColumn Header="Allowed" Width="Auto" DataMemberBinding="{Binding Allowed}" />
-                        <telerik:GridViewDataColumn Header="Inheritable" Width="Auto" DataMemberBinding="{Binding Inheritable}" />
-                    </telerik:RadGridView.Columns>
-                </telerik:RadGridView>
-            </GroupBox>
-
-            
-            <!--   Sacl   -->
-
-            <GroupBox Grid.Row="2">
-                <GroupBox.Header>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-
-                        <TextBlock Text="Audit" Style="{DynamicResource Header}" />
-
-                        <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                            <TextBlock Text="Inherit Audit" VerticalAlignment="Center"/>
-                            <CheckBox Style="{DynamicResource SliderCheckBox}" Margin="8"
-                                      IsChecked="{Binding Security.SaclAllowInherit}"/>
-
-                            <telerik:RadDropDownButton Name="cmdNewSaclAce"
-                                                       Content="New Audit" Width="125" Margin="7,5,5,5">
-                                <telerik:RadDropDownButton.DropDownContentTemplate>
+                        <telerik:RadGridView.Columns>
+                            <telerik:GridViewComboBoxColumn Header="Group" UniqueName="Groups"
+                                                            SelectedValueMemberPath="UId" DisplayMemberPath="Name"
+                                                            DataMemberBinding="{Binding TrusteeUId}" />
+                            <telerik:GridViewDataColumn Header="Right" Width="Auto" DataMemberBinding="{Binding Right}" CellTemplate="{StaticResource aceRight}">
+                                <telerik:GridViewDataColumn.CellEditTemplate>
                                     <DataTemplate>
-                                        <ListBox ItemsSource="{Binding}"
-                                                 SelectionChanged="cmdNewSaclAce_SelectionChanged">
-                                            <ListBox.ItemTemplate>
-                                                <DataTemplate>
-                                                    <TextBlock Text="{Binding Name}" />
-                                                </DataTemplate>
-                                            </ListBox.ItemTemplate>
-                                        </ListBox>
+                                        <local:AceRightsListBox Margin="3" MinWidth="250" BorderThickness="0" Ace="{Binding}"/>
                                     </DataTemplate>
-                                </telerik:RadDropDownButton.DropDownContentTemplate>
-                            </telerik:RadDropDownButton>
-                        </StackPanel>
-                    </Grid>
-                </GroupBox.Header>
+                                </telerik:GridViewDataColumn.CellEditTemplate>
+                            </telerik:GridViewDataColumn>
+                            <telerik:GridViewDataColumn Header="Allowed" Width="Auto" DataMemberBinding="{Binding Allowed}" />
+                            <telerik:GridViewDataColumn Header="Inheritable" Width="Auto" DataMemberBinding="{Binding Inheritable}" />
+                        </telerik:RadGridView.Columns>
+                    </telerik:RadGridView>
+                </GroupBox>
 
-                <telerik:RadGridView x:Name="grdSacl" AutoGenerateColumns="False" ShowGroupPanel="False"
-                                     ItemsSource="{Binding Security.Sacl}"
-                                     RowEditEnded="Acl_RowEditEnded">
-                    <telerik:RadGridView.Columns>
-                        <telerik:GridViewComboBoxColumn Header="Group" UniqueName="Groups"
-                                                        SelectedValueMemberPath="UId" DisplayMemberPath="Name"
-                                                        DataMemberBinding="{Binding TrusteeUId}" />
-                        <telerik:GridViewDataColumn Header="Right" Width="Auto" DataMemberBinding="{Binding Right}" CellTemplate="{StaticResource aceRight}">
-                            <telerik:GridViewDataColumn.CellEditTemplate>
-                                <DataTemplate>
-                                    <local:AceRightsListBox Margin="3" MinWidth="250" BorderThickness="0" Ace="{Binding}"/>
-                                </DataTemplate>
-                            </telerik:GridViewDataColumn.CellEditTemplate>
-                        </telerik:GridViewDataColumn>
-                        <telerik:GridViewDataColumn Header="Allowed" Width="Auto" DataMemberBinding="{Binding Allowed}" />
-                        <telerik:GridViewDataColumn Header="Denied" Width="Auto" DataMemberBinding="{Binding Denied}" />
-                        <telerik:GridViewDataColumn Header="Inheritable" Width="Auto" DataMemberBinding="{Binding Inheritable}" />
-                    </telerik:RadGridView.Columns>
-                </telerik:RadGridView>
-            </GroupBox>
-        </Grid>
+
+                <!--   Sacl   -->
+
+                <GroupBox Grid.Row="2">
+                    <GroupBox.Header>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="Audit" Style="{DynamicResource Header}" />
+
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                                <TextBlock Text="Inherit Audit" VerticalAlignment="Center"/>
+                                <CheckBox Style="{DynamicResource SliderCheckBox}" Margin="8"
+                                          IsChecked="{Binding Security.SaclAllowInherit}"/>
+
+                                <telerik:RadDropDownButton Name="cmdNewSaclAce"
+                                                       Content="New Audit" Width="125" Margin="7,5,5,5">
+                                    <telerik:RadDropDownButton.DropDownContentTemplate>
+                                        <DataTemplate>
+                                            <ListBox ItemsSource="{Binding}"
+                                                 SelectionChanged="cmdNewSaclAce_SelectionChanged">
+                                                <ListBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding Name}" />
+                                                    </DataTemplate>
+                                                </ListBox.ItemTemplate>
+                                            </ListBox>
+                                        </DataTemplate>
+                                    </telerik:RadDropDownButton.DropDownContentTemplate>
+                                </telerik:RadDropDownButton>
+                            </StackPanel>
+                        </Grid>
+                    </GroupBox.Header>
+
+                    <telerik:RadGridView x:Name="grdSacl" AutoGenerateColumns="False" ShowGroupPanel="False"
+                                         ItemsSource="{Binding Security.Sacl}"
+                                         RowEditEnded="Acl_RowEditEnded">
+                        <telerik:RadGridView.Columns>
+                            <telerik:GridViewComboBoxColumn Header="Group" UniqueName="Groups"
+                                                            SelectedValueMemberPath="UId" DisplayMemberPath="Name"
+                                                            DataMemberBinding="{Binding TrusteeUId}" />
+                            <telerik:GridViewDataColumn Header="Right" Width="Auto" DataMemberBinding="{Binding Right}" CellTemplate="{StaticResource aceRight}">
+                                <telerik:GridViewDataColumn.CellEditTemplate>
+                                    <DataTemplate>
+                                        <local:AceRightsListBox Margin="3" MinWidth="250" BorderThickness="0" Ace="{Binding}"/>
+                                    </DataTemplate>
+                                </telerik:GridViewDataColumn.CellEditTemplate>
+                            </telerik:GridViewDataColumn>
+                            <telerik:GridViewDataColumn Header="Allowed" Width="Auto" DataMemberBinding="{Binding Allowed}" />
+                            <telerik:GridViewDataColumn Header="Denied" Width="Auto" DataMemberBinding="{Binding Denied}" />
+                            <telerik:GridViewDataColumn Header="Inheritable" Width="Auto" DataMemberBinding="{Binding Inheritable}" />
+                        </telerik:RadGridView.Columns>
+                    </telerik:RadGridView>
+                </GroupBox>
+            </Grid>
+        </Border>
     </Grid>
 </UserControl>

@@ -39,10 +39,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Suplex.Security.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Suplex.Security.Core.1.0.18181\lib\net45\Suplex.Security.Core.dll</HintPath>
+      <HintPath>..\packages\Suplex.Security.Core.1.0.18280\lib\net45\Suplex.Security.Core.dll</HintPath>
     </Reference>
     <Reference Include="Suplex.Security.FileSystemDal, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Suplex.Security.FileSystemDal.1.0.18181\lib\net45\Suplex.Security.FileSystemDal.dll</HintPath>
+      <HintPath>..\packages\Suplex.Security.FileSystemDal.1.0.18280\lib\net45\Suplex.Security.FileSystemDal.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

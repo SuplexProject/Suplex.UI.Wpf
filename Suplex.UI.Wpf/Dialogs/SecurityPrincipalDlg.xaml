@@ -184,8 +184,8 @@
         </GroupBox>
 
 
-        <GridSplitter Grid.Column="1" BorderThickness=".5" BorderBrush="DarkGray" Background="Gray" Width="5"
-                      ResizeDirection="Columns" HorizontalAlignment="Center" />
+        <GridSplitter Grid.Column="1" BorderThickness=".5" BorderBrush="DarkGray" Background="#0D1A40" Width="5"
+                      ResizeDirection="Columns" HorizontalAlignment="Center" Margin="0,5" />
 
 
         <Grid Grid.Column="2" Name="pnlDetail">

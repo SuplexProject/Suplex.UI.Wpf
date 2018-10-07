@@ -35,114 +35,116 @@ namespace Suplex.UI.Wpf
             StyleManager.ApplicationTheme = new Office2016Theme();
             InitializeComponent();
 
+            FileNew();
+
             #region foo
-            List<User> users = new List<User>
-            {
-                new User{ Name = "x", IsBuiltIn = true, IsEnabled = true, IsLocal = true },
-                new User{ Name = "y", IsBuiltIn = false, IsEnabled = true, IsLocal = false },
-                new User{ Name = "z", IsBuiltIn = true, IsEnabled = false, IsLocal = true }
-            };
+            //List<User> users = new List<User>
+            //{
+            //    new User{ Name = "x", IsBuiltIn = true, IsEnabled = true, IsLocal = true },
+            //    new User{ Name = "y", IsBuiltIn = false, IsEnabled = true, IsLocal = false },
+            //    new User{ Name = "z", IsBuiltIn = true, IsEnabled = false, IsLocal = true }
+            //};
 
-            List<Group> groups = new List<Group>
-            {
-                new Group{ Name = "gx", IsEnabled = true, IsLocal = true },
-                new Group{ Name = "gy", IsEnabled = true, IsLocal = false },
-                new Group{ Name = "gz", IsEnabled = true, IsLocal = false }
-            };
-            bool isLocal = false;
-            for( int i = 0; i < 50; i++ )
-            {
-                isLocal = !isLocal;
-                groups.Add( new Group { Name = $"Group_{i}", IsLocal = isLocal } );
-            }
+            //List<Group> groups = new List<Group>
+            //{
+            //    new Group{ Name = "gx", IsEnabled = true, IsLocal = true },
+            //    new Group{ Name = "gy", IsEnabled = true, IsLocal = false },
+            //    new Group{ Name = "gz", IsEnabled = true, IsLocal = false }
+            //};
+            //bool isLocal = false;
+            //for( int i = 0; i < 50; i++ )
+            //{
+            //    isLocal = !isLocal;
+            //    groups.Add( new Group { Name = $"Group_{i}", IsLocal = isLocal } );
+            //}
 
-            GroupMembershipItem mx = new GroupMembershipItem
-            {
-                GroupUId = groups[0].UId,
-                MemberUId = users[0].UId,
-                IsMemberUser = true
-            };
-            GroupMembershipItem my = new GroupMembershipItem
-            {
-                GroupUId = groups[0].UId,
-                MemberUId = users[1].UId,
-                IsMemberUser = true
-            };
-            GroupMembershipItem mz = new GroupMembershipItem
-            {
-                GroupUId = groups[0].UId,
-                MemberUId = groups[1].UId,
-                IsMemberUser = false
-            };
-            List<GroupMembershipItem> gm = new List<GroupMembershipItem>
-            {
-                mx, my, mz
-            };
-
-
-            SecureObject child = new SecureObject() { UniqueName = "child" };
-            DiscretionaryAcl childdacl = new DiscretionaryAcl
-            {
-                new AccessControlEntry<FileSystemRight> { TrusteeUId = groups[0].UId, Allowed = true, Right = FileSystemRight.FullControl },
-                new AccessControlEntry<FileSystemRight> { TrusteeUId = groups[1].UId, Allowed = false, Right = FileSystemRight.Execute | FileSystemRight.List, Inheritable = false },
-                new AccessControlEntry<UIRight> { TrusteeUId = groups[2].UId, Right= UIRight.Operate | UIRight.Visible }
-            };
-            child.Security.Dacl = childdacl;
+            //GroupMembershipItem mx = new GroupMembershipItem
+            //{
+            //    GroupUId = groups[0].UId,
+            //    MemberUId = users[0].UId,
+            //    IsMemberUser = true
+            //};
+            //GroupMembershipItem my = new GroupMembershipItem
+            //{
+            //    GroupUId = groups[0].UId,
+            //    MemberUId = users[1].UId,
+            //    IsMemberUser = true
+            //};
+            //GroupMembershipItem mz = new GroupMembershipItem
+            //{
+            //    GroupUId = groups[0].UId,
+            //    MemberUId = groups[1].UId,
+            //    IsMemberUser = false
+            //};
+            //List<GroupMembershipItem> gm = new List<GroupMembershipItem>
+            //{
+            //    mx, my, mz
+            //};
 
 
-            SecureObject top = new SecureObject() { UniqueName = "top" };
-            DiscretionaryAcl topdacl = new DiscretionaryAcl
-            {
-                new AccessControlEntry<FileSystemRight> { TrusteeUId = groups[0].UId, Allowed = true, Right = FileSystemRight.FullControl },
-                new AccessControlEntry<FileSystemRight> { TrusteeUId = groups[1].UId, Allowed = false, Right = FileSystemRight.Execute | FileSystemRight.List, Inheritable = false },
-                new AccessControlEntry<UIRight> { TrusteeUId = groups[2].UId, Right= UIRight.Operate | UIRight.Visible }
-            };
-            SystemAcl topsacl = new SystemAcl
-            {
-                new AccessControlEntryAudit<UIRight> { TrusteeUId = groups[0].UId, Allowed = true, Right = UIRight.FullControl, Inheritable = false },
-                new AccessControlEntryAudit<FileSystemRight> { TrusteeUId = groups[1].UId, Allowed = true, Right = FileSystemRight.Execute | FileSystemRight.ReadPermissions, Inheritable = false },
-                new AccessControlEntryAudit<FileSystemRight> { TrusteeUId = groups[2].UId, Allowed = true, Right = FileSystemRight.Execute | FileSystemRight.List, Inheritable = false }
-            };
-            top.Security.Dacl = topdacl;
-            top.Security.DaclAllowInherit = false;
-            top.Security.Sacl = topsacl;
-
-            //child.ParentUId = top.UId;
-            top.Children.Add( child );
-
-            SecureObject top2 = new SecureObject() { UniqueName = "top2" };
-
-            SecureObject grandkid = new SecureObject() { UniqueName = "grandkid" };
-            child.Children.Add( grandkid );
+            //SecureObject child = new SecureObject() { UniqueName = "child" };
+            //DiscretionaryAcl childdacl = new DiscretionaryAcl
+            //{
+            //    new AccessControlEntry<FileSystemRight> { TrusteeUId = groups[0].UId, Allowed = true, Right = FileSystemRight.FullControl },
+            //    new AccessControlEntry<FileSystemRight> { TrusteeUId = groups[1].UId, Allowed = false, Right = FileSystemRight.Execute | FileSystemRight.List, Inheritable = false },
+            //    new AccessControlEntry<UIRight> { TrusteeUId = groups[2].UId, Right= UIRight.Operate | UIRight.Visible }
+            //};
+            //child.Security.Dacl = childdacl;
 
 
-            FileStore store = new FileStore()
-            {
-                SecureObjects = new List<SecureObject>() { top, top2 },
-                Users = users,
-                Groups = groups,
-                GroupMembership = gm
-            };
+            //SecureObject top = new SecureObject() { UniqueName = "top" };
+            //DiscretionaryAcl topdacl = new DiscretionaryAcl
+            //{
+            //    new AccessControlEntry<FileSystemRight> { TrusteeUId = groups[0].UId, Allowed = true, Right = FileSystemRight.FullControl },
+            //    new AccessControlEntry<FileSystemRight> { TrusteeUId = groups[1].UId, Allowed = false, Right = FileSystemRight.Execute | FileSystemRight.List, Inheritable = false },
+            //    new AccessControlEntry<UIRight> { TrusteeUId = groups[2].UId, Right= UIRight.Operate | UIRight.Visible }
+            //};
+            //SystemAcl topsacl = new SystemAcl
+            //{
+            //    new AccessControlEntryAudit<UIRight> { TrusteeUId = groups[0].UId, Allowed = true, Right = UIRight.FullControl, Inheritable = false },
+            //    new AccessControlEntryAudit<FileSystemRight> { TrusteeUId = groups[1].UId, Allowed = true, Right = FileSystemRight.Execute | FileSystemRight.ReadPermissions, Inheritable = false },
+            //    new AccessControlEntryAudit<FileSystemRight> { TrusteeUId = groups[2].UId, Allowed = true, Right = FileSystemRight.Execute | FileSystemRight.List, Inheritable = false }
+            //};
+            //top.Security.Dacl = topdacl;
+            //top.Security.DaclAllowInherit = false;
+            //top.Security.Sacl = topsacl;
 
-            for( int i = 0; i < 50; i++ )
-                store.SecureObjects.Add( new SecureObject { UniqueName = $"UniqueName_{i}" } );
+            ////child.ParentUId = top.UId;
+            //top.Children.Add( child );
 
-            //User ux = store.Users.GetByName<User>( "x" );
+            //SecureObject top2 = new SecureObject() { UniqueName = "top2" };
 
-            string x = store.ToYaml();
+            //SecureObject grandkid = new SecureObject() { UniqueName = "grandkid" };
+            //child.Children.Add( grandkid );
+
+
+            //FileStore store = new FileStore()
+            //{
+            //    SecureObjects = new List<SecureObject>() { top, top2 },
+            //    Users = users,
+            //    Groups = groups,
+            //    GroupMembership = gm
+            //};
+
+            //for( int i = 0; i < 50; i++ )
+            //    store.SecureObjects.Add( new SecureObject { UniqueName = $"UniqueName_{i}" } );
+
+            ////User ux = store.Users.GetByName<User>( "x" );
+
+            //string x = store.ToYaml();
+
+            //_fileStore = FileStore.FromYaml( x );
+
+            //_fileStore.SecureObjects.EnsureParentUIdRecursive();
+
+            //dlgSecureObjects.SplxStore = _fileStore;
+            //dlgSecureObjects.SplxDal = _fileStore.Dal;
+
+            //dlgSecurityPrincipals.SplxStore = _fileStore;
+            //dlgSecurityPrincipals.SplxDal = _fileStore.Dal;
+
+            ////dlgSecureObjects.DataContext = f.SecureObjects;
             #endregion
-
-            _fileStore = FileStore.FromYaml( x );
-
-            _fileStore.SecureObjects.EnsureParentUIdRecursive();
-
-            dlgSecureObjects.SplxStore = _fileStore;
-            dlgSecureObjects.SplxDal = _fileStore.Dal;
-
-            dlgSecurityPrincipals.SplxStore = _fileStore;
-            dlgSecurityPrincipals.SplxDal = _fileStore.Dal;
-
-            //dlgSecureObjects.DataContext = f.SecureObjects;
         }
 
         #region file
