@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
+using Microsoft.Win32;
 using Suplex.Security.AclModel;
 using Suplex.Security.AclModel.DataAccess;
 using Suplex.Security.Principal;
@@ -25,6 +26,10 @@ namespace Suplex.UI.Wpf
     /// </summary>
     public partial class MainDlg : Window
     {
+        IDataAccessLayer _splxDal = null;
+        SuplexStore _splxStore = null;
+        FileStore _fileStore = null;
+
         public MainDlg()
         {
             StyleManager.ApplicationTheme = new Office2016Theme();
@@ -127,43 +132,252 @@ namespace Suplex.UI.Wpf
             string x = store.ToYaml();
             #endregion
 
-            FileStore f = FileStore.FromYaml( x );
+            _fileStore = FileStore.FromYaml( x );
 
-            f.SecureObjects.EnsureParentUIdRecursive();
+            _fileStore.SecureObjects.EnsureParentUIdRecursive();
 
-            dlgSecureObjects.Store = f;
-            dlgSecureObjects.SplxDal = f.Dal;
+            dlgSecureObjects.SplxStore = _fileStore;
+            dlgSecureObjects.SplxDal = _fileStore.Dal;
 
-            dlgSecurityPrincipals.Store = f;
-            dlgSecurityPrincipals.SplxDal = f.Dal;
+            dlgSecurityPrincipals.SplxStore = _fileStore;
+            dlgSecurityPrincipals.SplxDal = _fileStore.Dal;
 
             //dlgSecureObjects.DataContext = f.SecureObjects;
         }
 
-        private void mnuRecentFile_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void tbbSaveSplxFileStore_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void tbbSaveSplxFileStoreSecure_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
+        #region file
         private void tbbNewSplxFileStore_Click(object sender, RoutedEventArgs e)
         {
-
+            bool ok = GlobalVerifySaveChanges();
+            if( ok )
+            {
+                FileNew();
+            }
         }
 
         private void tbbOpenSplxFileStore_Click(object sender, RoutedEventArgs e)
         {
-
+            bool ok = GlobalVerifySaveChanges();
+            if( ok )
+            {
+                OpenFileDialog dlg = new OpenFileDialog();
+                dlg.Filter = "Suplex Files|*.splx;*.xml|All Files|*.*";
+                if( dlg.ShowDialog( this ) == true )
+                    OpenFile( dlg.FileName );
+            }
         }
+
+        private void mnuRecentFile_Click(object sender, RoutedEventArgs e)
+        {
+            bool ok = GlobalVerifySaveChanges();
+            if( ok )
+            {
+                string file = ((MenuItem)e.OriginalSource).Header.ToString();
+                if( File.Exists( file ) )
+                {
+                    OpenFile( file );
+                }
+            }
+        }
+
+        private void tbbSaveSplxFileStore_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFile();
+        }
+
+        private void tbbSaveSplxFileStoreSecure_Click(object sender, RoutedEventArgs e)
+        {
+            //if( _fileExportDlg == null )
+            //{
+            //    _fileExportDlg = new FileExportDlg();
+            //    _fileExportDlg.Owner = this;
+            //    _fileExportDlg.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            //}
+
+            //_fileExportDlg.IsForExport = false;
+            //if( _fileExportDlg.ShowDialog() == true )
+            //{
+            //    _apiClient.SetFile( _fileExportDlg.FileName );
+            //    if( _fileExportDlg.SignFile )
+            //    {
+            //        _apiClient.SetPublicPrivateKeyFile( _fileExportDlg.KeysFileName );
+            //        _apiClient.PublicPrivateKeyContainerName = _fileExportDlg.KeysContainerName;
+            //    }
+            //    else
+            //    {
+            //        _apiClient.SetPublicPrivateKeyFile( null );
+            //        _apiClient.PublicPrivateKeyContainerName = null;
+            //    }
+            //    SaveFile();
+            //}
+        }
+
+        private void tbbSaveAllSplxFileStore_Click(object sender, RoutedEventArgs e)
+        {
+            dlgSecureObjects.SaveIfDirty();
+            dlgSecurityPrincipals.SaveIfDirty();
+
+            //if( !_splxDal.IsConnected )
+            //{
+            //    SaveFile();
+            //}
+        }
+
+        private void tbbSaveAsSplxFileStore_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileAs();
+        }
+
+        private void FileNew()
+        {
+            _fileStore = new FileStore();
+            _splxStore = _fileStore;
+            _splxDal = _fileStore.Dal;
+
+            //_splxStore.Clear();
+            //_splxDal.SetFile( null );
+            //_splxStore.IsDirty = false;
+
+            //dlgSecureObjects.ClearContentPanel();
+            //dlgSecurityPrincipals.ClearContentPanel();
+
+            SetMainDlgDataContext();
+        }
+
+        private void OpenFile(string fileName)
+        {
+            FileNew();
+
+            _fileStore = FileStore.FromYamlFile( fileName );
+            _splxStore = _fileStore;
+            _splxDal = _fileStore.Dal;
+            _fileStore.SecureObjects.EnsureParentUIdRecursive();
+
+            SetMainDlgDataContext();
+
+            //_settings.AddRecentFile( fileName );    //re-sorts the recent file list
+
+            ////_splx.GroupMembership.Resolve();
+        }
+
+        private bool SaveFile()
+        {
+            bool ok = _fileStore.CurrentPath == null;
+            if( !ok )
+            {
+                ok = SaveFileAs();
+            }
+            else
+            {
+                //_splxDal.SaveFile( _splxStore );
+                _fileStore.ToYamlFile();
+                ok = true;
+            }
+
+            return ok;
+        }
+
+        private bool SaveFileAs()
+        {
+            bool ok = false;
+            SaveFileDialog dlg = new SaveFileDialog();
+            dlg.Filter = "Suplex File|*.splx|Suplex XML File|*.xml";
+            if( dlg.ShowDialog( this ) == true )
+            {
+                _fileStore.ToYamlFile( dlg.FileName );
+
+                ok = true;   //SaveFile();
+            }
+
+            return ok;
+        }
+        #endregion
+
+
+        private bool StoreFileVerifySaveChanges()
+        {
+            bool ok = false;
+            //if( !_splxDal.IsConnected && _splxStore.IsDirty )
+            //{
+            //    MessageBoxResult mbr =
+            //        MessageBox.Show( string.Format( "Save changes to {0}?", _splxDal.HasFileConnection ? _splxDal.File.Name : "Untitled Document" ),
+            //        "Save changes?", MessageBoxButton.YesNoCancel, MessageBoxImage.Question, MessageBoxResult.Yes );
+
+            //    switch( mbr )
+            //    {
+            //        case MessageBoxResult.Yes:
+            //        {
+            //            ok = SaveFile();
+            //            break;
+            //        }
+            //        case MessageBoxResult.No:
+            //        {
+            //            ok = true;
+            //            break;
+            //        }
+            //        case MessageBoxResult.Cancel:
+            //        {
+            //            break;
+            //        }
+            //    }
+            //}
+            //else
+            //{
+            //    //no item to verify or item is not dirty
+            //    ok = true;
+            //}
+
+            //return ok;
+
+            return true;
+        }
+
+        private bool GlobalVerifySaveChanges()
+        {
+            bool ok = dlgSecureObjects.VerifySaveChanges();
+            if( ok )
+                ok = dlgSecurityPrincipals.VerifySaveChanges();
+            if( ok )
+                ok = StoreFileVerifySaveChanges();
+
+            return ok;
+        }
+
+        private void SetMainDlgDataContext()
+        {
+            DataContext = _splxDal;
+
+            dlgSecureObjects.SplxStore = _splxStore;
+            dlgSecureObjects.SplxDal = _splxDal;
+
+            dlgSecurityPrincipals.SplxStore = _splxStore;
+            dlgSecurityPrincipals.SplxDal = _splxDal;
+        }
+
+        //private void mnuRecentFile_Click(object sender, RoutedEventArgs e)
+        //{
+
+        //}
+
+        //private void tbbSaveSplxFileStore_Click(object sender, RoutedEventArgs e)
+        //{
+
+        //}
+
+        //private void tbbSaveSplxFileStoreSecure_Click(object sender, RoutedEventArgs e)
+        //{
+
+        //}
+
+        //private void tbbNewSplxFileStore_Click(object sender, RoutedEventArgs e)
+        //{
+
+        //}
+
+        //private void tbbOpenSplxFileStore_Click(object sender, RoutedEventArgs e)
+        //{
+
+        //}
 
         private void tbbRemoteConnect_Click(object sender, RoutedEventArgs e)
         {

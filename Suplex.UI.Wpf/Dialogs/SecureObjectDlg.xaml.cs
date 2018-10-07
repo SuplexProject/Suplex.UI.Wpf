@@ -58,7 +58,7 @@ namespace Suplex.UI.Wpf
         #region public props
         public IDataAccessLayer SplxDal { get; set; } = null;
 
-        public SuplexStore Store
+        public SuplexStore SplxStore
         {
             get => _store;
             set
@@ -85,11 +85,11 @@ namespace Suplex.UI.Wpf
                 SecureObject secureObject = new SecureObject { UniqueName = "New Root" };
 
                 if( item.Tag.ToString() == "Root" )
-                    Store.SecureObjects.Add( secureObject );
+                    SplxStore.SecureObjects.Add( secureObject );
                 else if( tvwSecureObjects.SelectedItem is SecureObject parent )
                 {
                     secureObject.UniqueName = "New Child";
-                    secureObject.ChangeParent( parent, Store.SecureObjects ); ;
+                    secureObject.ChangeParent( parent, SplxStore.SecureObjects ); ;
                 }
 
                 SplxDal.UpsertSecureObject( secureObject );
@@ -110,7 +110,7 @@ namespace Suplex.UI.Wpf
             if( secureObject != null )
             {
                 if( secureObject.Parent == null )
-                    Store.SecureObjects.Remove( secureObject );
+                    SplxStore.SecureObjects.Remove( secureObject );
                 else
                     secureObject.Parent.Children.Remove( secureObject );
 
@@ -208,6 +208,15 @@ namespace Suplex.UI.Wpf
         private void cmdDiscard_Click(object sender, RoutedEventArgs e)
         {
             CloneCachedToCurrent();
+        }
+
+        internal bool VerifySaveChanges()
+        {
+            return true;
+        }
+
+        internal void SaveIfDirty()
+        {
         }
         #endregion
     }

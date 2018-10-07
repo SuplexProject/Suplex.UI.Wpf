@@ -78,7 +78,7 @@ namespace Suplex.UI.Wpf
             _localGroupsCvs.View.Refresh();
         }
 
-        public SuplexStore Store
+        public SuplexStore SplxStore
         {
             get => _store;
             set
@@ -203,7 +203,7 @@ namespace Suplex.UI.Wpf
                 List<GroupMembershipItemWrapper> tmp = new List<GroupMembershipItemWrapper>();
                 foreach( GroupMembershipItem item in groupMemberOf )
                 {
-                    item.Resolve( Store.Groups, Store.Users );
+                    item.Resolve( SplxStore.Groups, SplxStore.Users );
                     tmp.Add( new GroupMembershipItemWrapper( item, displayMember: false ) );
                 }
                 tmp.Sort( (x, y) => x.GroupItem.Name.CompareTo( y.GroupItem.Name ) );
@@ -215,7 +215,7 @@ namespace Suplex.UI.Wpf
                     IEnumerable<GroupMembershipItem> groupMembers = SplxDal.GetGroupMembers( CurrentSecurityPrincipal.UId, includeDisabledMembership: true );
                     foreach( GroupMembershipItem item in groupMembers )
                     {
-                        item.Resolve( Store.Groups, Store.Users );
+                        item.Resolve( SplxStore.Groups, SplxStore.Users );
                         tmp.Add( new GroupMembershipItemWrapper( item, displayMember: true ) );
                     }
                     tmp.Sort( (x, y) => x.MemberItem.Name.CompareTo( y.MemberItem.Name ) );
@@ -238,15 +238,15 @@ namespace Suplex.UI.Wpf
                 {
                     User user = SplxDal.UpsertUser( new User { Name = "New User" } );
                     sp = user;
-                    if( !Store.Users.Contains( user ) )
-                        Store.Users.Add( user );
+                    if( !SplxStore.Users.Contains( user ) )
+                        SplxStore.Users.Add( user );
                 }
                 else
                 {
                     Group group = SplxDal.UpsertGroup( new Group { Name = "New Group" } );
                     sp = group;
-                    if( !Store.Groups.Contains( group ) )
-                        Store.Groups.Add( group );
+                    if( !SplxStore.Groups.Contains( group ) )
+                        SplxStore.Groups.Add( group );
                 }
 
                 RefreshViews();
@@ -265,12 +265,12 @@ namespace Suplex.UI.Wpf
             {
                 if( securityPrincipal.IsUser )
                 {
-                    Store.Users.Remove( securityPrincipal as User );
+                    SplxStore.Users.Remove( securityPrincipal as User );
                     SplxDal.DeleteUser( securityPrincipal.UId );
                 }
                 else
                 {
-                    Store.Groups.Remove( securityPrincipal as Group );
+                    SplxStore.Groups.Remove( securityPrincipal as Group );
                     SplxDal.DeleteGroup( securityPrincipal.UId );
                 }
 
@@ -375,6 +375,15 @@ namespace Suplex.UI.Wpf
         private void cmdDiscard_Click(object sender, RoutedEventArgs e)
         {
             CloneCachedToCurrent();
+        }
+
+        internal bool VerifySaveChanges()
+        {
+            return true;
+        }
+
+        internal void SaveIfDirty()
+        {
         }
         #endregion
     }
