@@ -103,6 +103,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Code\DialogViewModel.cs" />
     <Compile Include="Code\DialogTitleConverter.cs" />
     <Compile Include="Code\FormattedBinding.cs" />
     <Compile Include="Code\LocalGroupVisibilityConverter.cs" />
@@ -157,6 +158,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\file_new.png" />
+    <Resource Include="Resources\file_open.png" />
+    <Resource Include="Resources\file_save.png" />
+    <Resource Include="Resources\file_save_secure.png" />
     <Resource Include="suplex.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -165,11 +170,21 @@
     <Resource Include="Resources\user_internal.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\close_16x16_grey.png" />
+    <Resource Include="Resources\close_grey.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\secobj_insecure.png" />
     <Resource Include="Resources\secobj_secure.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\file_save_as.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\file_new_grey.png" />
+    <Resource Include="Resources\file_open_grey.png" />
+    <Resource Include="Resources\file_save_as_grey.png" />
+    <Resource Include="Resources\file_save_grey.png" />
+    <Resource Include="Resources\file_save_secure_grey.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -12,7 +12,7 @@ namespace Suplex.UI.Wpf
         public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             string connectionPath =
-                values[0] == DependencyProperty.UnsetValue ? string.Empty : values[0].ToString();
+                values[0] == DependencyProperty.UnsetValue ? string.Empty : values[0] as string;
             connectionPath = string.IsNullOrWhiteSpace( connectionPath ) ? string.Empty :
                 string.Format( ": {0}", values[0].ToString() );
 

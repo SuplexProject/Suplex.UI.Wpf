@@ -36,33 +36,33 @@
             <ToolBar Name="tbrFile" IsEnabled="{local:FormattedBinding Path=IsConnected, ValueIfTrue=False, ValueIfFalse=True}">
                 <Button Name="tbbNewSplxFileStore" Margin="0,0,2,0" ToolTip="New Suplex File Store"
                     Click="tbbNewSplxFileStore_Click">
-                    <Image Source="{local:FormattedBinding ElementName=tbrFile, Path=IsEnabled, ValueIfTrue='/Suplex.UI.Wpf;component/Resources/ToolBar/file/file_new_16x16.png', ValueIfFalse='/Suplex.UI.Wpf;component/Resources/ToolBar/file/file_new_16x16_grey.png'}" Width="16" Height="16"/>
+                    <Image Source="{local:FormattedBinding ElementName=tbrFile, Path=IsEnabled, ValueIfTrue='/Suplex.UI.Wpf;component/Resources/file_new.png', ValueIfFalse='/Suplex.UI.Wpf;component/Resources/file_new_grey.png'}" Width="16" Height="16"/>
                 </Button>
                 <local:SplitButton x:Name="tbbOpenSplxFileStore" Style="{DynamicResource ToolBarSplitButtonStyle}" Tag="file_open"
-                                Image="{local:FormattedBinding ElementName=tbrFile, Path=IsEnabled, ValueIfTrue='/Suplex.UI.Wpf;component/Resources/ToolBar/file/file_open_16x16.png', ValueIfFalse='/Suplex.UI.Wpf;component/Resources/ToolBar/file/file_open_16x16_grey.png'}"
-                                ToolTip="Open Suplex File Store"
-                                Click="tbbOpenSplxFileStore_Click">
+                                   Image="{local:FormattedBinding ElementName=tbrFile, Path=IsEnabled, ValueIfTrue='/Suplex.UI.Wpf;component/Resources/file_open.png', ValueIfFalse='/Suplex.UI.Wpf;component/Resources/file_open_grey.png'}"
+                                   ToolTip="Open Suplex File Store"
+                                   Click="tbbOpenSplxFileStore_Click">
                     <local:SplitButton.DropDownContextMenu>
                         <ContextMenu ItemsSource="{Binding}" ItemTemplate="{StaticResource RecentFile}" MenuItem.Click="mnuRecentFile_Click" />
                     </local:SplitButton.DropDownContextMenu>
                 </local:SplitButton>
                 <local:SplitButton x:Name="tbbSaveSplxFileStore" Style="{DynamicResource ToolBarSplitButtonStyle}" Tag="file_save"
-                                ToolTip="Save Suplex File Store"
-                                Click="tbbSaveSplxFileStore_Click">
+                                   ToolTip="Save Suplex File Store"
+                                   Click="tbbSaveSplxFileStore_Click">
                     <local:SplitButton.Image>
                         <MultiBinding Converter="{StaticResource saveImageConverter}"
-                                      ConverterParameter="/Suplex.UI.Wpf;component/Resources/ToolBar/file/,file_save_16x16.png,file_save_secure_16x16.png,file_save_16x16_grey.png,file_save_secure_16x16_grey.png">
+                                      ConverterParameter="/Suplex.UI.Wpf;component/Resources/,file_save.png,file_save_secure.png,file_save_grey.png,file_save_secure_grey.png">
                             <Binding ElementName="tbrFile" Path="IsEnabled"/>
                             <Binding Path="HasPublicPrivateKeyFile"/>
                         </MultiBinding>
                     </local:SplitButton.Image>
                     <local:SplitButton.DropDownContextMenu>
                         <ContextMenu>
-                            <MenuItem Header="Save As" Tag="file_save_as" Click="tbbSaveSplxFileStore_Click">
+                            <MenuItem Header="Save As" Tag="file_save_as" Click="tbbSaveAsSplxFileStore_Click">
                                 <MenuItem.Icon>
                                     <Image>
                                         <Image.Source>
-                                            <BitmapImage UriSource="/Suplex.UI.Wpf;component/Resources/ToolBar/file/file_save_as_16x16.png" />
+                                            <BitmapImage UriSource="/Suplex.UI.Wpf;component/Resources/file_save_as.png" />
                                         </Image.Source>
                                     </Image>
                                 </MenuItem.Icon>
@@ -71,7 +71,7 @@
                                 <MenuItem.Icon>
                                     <Image>
                                         <Image.Source>
-                                            <BitmapImage UriSource="/Suplex.UI.Wpf;component/Resources/ToolBar/file/file_save_secure_16x16.png" />
+                                            <BitmapImage UriSource="/Suplex.UI.Wpf;component/Resources/file_save_secure.png" />
                                         </Image.Source>
                                     </Image>
                                 </MenuItem.Icon>
@@ -80,7 +80,7 @@
                     </local:SplitButton.DropDownContextMenu>
                 </local:SplitButton>
             </ToolBar>
-            <ToolBar>
+            <ToolBar Visibility="Collapsed">
                 <local:SplitButton x:Name="tbbRemoteConnect" Style="{DynamicResource ToolBarSplitButtonStyle}"
                                 Click="tbbRemoteConnect_Click" ToolTip="Connect to a remote Suplex service/database"
                                 IsEnabled="{local:FormattedBinding ElementName=tbbRemoteDisconnect, Path=IsEnabled, ValueIfTrue=False, ValueIfFalse=True}"
@@ -111,8 +111,8 @@
                 </Button>
             </ToolBar>
             <ToolBar>
-                <RadioButton Name="tbbUie" Content="UI Elements" IsChecked="True" Style="{DynamicResource ToolBar.RadioButtonStyleKey}"/>
-                <RadioButton Name="tbbSec" Content="Users/Groups" IsChecked="False" Style="{DynamicResource ToolBar.RadioButtonStyleKey}"/>
+                <RadioButton Name="tbbUie" Content="Secure Objects" IsChecked="True" Style="{DynamicResource ToolBar.RadioButtonStyleKey}"/>
+                <RadioButton Name="tbbSec" Content="Security Principals" IsChecked="False" Style="{DynamicResource ToolBar.RadioButtonStyleKey}"/>
             </ToolBar>
         </ToolBarTray>
 

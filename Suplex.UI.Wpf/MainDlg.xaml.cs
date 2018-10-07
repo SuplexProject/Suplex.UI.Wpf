@@ -160,8 +160,10 @@ namespace Suplex.UI.Wpf
             bool ok = GlobalVerifySaveChanges();
             if( ok )
             {
-                OpenFileDialog dlg = new OpenFileDialog();
-                dlg.Filter = "Suplex Files|*.splx;*.xml|All Files|*.*";
+                OpenFileDialog dlg = new OpenFileDialog
+                {
+                    Filter = "Suplex Files|*.splx;*.xml|All Files|*.*"
+                };
                 if( dlg.ShowDialog( this ) == true )
                     OpenFile( dlg.FileName );
             }
@@ -183,6 +185,13 @@ namespace Suplex.UI.Wpf
         private void tbbSaveSplxFileStore_Click(object sender, RoutedEventArgs e)
         {
             SaveFile();
+            SetMainDlgDataContext();
+        }
+
+        private void tbbSaveAsSplxFileStore_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileAs();
+            SetMainDlgDataContext();
         }
 
         private void tbbSaveSplxFileStoreSecure_Click(object sender, RoutedEventArgs e)
@@ -223,11 +232,6 @@ namespace Suplex.UI.Wpf
             //}
         }
 
-        private void tbbSaveAsSplxFileStore_Click(object sender, RoutedEventArgs e)
-        {
-            SaveFileAs();
-        }
-
         private void FileNew()
         {
             _fileStore = new FileStore();
@@ -262,7 +266,7 @@ namespace Suplex.UI.Wpf
 
         private bool SaveFile()
         {
-            bool ok = _fileStore.CurrentPath == null;
+            bool ok = _fileStore.CurrentPath != null;
             if( !ok )
             {
                 ok = SaveFileAs();
@@ -280,8 +284,10 @@ namespace Suplex.UI.Wpf
         private bool SaveFileAs()
         {
             bool ok = false;
-            SaveFileDialog dlg = new SaveFileDialog();
-            dlg.Filter = "Suplex File|*.splx|Suplex XML File|*.xml";
+            SaveFileDialog dlg = new SaveFileDialog
+            {
+                Filter = "Suplex File|*.splx|Suplex XML File|*.xml"
+            };
             if( dlg.ShowDialog( this ) == true )
             {
                 _fileStore.ToYamlFile( dlg.FileName );
@@ -345,7 +351,10 @@ namespace Suplex.UI.Wpf
 
         private void SetMainDlgDataContext()
         {
-            DataContext = _splxDal;
+            if( DataContext == null )
+                DataContext = new DialogViewModel();
+
+            ((DialogViewModel)DataContext).ConnectionPath = _fileStore.CurrentPath;
 
             dlgSecureObjects.SplxStore = _splxStore;
             dlgSecureObjects.SplxDal = _splxDal;

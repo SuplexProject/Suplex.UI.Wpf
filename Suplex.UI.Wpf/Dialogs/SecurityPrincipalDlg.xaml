@@ -53,7 +53,7 @@
                     <Button.Template>
                         <ControlTemplate TargetType="{x:Type Button}">
                             <Image Height="14" Width="14" HorizontalAlignment="Center"
-                               Source="/Suplex.UI.Wpf;component/Resources/close_16x16_grey.png" />
+                               Source="/Suplex.UI.Wpf;component/Resources/close_grey.png" />
                         </ControlTemplate>
                     </Button.Template>
                 </Button>

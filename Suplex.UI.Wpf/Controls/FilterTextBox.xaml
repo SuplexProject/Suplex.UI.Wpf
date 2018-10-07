@@ -9,7 +9,7 @@
                  VerticalContentAlignment="Center"
                  KeyDown="txtFilter_KeyDown"
                  TextChanged="txtFilter_TextChanged" />
-        <Image Name="cmdClear" Source="/Suplex.UI.Wpf;component/Resources/close_16x16_grey.png"
+        <Image Name="cmdClear" Source="/Suplex.UI.Wpf;component/Resources/close_grey.png"
                Cursor="Hand" ToolTip="Clear filter"
                HorizontalAlignment="Right" Margin="0,0,3,0" Width="14" Height="14"
                MouseLeftButtonDown="cmdClear_MouseLeftButtonDown"/>

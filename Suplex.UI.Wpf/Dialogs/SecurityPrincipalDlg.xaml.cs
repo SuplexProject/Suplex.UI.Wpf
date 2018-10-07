@@ -87,6 +87,13 @@ namespace Suplex.UI.Wpf
                 {
                     _store = value;
 
+                    CurrentSecurityPrincipal = null;
+                    CurrentSecurityPrincipalMemberOf.Clear();
+                    CurrentSecurityPrincipalMembers.Clear();
+
+                    if( _store == null )
+                        return;
+
                     //note: must add SortDescriptions *before* View.Filter or filter doesn't work
                     _usersCvs_Filtered = new CollectionViewSource { Source = _store.Users };
                     _usersCvs_Filtered.SortDescriptions.Add( new SortDescription( "Name", ListSortDirection.Ascending ) );
@@ -158,6 +165,7 @@ namespace Suplex.UI.Wpf
             {
                 pnlDetail.DataContext = value;
                 pnlDetail.IsEnabled = value != null;
+                cmdDeletePrincipal.IsEnabled= value != null;
             }
         }
 

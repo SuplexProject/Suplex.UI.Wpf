@@ -180,7 +180,7 @@
     <!-- **************************************************************************************************************************************************** -->
 
     <!-- Used for Checkmark, Radio button, TreeViewItem, Expander ToggleButton glyphs -->
-    <!--<SolidColorBrush x:Key="GlyphBrush" Color="#444"/>-->
+    <SolidColorBrush x:Key="GlyphBrush" Color="#444"/>
 
     <!-- SelectedBackgroundBrush is used for the Selected item in ListBoxItem, ComboBoxItem-->
     <SolidColorBrush x:Key="SelectedBackgroundBrush" Color="#DDD"/>

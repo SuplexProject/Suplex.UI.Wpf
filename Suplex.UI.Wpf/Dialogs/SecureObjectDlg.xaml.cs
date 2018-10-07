@@ -67,6 +67,7 @@ namespace Suplex.UI.Wpf
                 {
                     _store = value;
 
+                    CurrentSecureObject = null;
                     DataContext = value?.SecureObjects;
 
                     ((GridViewComboBoxColumn)grdDacl.Columns["Groups"]).ItemsSource = value?.Groups;
@@ -132,6 +133,7 @@ namespace Suplex.UI.Wpf
             {
                 pnlDetail.DataContext = value;
                 pnlDetail.IsEnabled = value != null;
+                cmdDeleteSecureObject.IsEnabled = value != null;
             }
         }
 

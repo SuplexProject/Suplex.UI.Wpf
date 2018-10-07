@@ -15,12 +15,14 @@ namespace Suplex.UI.Wpf
         //4: grey save_secure icon
         public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
+            string[] parts = parameter.ToString().Split( ',' );
+
             if( values[0] == DependencyProperty.UnsetValue || values[1] == DependencyProperty.UnsetValue )
-                return null;
+                return new System.Windows.Media.Imaging.BitmapImage(
+                    new Uri( string.Format( "{0}{1}", parts[0], parts[1] ), UriKind.Relative ) );
 
             string imageName;
 
-            string[] parts = parameter.ToString().Split( ',' );
             bool isEnabled = (bool)values[0];
             bool isSecure = (bool)values[1];
 
