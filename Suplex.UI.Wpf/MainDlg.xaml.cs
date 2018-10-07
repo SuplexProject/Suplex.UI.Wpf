@@ -23,9 +23,9 @@ namespace Suplex.UI.Wpf
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainDlg : Window
     {
-        public MainWindow()
+        public MainDlg()
         {
             StyleManager.ApplicationTheme = new Office2016Theme();
             InitializeComponent();
@@ -138,6 +138,61 @@ namespace Suplex.UI.Wpf
             dlgSecurityPrincipals.SplxDal = f.Dal;
 
             //dlgSecureObjects.DataContext = f.SecureObjects;
+        }
+
+        private void mnuRecentFile_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void tbbSaveSplxFileStore_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void tbbSaveSplxFileStoreSecure_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void tbbNewSplxFileStore_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void tbbOpenSplxFileStore_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void tbbRemoteConnect_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void tbbRemoteDisconnect_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void tbbRemoteRefresh_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void tbbRemoteImport_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void tbbRemoteExport_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void mnuRecentConnection_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
