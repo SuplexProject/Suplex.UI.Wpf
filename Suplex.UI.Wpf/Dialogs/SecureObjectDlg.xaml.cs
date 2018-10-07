@@ -35,6 +35,27 @@ namespace Suplex.UI.Wpf
             cmdNewSaclAce.DropDownContent = rightTypes;
         }
 
+
+        #region delete setup
+        public override void OnApplyTemplate()
+        {
+            CommandBinding removeItem = new CommandBinding();
+            removeItem.Command = ApplicationCommands.Delete;
+            removeItem.Executed += DeleteItem_Command;
+            CommandBindings.Add( removeItem );
+
+            base.OnApplyTemplate();
+        }
+
+        private void DeleteItem_Command(object sender, ExecutedRoutedEventArgs e)
+        {
+            if( e.Parameter is SecureObject secureObject )
+                DeleteSecureObject( secureObject );
+        }
+        #endregion
+
+
+        #region public props
         public IDataAccessLayer SplxDal { get; set; } = null;
 
         public SuplexStore Store
@@ -53,7 +74,10 @@ namespace Suplex.UI.Wpf
                 }
             }
         }
+        #endregion
 
+
+        #region new/delete
         private void cmdNewSecureObject_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if( sender is ListBox listBox && listBox.SelectedItem is ListBoxItem item )
@@ -73,12 +97,17 @@ namespace Suplex.UI.Wpf
                 listBox.SelectedItem = null;
                 cmdNewSecureObject.IsOpen = false;
                 tvwSecureObjects.Rebind();
+
+                tvwSecureObjects.SelectedItem = secureObject;
+
+                txtUniqueName.Focus();
+                txtUniqueName.SelectAll();
             }
         }
 
-        private void cmdDeleteSecureObject_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void DeleteSecureObject(SecureObject secureObject)
         {
-            if( sender is ListBox listBox && listBox.SelectedItem is SecureObject secureObject )
+            if( secureObject != null )
             {
                 if( secureObject.Parent == null )
                     Store.SecureObjects.Remove( secureObject );
@@ -87,12 +116,14 @@ namespace Suplex.UI.Wpf
 
                 SplxDal.DeleteSecureObject( secureObject.UId );
 
-                listBox.SelectedItem = null;
                 cmdDeleteSecureObject.IsOpen = false;
                 tvwSecureObjects.Rebind();
             }
         }
+        #endregion
 
+
+        #region DataContext
         private SecureObject CachedSecureObject { get; set; }
         public SecureObject CurrentSecureObject
         {
@@ -113,9 +144,13 @@ namespace Suplex.UI.Wpf
         {
             CurrentSecureObject = CachedSecureObject?.Clone( shallow: false );
             CurrentSecureObject?.EnableIsDirty();
-            cmdDeleteSecureObject.DropDownContent = new List<SecureObject> { CurrentSecureObject };
-        }
 
+            cmdDeleteSecureObject.DropDownContent = CurrentSecureObject;
+        }
+        #endregion
+
+
+        #region aces
         private void cmdNewDaclAce_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if( sender is ListBox listBox && listBox.SelectedItem != null )
@@ -154,6 +189,16 @@ namespace Suplex.UI.Wpf
             }
         }
 
+        // CurrentSecureObject.EnableIsDirty() doesn't cover updating an object in a collection,
+        // this is a work-around to set IsDirty
+        private void Acl_RowEditEnded(object sender, GridViewRowEditEndedEventArgs e)
+        {
+            CurrentSecureObject.IsDirty = true;
+        }
+        #endregion
+
+
+        #region save/discard
         private void cmdSave_Click(object sender, RoutedEventArgs e)
         {
             SplxDal.UpsertSecureObject( CurrentSecureObject );
@@ -164,12 +209,6 @@ namespace Suplex.UI.Wpf
         {
             CloneCachedToCurrent();
         }
-
-        // CurrentSecureObject.EnableIsDirty() doesn't cover updating an object in a collection,
-        // this is a work-around to set IsDirty
-        private void Acl_RowEditEnded(object sender, GridViewRowEditEndedEventArgs e)
-        {
-            CurrentSecureObject.IsDirty = true;
-        }
+        #endregion
     }
 }

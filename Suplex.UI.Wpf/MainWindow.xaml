@@ -10,10 +10,10 @@
         </Grid.ColumnDefinitions>
 
         <TabControl>
-            <TabItem Header="Secure Objects">
+            <TabItem Header="Secure Objects" IsSelected="True">
                 <local:SecureObjectDlg x:Name="dlgSecureObjects" />
             </TabItem>
-            <TabItem Header="Security Principals" IsSelected="True">
+            <TabItem Header="Security Principals">
                 <local:SecurityPrincipalDlg x:Name="dlgSecurityPrincipals" />
             </TabItem>
         </TabControl>

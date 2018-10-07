@@ -164,5 +164,9 @@
   <ItemGroup>
     <Resource Include="Resources\close_16x16_grey.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\secobj_insecure.png" />
+    <Resource Include="Resources\secobj_secure.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

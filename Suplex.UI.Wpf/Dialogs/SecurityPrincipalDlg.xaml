@@ -154,7 +154,8 @@
                                                 </ControlTemplate.Triggers>
                                             </ControlTemplate>
                                         </Button.Template>
-                                    </Button>                                </DataTemplate>
+                                    </Button>
+                                </DataTemplate>
                             </telerik:RadDropDownButton.DropDownContentTemplate>
                         </telerik:RadDropDownButton>
                     </StackPanel>
