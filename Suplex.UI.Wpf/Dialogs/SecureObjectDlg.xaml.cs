@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using Suplex.Security.AclModel;
-using Suplex.Security.AclModel.DataAccess;
+using Suplex.Security.DataAccess;
 
 using Telerik.Windows.Controls;
 
@@ -56,7 +56,7 @@ namespace Suplex.UI.Wpf
 
 
         #region public props
-        public IDataAccessLayer SplxDal { get; set; } = null;
+        public ISuplexDal SplxDal { get; set; } = null;
 
         public SuplexStore SplxStore
         {

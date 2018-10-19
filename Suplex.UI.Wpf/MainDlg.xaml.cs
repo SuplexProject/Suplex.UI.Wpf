@@ -15,7 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Win32;
 using Suplex.Security.AclModel;
-using Suplex.Security.AclModel.DataAccess;
+using Suplex.Security.DataAccess;
 using Suplex.Security.Principal;
 using Telerik.Windows.Controls;
 
@@ -26,9 +26,9 @@ namespace Suplex.UI.Wpf
     /// </summary>
     public partial class MainDlg : Window
     {
-        IDataAccessLayer _splxDal = null;
+        ISuplexDal _splxDal = null;
         SuplexStore _splxStore = null;
-        FileStore _fileStore = null;
+        FileSystemDal _fileSystemDal = null;
 
         public MainDlg()
         {
@@ -236,9 +236,9 @@ namespace Suplex.UI.Wpf
 
         private void FileNew()
         {
-            _fileStore = new FileStore();
-            _splxStore = _fileStore;
-            _splxDal = _fileStore.Dal;
+            _fileSystemDal = new FileSystemDal();
+            _splxStore = _fileSystemDal.Store as SuplexStore;
+            _splxDal = _fileSystemDal.Dal;
 
             //_splxStore.Clear();
             //_splxDal.SetFile( null );
@@ -254,10 +254,10 @@ namespace Suplex.UI.Wpf
         {
             FileNew();
 
-            _fileStore = FileStore.FromYamlFile( fileName );
-            _splxStore = _fileStore;
-            _splxDal = _fileStore.Dal;
-            _fileStore.SecureObjects.EnsureParentUIdRecursive();
+            _fileSystemDal = FileSystemDal.LoadFromYamlFile( fileName );
+            _splxStore = _fileSystemDal.Store as SuplexStore;
+            _splxDal = _fileSystemDal.Dal;
+            _fileSystemDal.Store.SecureObjects.EnsureParentUIdRecursive();
 
             SetMainDlgDataContext();
 
@@ -268,7 +268,7 @@ namespace Suplex.UI.Wpf
 
         private bool SaveFile()
         {
-            bool ok = _fileStore.CurrentPath != null;
+            bool ok = _fileSystemDal.CurrentPath != null;
             if( !ok )
             {
                 ok = SaveFileAs();
@@ -276,7 +276,7 @@ namespace Suplex.UI.Wpf
             else
             {
                 //_splxDal.SaveFile( _splxStore );
-                _fileStore.ToYamlFile();
+                _fileSystemDal.ToYamlFile();
                 ok = true;
             }
 
@@ -292,7 +292,7 @@ namespace Suplex.UI.Wpf
             };
             if( dlg.ShowDialog( this ) == true )
             {
-                _fileStore.ToYamlFile( dlg.FileName );
+                _fileSystemDal.ToYamlFile( dlg.FileName );
 
                 ok = true;   //SaveFile();
             }
@@ -356,7 +356,7 @@ namespace Suplex.UI.Wpf
             if( DataContext == null )
                 DataContext = new DialogViewModel();
 
-            ((DialogViewModel)DataContext).ConnectionPath = _fileStore.CurrentPath;
+            ((DialogViewModel)DataContext).ConnectionPath = _fileSystemDal.CurrentPath;
 
             dlgSecureObjects.SplxStore = _splxStore;
             dlgSecureObjects.SplxDal = _splxDal;

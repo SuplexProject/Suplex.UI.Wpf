@@ -8,7 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 
-using Suplex.Security.AclModel.DataAccess;
+using Suplex.Security.DataAccess;
 using Suplex.Security.Principal;
 
 using Telerik.Windows.Controls;
@@ -59,7 +59,7 @@ namespace Suplex.UI.Wpf
 
 
         #region public props
-        public IDataAccessLayer SplxDal { get; set; } = null;
+        public ISuplexDal SplxDal { get; set; } = null;
 
         CollectionViewSource _usersCvs_Filtered = null;
         CollectionViewSource _groupsCvs_Filtered = null;

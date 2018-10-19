@@ -39,10 +39,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Suplex.Security.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Suplex.Security.Core.1.0.18280\lib\net45\Suplex.Security.Core.dll</HintPath>
+      <HintPath>..\packages\Suplex.Security.Core.1.0.18291\lib\net45\Suplex.Security.Core.dll</HintPath>
     </Reference>
     <Reference Include="Suplex.Security.FileSystemDal, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Suplex.Security.FileSystemDal.1.0.18280\lib\net45\Suplex.Security.FileSystemDal.dll</HintPath>
+      <HintPath>..\packages\Suplex.Security.FileSystemDal.1.0.18292\lib\net45\Suplex.Security.FileSystemDal.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -74,8 +74,8 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="YamlDotNet, Version=4.3.1.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
-      <HintPath>..\packages\YamlDotNet.Signed.4.3.1\lib\net45\YamlDotNet.dll</HintPath>
+    <Reference Include="YamlDotNet, Version=5.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
+      <HintPath>..\packages\YamlDotNet.Signed.5.2.1\lib\net45\YamlDotNet.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
