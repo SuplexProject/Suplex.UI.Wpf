@@ -44,6 +44,9 @@
     <Reference Include="Suplex.Security.FileSystemDal, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Suplex.Security.FileSystemDal.1.0.18292\lib\net45\Suplex.Security.FileSystemDal.dll</HintPath>
     </Reference>
+    <Reference Include="Suplex.Security.WebApi.HttpClient">
+      <HintPath>..\..\Suplex.Security.WebApi\Suplex.Security.WebApi.HttpClient\bin\Debug\Suplex.Security.WebApi.HttpClient.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -108,6 +111,7 @@
     <Compile Include="Code\FormattedBinding.cs" />
     <Compile Include="Code\LocalGroupVisibilityConverter.cs" />
     <Compile Include="Code\SaveImageConverter.cs" />
+    <Compile Include="Code\SuplexSecurityDalClient.cs" />
     <Compile Include="Controls\AceRightsListBox.cs" />
     <Compile Include="Controls\FilterTextBox.xaml.cs">
       <DependentUpon>FilterTextBox.xaml</DependentUpon>
