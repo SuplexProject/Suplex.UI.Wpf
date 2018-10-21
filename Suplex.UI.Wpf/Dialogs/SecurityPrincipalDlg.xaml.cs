@@ -185,7 +185,7 @@ namespace Suplex.UI.Wpf
             {
                 pnlDetail.DataContext = value;
                 pnlDetail.IsEnabled = value != null;
-                cmdDeletePrincipal.IsEnabled= value != null;
+                cmdDeletePrincipal.IsEnabled = value != null;
             }
         }
 
@@ -394,6 +394,8 @@ namespace Suplex.UI.Wpf
                 new ObservableCollection<GroupMembershipItemWrapper>( CurrentSecurityPrincipalMemberOf.OrderBy( gmi => gmi.GroupItem.Name ) );
             CurrentSecurityPrincipalMembers =
                 new ObservableCollection<GroupMembershipItemWrapper>( CurrentSecurityPrincipalMembers.OrderBy( gmi => gmi.MemberItem.Name ) );
+
+            CachedSecurityPrincipal.Sync( CurrentSecurityPrincipal, shallow: false );
 
             RefreshViews();
 
