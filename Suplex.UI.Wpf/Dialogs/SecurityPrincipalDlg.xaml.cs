@@ -59,7 +59,27 @@ namespace Suplex.UI.Wpf
 
 
         #region public props
-        public ISuplexDal SplxDal { get; set; } = null;
+        SuplexSecurityDalClient _splxDal = null;
+        public SuplexSecurityDalClient SplxDal
+        {
+            get => _splxDal;
+            set
+            {
+                if( _splxDal != value )
+                {
+                    _splxDal = value;
+                    _splxDal.PropertyChanged += SplxDal_PropertyChanged;
+                }
+            }
+        }
+
+        private void SplxDal_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if( e.PropertyName == "Store" )
+            {
+                SplxStore = _splxDal.Store;
+            }
+        }
 
         CollectionViewSource _usersCvs_Filtered = null;
         CollectionViewSource _groupsCvs_Filtered = null;

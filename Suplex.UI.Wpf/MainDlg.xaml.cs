@@ -21,135 +21,21 @@ using Telerik.Windows.Controls;
 
 namespace Suplex.UI.Wpf
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainDlg : Window
     {
-        //ISuplexDal _splxDal = null;
-        //SuplexStore _splxStore = null;
-        //FileSystemDal _fileSystemDal = null;
-
         SuplexSecurityDalClient _dal = null;
 
         public MainDlg()
         {
-            StyleManager.ApplicationTheme = new Expression_DarkTheme(); //Office2016Theme
+            StyleManager.ApplicationTheme = new Office2016Theme(); //Expression_DarkTheme
             InitializeComponent();
 
-            _dal = new SuplexSecurityDalClient( null, false );
-            SetMainDlgDataContext();
+            _dal = new SuplexSecurityDalClient();
+            DataContext = _dal;
+            dlgSecureObjects.SplxDal = _dal;
+            dlgSecurityPrincipals.SplxDal = _dal;
 
             FileNew();
-
-            #region foo
-            //List<User> users = new List<User>
-            //{
-            //    new User{ Name = "x", IsBuiltIn = true, IsEnabled = true, IsLocal = true },
-            //    new User{ Name = "y", IsBuiltIn = false, IsEnabled = true, IsLocal = false },
-            //    new User{ Name = "z", IsBuiltIn = true, IsEnabled = false, IsLocal = true }
-            //};
-
-            //List<Group> groups = new List<Group>
-            //{
-            //    new Group{ Name = "gx", IsEnabled = true, IsLocal = true },
-            //    new Group{ Name = "gy", IsEnabled = true, IsLocal = false },
-            //    new Group{ Name = "gz", IsEnabled = true, IsLocal = false }
-            //};
-            //bool isLocal = false;
-            //for( int i = 0; i < 50; i++ )
-            //{
-            //    isLocal = !isLocal;
-            //    groups.Add( new Group { Name = $"Group_{i}", IsLocal = isLocal } );
-            //}
-
-            //GroupMembershipItem mx = new GroupMembershipItem
-            //{
-            //    GroupUId = groups[0].UId,
-            //    MemberUId = users[0].UId,
-            //    IsMemberUser = true
-            //};
-            //GroupMembershipItem my = new GroupMembershipItem
-            //{
-            //    GroupUId = groups[0].UId,
-            //    MemberUId = users[1].UId,
-            //    IsMemberUser = true
-            //};
-            //GroupMembershipItem mz = new GroupMembershipItem
-            //{
-            //    GroupUId = groups[0].UId,
-            //    MemberUId = groups[1].UId,
-            //    IsMemberUser = false
-            //};
-            //List<GroupMembershipItem> gm = new List<GroupMembershipItem>
-            //{
-            //    mx, my, mz
-            //};
-
-
-            //SecureObject child = new SecureObject() { UniqueName = "child" };
-            //DiscretionaryAcl childdacl = new DiscretionaryAcl
-            //{
-            //    new AccessControlEntry<FileSystemRight> { TrusteeUId = groups[0].UId, Allowed = true, Right = FileSystemRight.FullControl },
-            //    new AccessControlEntry<FileSystemRight> { TrusteeUId = groups[1].UId, Allowed = false, Right = FileSystemRight.Execute | FileSystemRight.List, Inheritable = false },
-            //    new AccessControlEntry<UIRight> { TrusteeUId = groups[2].UId, Right= UIRight.Operate | UIRight.Visible }
-            //};
-            //child.Security.Dacl = childdacl;
-
-
-            //SecureObject top = new SecureObject() { UniqueName = "top" };
-            //DiscretionaryAcl topdacl = new DiscretionaryAcl
-            //{
-            //    new AccessControlEntry<FileSystemRight> { TrusteeUId = groups[0].UId, Allowed = true, Right = FileSystemRight.FullControl },
-            //    new AccessControlEntry<FileSystemRight> { TrusteeUId = groups[1].UId, Allowed = false, Right = FileSystemRight.Execute | FileSystemRight.List, Inheritable = false },
-            //    new AccessControlEntry<UIRight> { TrusteeUId = groups[2].UId, Right= UIRight.Operate | UIRight.Visible }
-            //};
-            //SystemAcl topsacl = new SystemAcl
-            //{
-            //    new AccessControlEntryAudit<UIRight> { TrusteeUId = groups[0].UId, Allowed = true, Right = UIRight.FullControl, Inheritable = false },
-            //    new AccessControlEntryAudit<FileSystemRight> { TrusteeUId = groups[1].UId, Allowed = true, Right = FileSystemRight.Execute | FileSystemRight.ReadPermissions, Inheritable = false },
-            //    new AccessControlEntryAudit<FileSystemRight> { TrusteeUId = groups[2].UId, Allowed = true, Right = FileSystemRight.Execute | FileSystemRight.List, Inheritable = false }
-            //};
-            //top.Security.Dacl = topdacl;
-            //top.Security.DaclAllowInherit = false;
-            //top.Security.Sacl = topsacl;
-
-            ////child.ParentUId = top.UId;
-            //top.Children.Add( child );
-
-            //SecureObject top2 = new SecureObject() { UniqueName = "top2" };
-
-            //SecureObject grandkid = new SecureObject() { UniqueName = "grandkid" };
-            //child.Children.Add( grandkid );
-
-
-            //FileStore store = new FileStore()
-            //{
-            //    SecureObjects = new List<SecureObject>() { top, top2 },
-            //    Users = users,
-            //    Groups = groups,
-            //    GroupMembership = gm
-            //};
-
-            //for( int i = 0; i < 50; i++ )
-            //    store.SecureObjects.Add( new SecureObject { UniqueName = $"UniqueName_{i}" } );
-
-            ////User ux = store.Users.GetByName<User>( "x" );
-
-            //string x = store.ToYaml();
-
-            //_fileStore = FileStore.FromYaml( x );
-
-            //_fileStore.SecureObjects.EnsureParentUIdRecursive();
-
-            //dlgSecureObjects.SplxStore = _fileStore;
-            //dlgSecureObjects.SplxDal = _fileStore.Dal;
-
-            //dlgSecurityPrincipals.SplxStore = _fileStore;
-            //dlgSecurityPrincipals.SplxDal = _fileStore.Dal;
-
-            ////dlgSecureObjects.DataContext = f.SecureObjects;
-            #endregion
         }
 
         #region file
@@ -192,13 +78,11 @@ namespace Suplex.UI.Wpf
         private void tbbSaveSplxFileStore_Click(object sender, RoutedEventArgs e)
         {
             SaveFile();
-            SetMainDlgDataContext();
         }
 
         private void tbbSaveAsSplxFileStore_Click(object sender, RoutedEventArgs e)
         {
             SaveFileAs();
-            SetMainDlgDataContext();
         }
 
         private void tbbSaveSplxFileStoreSecure_Click(object sender, RoutedEventArgs e)
@@ -241,72 +125,65 @@ namespace Suplex.UI.Wpf
 
         private void FileNew()
         {
-            _dal = new SuplexSecurityDalClient( null, false );
-
-            //_fileSystemDal = new FileSystemDal();
-            //_splxStore = _fileSystemDal.Store as SuplexStore;
-            //_splxDal = _fileSystemDal.Dal;
-
-            //_splxStore.Clear();
-            //_splxDal.SetFile( null );
-            //_splxStore.IsDirty = false;
-
-            //dlgSecureObjects.ClearContentPanel();
-            //dlgSecurityPrincipals.ClearContentPanel();
-
-            //SetMainDlgDataContext();
+            _dal.InitFileSystemDal( null, false );
         }
 
         private void OpenFile(string fileName)
         {
-            _dal = new SuplexSecurityDalClient( fileName, autoSave: false );
-
-            //FileNew();
-
-            //_fileSystemDal = FileSystemDal.LoadFromYamlFile( fileName );
-            //_splxStore = _fileSystemDal.Store as SuplexStore;
-            //_splxDal = _fileSystemDal.Dal;
-            //_fileSystemDal.Store.SecureObjects.EnsureParentUIdRecursive();
-
-            SetMainDlgDataContext();
-
-            //_settings.AddRecentFile( fileName );    //re-sorts the recent file list
-
-            ////_splx.GroupMembership.Resolve();
+            _dal.InitFileSystemDal( fileName, autoSave: false );
         }
 
-        private bool SaveFile()
+        void SaveFile()
         {
-            bool ok = _dal.HasConnectionPath;
-            if( !ok )
-            {
-                ok = SaveFileAs();
-            }
+            if( !_dal.HasConnectionPath )
+                SaveFileAs();
             else
-            {
-                //_splxDal.SaveFile( _splxStore );
                 _dal.AsFileSystemDal.ToYamlFile();
-                ok = true;
-            }
-
-            return ok;
         }
 
-        private bool SaveFileAs()
+        void SaveFileAs()
         {
-            bool ok = false;
             SaveFileDialog dlg = new SaveFileDialog
             {
                 Filter = "Suplex File|*.splx|Suplex XML File|*.xml"
             };
-            if( dlg.ShowDialog( this ) == true )
-            {
-                _dal.AsFileSystemDal.ToYamlFile( dlg.FileName );
+            if( dlg.ShowDialog( this ).Value )
+                _dal.AsFileSystemDal.ToYamlFile( dlg.FileName );   //SaveFile();  <-- todo: make sure that sets the file context
+        }
+        #endregion
 
-                ok = true;   //SaveFile();
-            }
+        #region service
+        private void tbbRemoteConnect_Click(object sender, RoutedEventArgs e)
+        {
+            ServiceConnectDlg dlg = new ServiceConnectDlg();
+            dlg.ShowInTaskbar = false;
+            if( dlg.ShowDialog().Value )
+                _dal.InitWebApiConnection( dlg.WebApiUrl );
+        }
 
-            return ok;
+        private void tbbRemoteDisconnect_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void tbbRemoteRefresh_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void tbbRemoteImport_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void tbbRemoteExport_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void mnuRecentConnection_Click(object sender, RoutedEventArgs e)
+        {
+
         }
         #endregion
 
@@ -358,75 +235,6 @@ namespace Suplex.UI.Wpf
                 ok = StoreFileVerifySaveChanges();
 
             return ok;
-        }
-
-        private void SetMainDlgDataContext()
-        {
-            if( DataContext == null )
-                DataContext = new DialogViewModel();
-
-            ((DialogViewModel)DataContext).ConnectionPath = _dal.ConnectionPath;
-
-            dlgSecureObjects.SplxStore = _dal.Store;
-            dlgSecureObjects.SplxDal = _dal;
-
-            dlgSecurityPrincipals.SplxStore = _dal.Store;
-            dlgSecurityPrincipals.SplxDal = _dal;
-        }
-
-        //private void mnuRecentFile_Click(object sender, RoutedEventArgs e)
-        //{
-
-        //}
-
-        //private void tbbSaveSplxFileStore_Click(object sender, RoutedEventArgs e)
-        //{
-
-        //}
-
-        //private void tbbSaveSplxFileStoreSecure_Click(object sender, RoutedEventArgs e)
-        //{
-
-        //}
-
-        //private void tbbNewSplxFileStore_Click(object sender, RoutedEventArgs e)
-        //{
-
-        //}
-
-        //private void tbbOpenSplxFileStore_Click(object sender, RoutedEventArgs e)
-        //{
-
-        //}
-
-        private void tbbRemoteConnect_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void tbbRemoteDisconnect_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void tbbRemoteRefresh_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void tbbRemoteImport_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void tbbRemoteExport_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void mnuRecentConnection_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

@@ -14,21 +14,25 @@ namespace Suplex.UI.Wpf
     {
         ISuplexDal _dal = null;
 
-        public SuplexSecurityDalClient(string filePath, bool autoSave)
+        public SuplexSecurityDalClient()
+        {
+        }
+
+        public void InitFileSystemDal(string filePath, bool autoSave)
         {
             _dal = new FileSystemDal();
             if( !string.IsNullOrWhiteSpace( filePath ) )
                 AsFileSystemDal.Configure( new FileSystemDalConfig { FilePath = filePath, AutomaticallyPersistChanges = autoSave } );
             ConnectionPath = filePath;
-            IsFileConnection = true;
+            IsConnected = false;
 
             RefreshStore();
         }
-        public SuplexSecurityDalClient(string baseUrl, string messageFormatType = "application/json")
+        public void InitWebApiConnection(string baseUrl, string messageFormatType = "application/json")
         {
-            _dal = new SuplexSecurityHttpApiClient( baseUrl, messageFormatType );
+            _dal = new SuplexSecurityHttpApiClient( baseUrl, messageFormatType, configureAwaitContinueOnCapturedContext: false );
             ConnectionPath = baseUrl;
-            IsFileConnection = false;
+            IsConnected = true;
 
             RefreshStore();
         }
@@ -37,21 +41,23 @@ namespace Suplex.UI.Wpf
 
         public void RefreshStore()
         {
-            if( IsFileConnection )
+            if( IsConnected )
+            {
+                Store = new SuplexStore
+                {
+                    Users = _dal.GetUserByName( null, false ),
+                    Groups = _dal.GetGroupByName( null, false )
+                    //,SecureObjects = _dal.GetSecureObjects() as List<SecureObject>
+                };
+            }
+            else
             {
                 if( HasConnectionPath )
                     AsFileSystemDal.FromYamlFile( ConnectionPath );
                 Store = AsFileSystemDal.Store as SuplexStore;
             }
-            else
-                Store = new SuplexStore
-                {
-                    Users = _dal.GetUserByName( null, false ),
-                    Groups = _dal.GetGroupByName( null, false ),
-                    SecureObjects = _dal.GetSecureObjects() as List<SecureObject>
-                };
 
-            Store.SecureObjects.EnsureParentUIdRecursive();
+            Store.SecureObjects?.EnsureParentUIdRecursive();
         }
 
         #region INotifyPropertyChanged
@@ -71,16 +77,16 @@ namespace Suplex.UI.Wpf
             }
         }
 
-        bool _isFileConnection = false;
-        public virtual bool IsFileConnection
+        bool _isConnected = false;
+        public virtual bool IsConnected
         {
-            get => _isFileConnection;
+            get => _isConnected;
             set
             {
-                if( value != _isFileConnection )
+                if( value != _isConnected )
                 {
-                    _isFileConnection = value;
-                    PropertyChanged?.Invoke( this, new PropertyChangedEventArgs( nameof( IsFileConnection ) ) );
+                    _isConnected = value;
+                    PropertyChanged?.Invoke( this, new PropertyChangedEventArgs( nameof( IsConnected ) ) );
                 }
             }
         }

@@ -32,6 +32,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
+
         <ToolBarTray>
             <ToolBar Name="tbrFile" IsEnabled="{local:FormattedBinding Path=IsConnected, ValueIfTrue=False, ValueIfFalse=True}">
                 <Button Name="tbbNewSplxFileStore" Margin="0,0,2,0" ToolTip="New Suplex File Store"
@@ -80,11 +81,11 @@
                     </local:SplitButton.DropDownContextMenu>
                 </local:SplitButton>
             </ToolBar>
-            <ToolBar Visibility="Collapsed">
+            <ToolBar>
                 <local:SplitButton x:Name="tbbRemoteConnect" Style="{DynamicResource ToolBarSplitButtonStyle}"
                                 Click="tbbRemoteConnect_Click" ToolTip="Connect to a remote Suplex service/database"
                                 IsEnabled="{local:FormattedBinding ElementName=tbbRemoteDisconnect, Path=IsEnabled, ValueIfTrue=False, ValueIfFalse=True}"
-                                Image="{local:FormattedBinding ElementName=tbbRemoteConnect, Path=IsEnabled, ValueIfTrue='/Suplex.UI.Wpf;component/Resources/Toolbar/service/service_connect_16x16.png', ValueIfFalse='/Suplex.UI.Wpf;component/Resources/Toolbar/service/service_connect_16x16_grey.png'}">
+                                Image="{local:FormattedBinding ElementName=tbbRemoteConnect, Path=IsEnabled, ValueIfTrue='/Suplex.UI.Wpf;component/Resources/service_connect.png', ValueIfFalse='/Suplex.UI.Wpf;component/Resources/Toolbar/service/service_connect_grey.png'}">
                     <local:SplitButton.DropDownContextMenu>
                         <ContextMenu ItemsSource="{Binding}" ItemTemplate="{StaticResource RecentConnection}" MenuItem.Click="mnuRecentConnection_Click"/>
                     </local:SplitButton.DropDownContextMenu>
@@ -92,22 +93,26 @@
                 <Button Style="{DynamicResource ToolBar.ButtonStyleKey}" Name="tbbRemoteDisconnect"
                     Click="tbbRemoteDisconnect_Click" ToolTip="Disconnect"
                     IsEnabled="{local:FormattedBinding Path=IsConnected}">
-                    <Image Source="{local:FormattedBinding ElementName=tbbRemoteDisconnect, Path=IsEnabled, ValueIfTrue='Resources\\Toolbar\\service\\service_disconnect_16x16.png', ValueIfFalse='Resources\\Toolbar\\service\\service_disconnect_16x16_grey.png'}" Height="16" Width="16"/>
+                    <Image Source="Resources\service_disconnect.png"
+                           Opacity="{local:FormattedBinding ElementName=tbbRemoteDisconnect, Path=IsEnabled, ValueIfTrue='1', ValueIfFalse='.5'}" Height="18" Width="18"/>
                 </Button>
                 <Button Name="tbbRemoteRefresh" ToolTip="Refresh"
                         Click="tbbRemoteRefresh_Click"
                         IsEnabled="{local:FormattedBinding Path=IsConnected}">
-                    <Image Source="{local:FormattedBinding ElementName=tbbRemoteRefresh, Path=IsEnabled, ValueIfTrue='Resources\\Toolbar\\service\\service_refresh_16x16.png', ValueIfFalse='Resources\\Toolbar\\service\\service_refresh_16x16_grey.png'}" Height="16" Width="16"/>
+                    <Image Source="Resources\service_refresh.png"
+                           Opacity="{local:FormattedBinding ElementName=tbbRemoteRefresh, Path=IsEnabled, ValueIfTrue='1', ValueIfFalse='.5'}" Height="18" Width="18"/>
                 </Button>
                 <Button Name="tbbRemoteImport" ToolTip="Merge objects into a Suplex schema"
                         Click="tbbRemoteImport_Click"
                         IsEnabled="{local:FormattedBinding Path=IsConnected}">
-                    <Image Source="{local:FormattedBinding ElementName=tbbRemoteImport, Path=IsEnabled, ValueIfTrue='Resources\\Toolbar\\service\\service_import_16x16.png', ValueIfFalse='Resources\\Toolbar\\service\\service_import_16x16_grey.png'}" Height="16" Width="16"/>
+                    <Image Source="Resources\service_import.png"
+                           Opacity="{local:FormattedBinding ElementName=tbbRemoteImport, Path=IsEnabled, ValueIfTrue='1', ValueIfFalse='.5'}" Height="18" Width="18"/>
                 </Button>
                 <Button Name="tbbRemoteExport" ToolTip="Export objects from a Suplex schema"
                         Click="tbbRemoteExport_Click"
                         IsEnabled="{local:FormattedBinding Path=IsConnected}">
-                    <Image Source="{local:FormattedBinding ElementName=tbbRemoteExport, Path=IsEnabled, ValueIfTrue='Resources\\Toolbar\\service\\service_export_16x16.png', ValueIfFalse='Resources\\Toolbar\\service\\service_export_16x16_grey.png'}" Height="16" Width="16"/>
+                    <Image Source="Resources\service_export.png"
+                           Opacity="{local:FormattedBinding ElementName=tbbRemoteExport, Path=IsEnabled, ValueIfTrue='1', ValueIfFalse='5'}" Height="18" Width="18"/>
                 </Button>
             </ToolBar>
             <ToolBar>

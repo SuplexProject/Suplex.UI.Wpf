@@ -98,6 +98,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Dialogs\ServiceConnectDlg.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainDlg.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -125,6 +129,9 @@
       <DependentUpon>SecurityPrincipalDlg.xaml</DependentUpon>
     </Compile>
     <Compile Include="Code\SecurityPrincipalTypeConverter.cs" />
+    <Compile Include="Dialogs\ServiceConnectDlg.xaml.cs">
+      <DependentUpon>ServiceConnectDlg.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MainDlg.xaml.cs">
       <DependentUpon>MainDlg.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -189,6 +196,14 @@
     <Resource Include="Resources\file_save_as_grey.png" />
     <Resource Include="Resources\file_save_grey.png" />
     <Resource Include="Resources\file_save_secure_grey.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\service.png" />
+    <Resource Include="Resources\service_connect.png" />
+    <Resource Include="Resources\service_disconnect.png" />
+    <Resource Include="Resources\service_export.png" />
+    <Content Include="Resources\service_import.png" />
+    <Resource Include="Resources\service_refresh.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
