@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 
 using Suplex.Security.AclModel;
@@ -46,8 +47,8 @@ namespace Suplex.UI.Wpf
                 Store = new SuplexStore
                 {
                     Users = _dal.GetUserByName( null, false ),
-                    Groups = _dal.GetGroupByName( null, false )
-                    //,SecureObjects = _dal.GetSecureObjects() as List<SecureObject>
+                    Groups = _dal.GetGroupByName( null, false ),
+                    SecureObjects = _dal.GetSecureObjects() as List<SecureObject>
                 };
             }
             else

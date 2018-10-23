@@ -226,6 +226,7 @@ namespace Suplex.UI.Wpf
         {
             SplxDal.UpsertSecureObject( CurrentSecureObject );
             CurrentSecureObject.IsDirty = false;
+            CachedSecureObject.Sync( CurrentSecureObject, shallow: false );
         }
 
         private void cmdDiscard_Click(object sender, RoutedEventArgs e)
