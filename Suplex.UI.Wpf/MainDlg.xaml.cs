@@ -163,12 +163,12 @@ namespace Suplex.UI.Wpf
 
         private void tbbRemoteDisconnect_Click(object sender, RoutedEventArgs e)
         {
-
+            _dal.RehostDalToFileSystemDal();
         }
 
         private void tbbRemoteRefresh_Click(object sender, RoutedEventArgs e)
         {
-
+            _dal.RefreshStore();
         }
 
         private void tbbRemoteImport_Click(object sender, RoutedEventArgs e)

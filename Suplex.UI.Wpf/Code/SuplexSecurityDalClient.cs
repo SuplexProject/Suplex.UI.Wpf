@@ -38,6 +38,14 @@ namespace Suplex.UI.Wpf
             RefreshStore();
         }
 
+        public void RehostDalToFileSystemDal()
+        {
+            _dal = new FileSystemDal();
+            AsFileSystemDal.Store = Store;
+            IsConnected = false;
+            ConnectionPath = null;
+        }
+
         public FileSystemDal AsFileSystemDal { get { return (FileSystemDal)_dal; } }
 
         public void RefreshStore()
