@@ -82,7 +82,7 @@ namespace Suplex.UI.Wpf
 
         private void tbbSaveAsSplxFileStore_Click(object sender, RoutedEventArgs e)
         {
-            SaveFileAs();
+            SaveFileAs( _dal.AsFileSystemDal );
         }
 
         private void tbbSaveSplxFileStoreSecure_Click(object sender, RoutedEventArgs e)
@@ -136,27 +136,31 @@ namespace Suplex.UI.Wpf
         void SaveFile()
         {
             if( !_dal.HasConnectionPath )
-                SaveFileAs();
+                SaveFileAs( _dal.AsFileSystemDal );
             else
                 _dal.AsFileSystemDal.ToYamlFile();
         }
 
-        void SaveFileAs()
+        void SaveFileAs(FileSystemDal fileSystemDal)
         {
             SaveFileDialog dlg = new SaveFileDialog
             {
-                Filter = "Suplex File|*.splx|Suplex XML File|*.xml"
+                Filter = "Suplex File|*.splx|Suplex YAML File|*.yaml"
             };
             if( dlg.ShowDialog( this ).Value )
-                _dal.AsFileSystemDal.ToYamlFile( dlg.FileName );   //SaveFile();  <-- todo: make sure that sets the file context
+                fileSystemDal.ToYamlFile( dlg.FileName );   //make sure that sets the file context
         }
         #endregion
 
         #region service
         private void tbbRemoteConnect_Click(object sender, RoutedEventArgs e)
         {
-            ServiceConnectDlg dlg = new ServiceConnectDlg();
-            dlg.ShowInTaskbar = false;
+            ServiceConnectDlg dlg = new ServiceConnectDlg
+            {
+                ShowInTaskbar = false,
+                Owner = this,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
+            };
             if( dlg.ShowDialog().Value )
                 _dal.InitWebApiConnection( dlg.WebApiUrl );
         }
@@ -178,7 +182,11 @@ namespace Suplex.UI.Wpf
 
         private void tbbRemoteExport_Click(object sender, RoutedEventArgs e)
         {
-
+            FileSystemDal export = new FileSystemDal()
+            {
+                Store = _dal.Store
+            };
+            SaveFileAs( export );
         }
 
         private void mnuRecentConnection_Click(object sender, RoutedEventArgs e)

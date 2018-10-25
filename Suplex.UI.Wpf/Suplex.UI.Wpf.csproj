@@ -169,9 +169,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\file_new.png" />
-    <Resource Include="Resources\file_open.png" />
-    <Resource Include="Resources\file_save.png" />
     <Resource Include="Resources\file_save_secure.png" />
     <Resource Include="suplex.ico" />
   </ItemGroup>
@@ -191,19 +188,18 @@
     <Resource Include="Resources\file_save_as.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\file_new_grey.png" />
-    <Resource Include="Resources\file_open_grey.png" />
-    <Resource Include="Resources\file_save_as_grey.png" />
-    <Resource Include="Resources\file_save_grey.png" />
-    <Resource Include="Resources\file_save_secure_grey.png" />
+    <Resource Include="Resources\file_new-32.png" />
+    <Resource Include="Resources\file_open-32.png" />
+    <Resource Include="Resources\file_save-32.png" />
+    <Resource Include="Resources\service_connect-32.png" />
+    <Resource Include="Resources\service_disconnect-32.png" />
+    <Resource Include="Resources\service_export-32.png" />
+    <Resource Include="Resources\service_import-32.png" />
+    <Resource Include="Resources\service_refresh-32.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\service.png" />
-    <Resource Include="Resources\service_connect.png" />
-    <Resource Include="Resources\service_disconnect.png" />
-    <Resource Include="Resources\service_export.png" />
-    <Content Include="Resources\service_import.png" />
-    <Resource Include="Resources\service_refresh.png" />
+    <Resource Include="Resources\object_tree-32.png" />
+    <Resource Include="Resources\security_principals-32.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

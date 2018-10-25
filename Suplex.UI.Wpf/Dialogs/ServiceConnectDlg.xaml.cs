@@ -12,6 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
+using Suplex.Security.AclModel;
+using Suplex.Security.WebApi;
+
 namespace Suplex.UI.Wpf
 {
     /// <summary>
@@ -29,9 +32,20 @@ namespace Suplex.UI.Wpf
 
         private void cmdOk_Click(object sender, RoutedEventArgs e)
         {
-            WebApiUrl = txtWebApiUrl.Text;
-            DialogResult = true;
-            Close();
+            try
+            {
+                SuplexSecurityHttpApiClient apiClient = new SuplexSecurityHttpApiClient( txtWebApiUrl.Text, configureAwaitContinueOnCapturedContext: false );
+                //this is just a connection test, doesn't matter what the result is
+                SecureObject secureObject = apiClient.GetSecureObjectByUId( Guid.NewGuid(), includeChildren: false ) as SecureObject;
+
+                WebApiUrl = txtWebApiUrl.Text;
+                DialogResult = true;
+                Close();
+            }
+            catch( Exception ex )
+            {
+                this.Title = ex.Message;
+            }
         }
 
         private void cmdCancel_Click(object sender, RoutedEventArgs e)

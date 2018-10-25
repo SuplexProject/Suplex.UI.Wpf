@@ -379,7 +379,7 @@
                         <StackPanel Orientation="Horizontal">
                             <Button x:Name="PART_Button" Style="{DynamicResource ButtonStyle}" IsEnabled="{TemplateBinding IsMainButtonEnabled}">
                                 <StackPanel Orientation="Horizontal">
-                                    <Image Margin="2,2,2,2" VerticalAlignment="Center" Width="16" Height="16" Source="{TemplateBinding Image}"/>
+                                    <Image Margin="2,2,2,2" VerticalAlignment="Center" HorizontalAlignment="Center" Width="32" Height="32" Source="{TemplateBinding Image}"/>
                                     <Label Content="{TemplateBinding Text}" Target="{TemplateBinding Target}" VerticalAlignment="Center" Padding="0" Margin="3,0,3,0"/>
                                 </StackPanel>
                             </Button>

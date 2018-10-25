@@ -25,7 +25,7 @@ namespace Suplex.UI.Wpf
             if( !string.IsNullOrWhiteSpace( filePath ) )
                 AsFileSystemDal.Configure( new FileSystemDalConfig { FilePath = filePath, AutomaticallyPersistChanges = autoSave } );
             ConnectionPath = filePath;
-            IsConnected = false;
+            IsServiceConnection = false;
 
             RefreshStore();
         }
@@ -33,7 +33,7 @@ namespace Suplex.UI.Wpf
         {
             _dal = new SuplexSecurityHttpApiClient( baseUrl, messageFormatType, configureAwaitContinueOnCapturedContext: false );
             ConnectionPath = baseUrl;
-            IsConnected = true;
+            IsServiceConnection = true;
 
             RefreshStore();
         }
@@ -42,7 +42,7 @@ namespace Suplex.UI.Wpf
         {
             _dal = new FileSystemDal();
             AsFileSystemDal.Store = Store;
-            IsConnected = false;
+            IsServiceConnection = false;
             ConnectionPath = null;
         }
 
@@ -50,7 +50,7 @@ namespace Suplex.UI.Wpf
 
         public void RefreshStore()
         {
-            if( IsConnected )
+            if( IsServiceConnection )
             {
                 Store = new SuplexStore
                 {
@@ -87,7 +87,7 @@ namespace Suplex.UI.Wpf
         }
 
         bool _isConnected = false;
-        public virtual bool IsConnected
+        public virtual bool IsServiceConnection
         {
             get => _isConnected;
             set
@@ -95,7 +95,7 @@ namespace Suplex.UI.Wpf
                 if( value != _isConnected )
                 {
                     _isConnected = value;
-                    PropertyChanged?.Invoke( this, new PropertyChangedEventArgs( nameof( IsConnected ) ) );
+                    PropertyChanged?.Invoke( this, new PropertyChangedEventArgs( nameof( IsServiceConnection ) ) );
                 }
             }
         }
