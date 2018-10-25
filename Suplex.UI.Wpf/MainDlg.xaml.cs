@@ -1,22 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+
 using Microsoft.Win32;
-using Suplex.Security.AclModel;
-using Suplex.Security.DataAccess;
-using Suplex.Security.Principal;
 using Telerik.Windows.Controls;
 
 namespace Suplex.UI.Wpf
@@ -41,17 +28,13 @@ namespace Suplex.UI.Wpf
         #region file
         private void tbbNewSplxFileStore_Click(object sender, RoutedEventArgs e)
         {
-            bool ok = GlobalVerifySaveChanges();
-            if( ok )
-            {
+            if( GlobalVerifySaveChanges() )
                 FileNew();
-            }
         }
 
         private void tbbOpenSplxFileStore_Click(object sender, RoutedEventArgs e)
         {
-            bool ok = GlobalVerifySaveChanges();
-            if( ok )
+            if( GlobalVerifySaveChanges() )
             {
                 OpenFileDialog dlg = new OpenFileDialog
                 {
@@ -64,14 +47,11 @@ namespace Suplex.UI.Wpf
 
         private void mnuRecentFile_Click(object sender, RoutedEventArgs e)
         {
-            bool ok = GlobalVerifySaveChanges();
-            if( ok )
+            if( GlobalVerifySaveChanges() )
             {
                 string file = ((MenuItem)e.OriginalSource).Header.ToString();
                 if( File.Exists( file ) )
-                {
                     OpenFile( file );
-                }
             }
         }
 
