@@ -206,5 +206,8 @@
     <Resource Include="Resources\object_tree-32.png" />
     <Resource Include="Resources\security_principals-32.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\gridSplitterGripColumns.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

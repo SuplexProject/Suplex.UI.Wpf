@@ -34,16 +34,17 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <ToolBarTray>
-            <ToolBar Name="tbrFile" IsEnabled="{local:FormattedBinding Path=IsServiceConnection, ValueIfTrue=False, ValueIfFalse=True}">
-                <Button Name="tbbNewSplxFileStore" Margin="0,0,2,0" ToolTip="New Suplex File Store"
-                    Click="tbbNewSplxFileStore_Click">
+        <StackPanel Background="{StaticResource DarkThemeBackgroundBrush}" Orientation="Horizontal">
+            <StackPanel Name="tbrFile" Orientation="Horizontal" Margin="2,3"
+                        IsEnabled="{local:FormattedBinding Path=IsServiceConnection, ValueIfTrue=False, ValueIfFalse=True}">
+                <Button Name="tbbNewSplxFileStore" Margin="0,0,2,0" Style="{StaticResource DarkThemeButton}"
+                        Click="tbbNewSplxFileStore_Click" ToolTip="New Suplex File Store">
                     <Image Source="Resources\file_new-32.png"
-                           Opacity="{local:FormattedBinding ElementName=tbrFile, Path=IsEnabled, ValueIfTrue='1', ValueIfFalse='.35'}" Height="32" Width="32"/>
+                           Opacity="{local:FormattedBinding ElementName=tbrFile, Path=IsEnabled, ValueIfTrue='1', ValueIfFalse='.20'}" Height="32" Width="32"/>
                 </Button>
                 <local:SplitButton x:Name="tbbOpenSplxFileStore" Style="{DynamicResource ToolBarSplitButtonStyle}" Tag="file_open"
                                    Image="/Suplex.UI.Wpf;component/Resources/file_open-32.png"
-                                   Opacity="{local:FormattedBinding ElementName=tbrFile, Path=IsEnabled, ValueIfTrue='1', ValueIfFalse='.35'}"
+                                   Opacity="{local:FormattedBinding ElementName=tbrFile, Path=IsEnabled, ValueIfTrue='1', ValueIfFalse='.20'}"
                                    ToolTip="Open Suplex File Store"
                                    Click="tbbOpenSplxFileStore_Click">
                     <local:SplitButton.DropDownContextMenu>
@@ -51,7 +52,7 @@
                     </local:SplitButton.DropDownContextMenu>
                 </local:SplitButton>
                 <local:SplitButton x:Name="tbbSaveSplxFileStore" Style="{DynamicResource ToolBarSplitButtonStyle}" Tag="file_save"
-                                   Opacity="{local:FormattedBinding ElementName=tbrFile, Path=IsEnabled, ValueIfTrue='1', ValueIfFalse='.35'}"
+                                   Opacity="{local:FormattedBinding ElementName=tbrFile, Path=IsEnabled, ValueIfTrue='1', ValueIfFalse='.20'}"
                                    ToolTip="Save Suplex File Store"
                                    Click="tbbSaveSplxFileStore_Click">
                     <local:SplitButton.Image>
@@ -84,63 +85,81 @@
                         </ContextMenu>
                     </local:SplitButton.DropDownContextMenu>
                 </local:SplitButton>
-            </ToolBar>
-            <ToolBar>
+            </StackPanel>
+
+            <Border Style="{StaticResource Separator}" Margin="10,0">
+                <StackPanel VerticalAlignment="Center">
+                    <Ellipse Style="{StaticResource SeparatorEllipse}" />
+                    <Ellipse Style="{StaticResource SeparatorEllipse}" />
+                    <Ellipse Style="{StaticResource SeparatorEllipse}" />
+                </StackPanel>
+            </Border>
+
+            <StackPanel Orientation="Horizontal" Margin="0,0">
                 <local:SplitButton x:Name="tbbRemoteConnect" Style="{DynamicResource ToolBarSplitButtonStyle}"
                                    Click="tbbRemoteConnect_Click" ToolTip="Connect to a Suplex WebApi"
                                    IsEnabled="{local:FormattedBinding ElementName=tbbRemoteDisconnect, Path=IsEnabled, ValueIfTrue=False, ValueIfFalse=True}"
                                    Image="/Suplex.UI.Wpf;component/Resources/service_connect-32.png"
-                                   Opacity="{local:FormattedBinding ElementName=tbrFile, Path=IsEnabled, ValueIfTrue='1', ValueIfFalse='.35'}">
+                                   Opacity="{local:FormattedBinding ElementName=tbrFile, Path=IsEnabled, ValueIfTrue='1', ValueIfFalse='.20'}">
                     <local:SplitButton.DropDownContextMenu>
                         <ContextMenu ItemsSource="{Binding}" ItemTemplate="{StaticResource RecentConnection}" MenuItem.Click="mnuRecentConnection_Click"/>
                     </local:SplitButton.DropDownContextMenu>
                 </local:SplitButton>
-                <Button Style="{DynamicResource ToolBar.ButtonStyleKey}" Name="tbbRemoteDisconnect"
-                    Click="tbbRemoteDisconnect_Click" ToolTip="Disconnect"
-                    IsEnabled="{local:FormattedBinding Path=IsServiceConnection}">
+                <Button Name="tbbRemoteDisconnect" Style="{StaticResource DarkThemeButton}"
+                        Click="tbbRemoteDisconnect_Click" ToolTip="Disconnect"
+                        IsEnabled="{local:FormattedBinding Path=IsServiceConnection}">
                     <Image Source="Resources\service_disconnect-32.png"
-                           Opacity="{local:FormattedBinding ElementName=tbbRemoteDisconnect, Path=IsEnabled, ValueIfTrue='1', ValueIfFalse='.35'}" Height="32" Width="32"/>
+                           Opacity="{local:FormattedBinding ElementName=tbbRemoteDisconnect, Path=IsEnabled, ValueIfTrue='1', ValueIfFalse='.20'}" Height="32" Width="32"/>
                 </Button>
-                <Button Name="tbbRemoteRefresh" ToolTip="Refresh"
-                        Click="tbbRemoteRefresh_Click"
+                <Button Name="tbbRemoteRefresh" Style="{StaticResource DarkThemeButton}"
+                        Click="tbbRemoteRefresh_Click" ToolTip="Refresh"
                         IsEnabled="{local:FormattedBinding Path=IsServiceConnection}">
                     <Image Source="Resources\service_refresh-32.png"
-                           Opacity="{local:FormattedBinding ElementName=tbbRemoteRefresh, Path=IsEnabled, ValueIfTrue='1', ValueIfFalse='.35'}" Height="32" Width="32"/>
+                           Opacity="{local:FormattedBinding ElementName=tbbRemoteRefresh, Path=IsEnabled, ValueIfTrue='1', ValueIfFalse='.20'}" Height="32" Width="32"/>
                 </Button>
-                <Button Name="tbbRemoteImport" ToolTip="Merge objects into a Suplex store"
-                        Click="tbbRemoteImport_Click"
+                <Button Name="tbbRemoteImport" Style="{StaticResource DarkThemeButton}"
+                        Click="tbbRemoteImport_Click" ToolTip="Merge objects into a Suplex store"
                         IsEnabled="{local:FormattedBinding Path=IsServiceConnection}">
                     <Image Source="Resources\service_import-32.png"
-                           Opacity="{local:FormattedBinding ElementName=tbbRemoteImport, Path=IsEnabled, ValueIfTrue='1', ValueIfFalse='.35'}" Height="32" Width="32"/>
+                           Opacity="{local:FormattedBinding ElementName=tbbRemoteImport, Path=IsEnabled, ValueIfTrue='1', ValueIfFalse='.20'}" Height="32" Width="32"/>
                 </Button>
-                <Button Name="tbbRemoteExport" ToolTip="Export objects from a Suplex store"
-                        Click="tbbRemoteExport_Click"
+                <Button Name="tbbRemoteExport" Style="{StaticResource DarkThemeButton}"
+                        Click="tbbRemoteExport_Click" ToolTip="Export objects from a Suplex store"
                         IsEnabled="{local:FormattedBinding Path=IsServiceConnection}">
                     <Image Source="Resources\service_export-32.png"
-                           Opacity="{local:FormattedBinding ElementName=tbbRemoteExport, Path=IsEnabled, ValueIfTrue='1', ValueIfFalse='.35'}" Height="32" Width="32"/>
+                           Opacity="{local:FormattedBinding ElementName=tbbRemoteExport, Path=IsEnabled, ValueIfTrue='1', ValueIfFalse='.20'}" Height="32" Width="32"/>
                 </Button>
-            </ToolBar>
-            <ToolBar>
-                <RadioButton Name="tbbUie" ToolTip="Secure Objects" IsChecked="True" Style="{DynamicResource ToolBar.RadioButtonStyleKey}">
+            </StackPanel>
+
+            <Border Style="{StaticResource Separator}" Margin="10,0">
+                <StackPanel VerticalAlignment="Center">
+                    <Ellipse Style="{StaticResource SeparatorEllipse}" />
+                    <Ellipse Style="{StaticResource SeparatorEllipse}" />
+                    <Ellipse Style="{StaticResource SeparatorEllipse}" />
+                </StackPanel>
+            </Border>
+
+            <StackPanel Orientation="Horizontal" Margin="2,0">
+                <RadioButton Name="tbbUie" ToolTip="Secure Objects" IsChecked="True" Style="{StaticResource DarkThemeRadioButton}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="Resources\object_tree-32.png" Height="32" Width="32"/>
                         <StackPanel Margin="5,0">
-                            <TextBlock Text="Secure" HorizontalAlignment="Center"/>
-                            <TextBlock Text="Objects" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Secure" HorizontalAlignment="Center" Foreground="White"/>
+                            <TextBlock Text="Objects" HorizontalAlignment="Center" Foreground="White"/>
                         </StackPanel>
                     </StackPanel>
                 </RadioButton>
-                <RadioButton Name="tbbSec" ToolTip="Security Principals" IsChecked="False" Style="{DynamicResource ToolBar.RadioButtonStyleKey}">
+                <RadioButton Name="tbbSec" ToolTip="Security Principals" IsChecked="False" Style="{StaticResource DarkThemeRadioButton}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="Resources\security_principals-32.png" Height="32" Width="32"/>
                         <StackPanel Margin="5,0">
-                            <TextBlock Text="Security" HorizontalAlignment="Center"/>
-                            <TextBlock Text="Principals" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Security" HorizontalAlignment="Center" Foreground="White"/>
+                            <TextBlock Text="Principals" HorizontalAlignment="Center" Foreground="White"/>
                         </StackPanel>
                     </StackPanel>
                 </RadioButton>
-            </ToolBar>
-        </ToolBarTray>
+            </StackPanel>
+        </StackPanel>
 
         <local:SecureObjectDlg x:Name="dlgSecureObjects" Grid.Row="1"
                                Visibility="{local:FormattedBinding Path=IsChecked, ElementName=tbbSec, ValueIfTrue=Collapsed, ValueIfFalse=Visible}"/>
