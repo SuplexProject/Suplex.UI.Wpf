@@ -183,7 +183,7 @@
     <SolidColorBrush x:Key="GlyphBrush" Color="#444"/>
 
     <!-- SelectedBackgroundBrush is used for the Selected item in ListBoxItem, ComboBoxItem-->
-    <SolidColorBrush x:Key="SelectedBackgroundBrush" Color="#DDD"/>
+    <SolidColorBrush x:Key="SelectedBackgroundBrush" Color="#400080FF"/>
 
     <!-- Disabled Brushes are used for the Disabled look of each control -->
     <!--<SolidColorBrush x:Key="DisabledForegroundBrush" Color="#888"/>-->
@@ -390,16 +390,16 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="True">
                             <Setter Property="BorderBrush" Value="#FF316AC5"/>
-                            <Setter Property="Background" Value="#FFE1E6E8"/>
+                            <Setter Property="Background" Value="#400080FF"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="BorderBrush" Value="#FF316AC5"/>
-                            <Setter Property="Background" Value="#FFE1E6E8"/>
+                            <Setter Property="BorderBrush" Value="#80DADADA"/> <!--#FF316AC5-->
+                            <Setter Property="Background" Value="#210080FF"/> <!--FFE1E6E8-->
                             <Setter Property="Visibility" Value="Visible" TargetName="line"/>
                         </Trigger>
                         <Trigger Property="IsKeyboardFocused" Value="True">
                             <Setter Property="BorderBrush" Value="#FF316AC5"/>
-                            <Setter Property="Background" Value="#FFC1D2EE"/>
+                            <Setter Property="Background" Value="#400080FF"/>
                             <Setter Property="Visibility" Value="Visible" TargetName="line"/>
                         </Trigger>
                         <MultiTrigger>
@@ -408,7 +408,7 @@
                                 <Condition Property="IsChecked" Value="True"/>
                             </MultiTrigger.Conditions>
                             <Setter Property="BorderBrush" Value="#FF4B4B6F"/>
-                            <Setter Property="Background" Value="#FF98B5E2"/>
+                            <Setter Property="Background" Value="#400080FF"/> <!--FF98B5E2-->
                             <Setter Property="Visibility" Value="Visible" TargetName="line"/>
                         </MultiTrigger>
                         <MultiTrigger>
@@ -417,12 +417,12 @@
                                 <Condition Property="IsChecked" Value="True"/>
                             </MultiTrigger.Conditions>
                             <Setter Property="BorderBrush" Value="#FF4B4B6F"/>
-                            <Setter Property="Background" Value="#FF98B5E2"/>
+                            <Setter Property="Background" Value="#400080FF"/> <!--FF98B5E2-->
                             <Setter Property="Visibility" Value="Visible" TargetName="line"/>
                         </MultiTrigger>
                         <Trigger Property="IsPressed" Value="True">
                             <Setter Property="BorderBrush" Value="#FF4B4B6F"/>
-                            <Setter Property="Background" Value="#FF98B5E2"/>
+                            <Setter Property="Background" Value="#400080FF"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
@@ -459,16 +459,16 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="True">
                             <Setter Property="BorderBrush" Value="#FF316AC5"/>
-                            <Setter Property="Background" Value="#FFEEEFFF"/>
+                            <Setter Property="Background" Value="#400080FF"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="BorderBrush" Value="#FF316AC5"/>
-                            <Setter Property="Background" Value="#FF99CCFF"/>
+                            <Setter Property="Background" Value="#400080FF"/>
                             <Setter Property="Visibility" Value="Visible" TargetName="line"/>
                         </Trigger>
                         <Trigger Property="IsKeyboardFocused" Value="True">
                             <Setter Property="BorderBrush" Value="#FF316AC5"/>
-                            <Setter Property="Background" Value="#FFC1D2EE"/>
+                            <Setter Property="Background" Value="#400080FF"/>
                             <Setter Property="Visibility" Value="Visible" TargetName="line"/>
                         </Trigger>
                         <MultiTrigger>
@@ -477,7 +477,7 @@
                                 <Condition Property="IsChecked" Value="True"/>
                             </MultiTrigger.Conditions>
                             <Setter Property="BorderBrush" Value="#FF4B4B6F"/>
-                            <Setter Property="Background" Value="#FF98B5E2"/>
+                            <Setter Property="Background" Value="#400080FF"/>
                             <Setter Property="Visibility" Value="Visible" TargetName="line"/>
                         </MultiTrigger>
                         <MultiTrigger>
@@ -486,12 +486,12 @@
                                 <Condition Property="IsChecked" Value="True"/>
                             </MultiTrigger.Conditions>
                             <Setter Property="BorderBrush" Value="#FF4B4B6F"/>
-                            <Setter Property="Background" Value="#FF98B5E2"/>
+                            <Setter Property="Background" Value="#400080FF"/>
                             <Setter Property="Visibility" Value="Visible" TargetName="line"/>
                         </MultiTrigger>
                         <Trigger Property="IsPressed" Value="True">
                             <Setter Property="BorderBrush" Value="#FF4B4B6F"/>
-                            <Setter Property="Background" Value="#FF98B5E2"/>
+                            <Setter Property="Background" Value="#400080FF"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>

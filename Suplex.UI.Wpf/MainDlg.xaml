@@ -121,10 +121,22 @@
             </ToolBar>
             <ToolBar>
                 <RadioButton Name="tbbUie" ToolTip="Secure Objects" IsChecked="True" Style="{DynamicResource ToolBar.RadioButtonStyleKey}">
-                    <Image Source="Resources\object_tree-32.png" Height="32" Width="32"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="Resources\object_tree-32.png" Height="32" Width="32"/>
+                        <StackPanel Margin="5,0">
+                            <TextBlock Text="Secure" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Objects" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </StackPanel>
                 </RadioButton>
                 <RadioButton Name="tbbSec" ToolTip="Security Principals" IsChecked="False" Style="{DynamicResource ToolBar.RadioButtonStyleKey}">
-                    <Image Source="Resources\security_principals-32.png" Height="32" Width="32"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="Resources\security_principals-32.png" Height="32" Width="32"/>
+                        <StackPanel Margin="5,0">
+                            <TextBlock Text="Security" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Principals" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </StackPanel>
                 </RadioButton>
             </ToolBar>
         </ToolBarTray>
