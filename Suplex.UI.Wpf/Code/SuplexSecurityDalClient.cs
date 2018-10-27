@@ -116,6 +116,25 @@ namespace Suplex.UI.Wpf
         public bool HasConnectionPath { get { return !string.IsNullOrWhiteSpace( _connectionPath ); } }
         #endregion
 
+        #region utilities
+        public static bool ValidateServiceConnection(string url, out string exception)
+        {
+            exception = null;
+            try
+            {
+                //this is just a connection test, doesn't matter what the result is
+                SecureObject secureObject = new SuplexSecurityHttpApiClient( url, configureAwaitContinueOnCapturedContext: false )
+                    .GetSecureObjectByUId( Guid.NewGuid(), includeChildren: false ) as SecureObject;
+            }
+            catch( Exception ex )
+            {
+                exception = ExceptionHelpers.UnwindException( ex );
+            }
+
+            return exception == null;
+        }
+        #endregion
+
         #region ISuplexDal
         public User GetUserByUId(Guid userUId)
         {

@@ -2,7 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:Suplex.UI.Wpf"
-        Height="1000" Width="1300">
+        Height="1000" Width="1300"
+        Closing="MainDlg_Closing">
     <Window.Resources>
         <local:SaveImageConverter x:Key="saveImageConverter" />
         <local:DialogTitleConverter x:Key="dialogTitleConverter" />
@@ -86,7 +87,7 @@
             </ToolBar>
             <ToolBar>
                 <local:SplitButton x:Name="tbbRemoteConnect" Style="{DynamicResource ToolBarSplitButtonStyle}"
-                                   Click="tbbRemoteConnect_Click" ToolTip="Connect to a remote Suplex service/database"
+                                   Click="tbbRemoteConnect_Click" ToolTip="Connect to a Suplex WebApi"
                                    IsEnabled="{local:FormattedBinding ElementName=tbbRemoteDisconnect, Path=IsEnabled, ValueIfTrue=False, ValueIfFalse=True}"
                                    Image="/Suplex.UI.Wpf;component/Resources/service_connect-32.png"
                                    Opacity="{local:FormattedBinding ElementName=tbrFile, Path=IsEnabled, ValueIfTrue='1', ValueIfFalse='.35'}">
@@ -106,13 +107,13 @@
                     <Image Source="Resources\service_refresh-32.png"
                            Opacity="{local:FormattedBinding ElementName=tbbRemoteRefresh, Path=IsEnabled, ValueIfTrue='1', ValueIfFalse='.35'}" Height="32" Width="32"/>
                 </Button>
-                <Button Name="tbbRemoteImport" ToolTip="Merge objects into a Suplex schema"
+                <Button Name="tbbRemoteImport" ToolTip="Merge objects into a Suplex store"
                         Click="tbbRemoteImport_Click"
                         IsEnabled="{local:FormattedBinding Path=IsServiceConnection}">
                     <Image Source="Resources\service_import-32.png"
                            Opacity="{local:FormattedBinding ElementName=tbbRemoteImport, Path=IsEnabled, ValueIfTrue='1', ValueIfFalse='.35'}" Height="32" Width="32"/>
                 </Button>
-                <Button Name="tbbRemoteExport" ToolTip="Export objects from a Suplex schema"
+                <Button Name="tbbRemoteExport" ToolTip="Export objects from a Suplex store"
                         Click="tbbRemoteExport_Click"
                         IsEnabled="{local:FormattedBinding Path=IsServiceConnection}">
                     <Image Source="Resources\service_export-32.png"

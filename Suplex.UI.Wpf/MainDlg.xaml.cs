@@ -10,6 +10,7 @@ namespace Suplex.UI.Wpf
 {
     public partial class MainDlg : Window
     {
+        SuplexMru _mru = null;
         SuplexSecurityDalClient _dal = null;
 
         public MainDlg()
@@ -22,8 +23,27 @@ namespace Suplex.UI.Wpf
             dlgSecureObjects.SplxDal = _dal;
             dlgSecurityPrincipals.SplxDal = _dal;
 
+            LoadMru();
+
             FileNew();
         }
+
+        #region MainDlg handlers, Startup/Shutdown
+        private void MainDlg_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if( GlobalVerifySaveChanges() )
+                _mru.Serialize();
+            else
+                e.Cancel = true;
+        }
+
+        private void LoadMru()
+        {
+            _mru = SuplexMru.Deserialize();
+            tbbOpenSplxFileStore.DropDownContextMenu.DataContext = _mru.RecentFiles;
+            tbbRemoteConnect.DropDownContextMenu.DataContext = _mru.RecentServices;
+        }
+        #endregion
 
         #region file
         private void tbbNewSplxFileStore_Click(object sender, RoutedEventArgs e)
@@ -111,6 +131,7 @@ namespace Suplex.UI.Wpf
         private void OpenFile(string fileName)
         {
             _dal.InitFileSystemDal( fileName, autoSave: false );
+            _mru.AddRecentFile( fileName );
         }
 
         void SaveFile()
@@ -143,6 +164,8 @@ namespace Suplex.UI.Wpf
             };
             if( dlg.ShowDialog().Value )
                 _dal.InitWebApiConnection( dlg.WebApiUrl );
+
+            _mru.AddRecentService( dlg.WebApiUrl );
         }
 
         private void tbbRemoteDisconnect_Click(object sender, RoutedEventArgs e)
@@ -171,6 +194,14 @@ namespace Suplex.UI.Wpf
 
         private void mnuRecentConnection_Click(object sender, RoutedEventArgs e)
         {
+            if( GlobalVerifySaveChanges() )
+            {
+                string url = ((MenuItem)e.OriginalSource).Header.ToString();
+                if( SuplexSecurityDalClient.ValidateServiceConnection( url, out string exception ) )
+                    _dal.InitWebApiConnection( url );
+                else
+                    MessageBox.Show( exception, "Error", MessageBoxButton.OK, MessageBoxImage.Exclamation );
+            }
 
         }
         #endregion

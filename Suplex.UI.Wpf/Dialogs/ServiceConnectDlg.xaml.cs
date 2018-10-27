@@ -1,25 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-
-using Suplex.Security.AclModel;
-using Suplex.Security.WebApi;
 
 namespace Suplex.UI.Wpf
 {
-    /// <summary>
-    /// Interaction logic for ServiceConnectDlg.xaml
-    /// </summary>
     public partial class ServiceConnectDlg : Window
     {
         public ServiceConnectDlg()
@@ -32,26 +15,28 @@ namespace Suplex.UI.Wpf
 
         private void cmdOk_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                SuplexSecurityHttpApiClient apiClient = new SuplexSecurityHttpApiClient( txtWebApiUrl.Text, configureAwaitContinueOnCapturedContext: false );
-                //this is just a connection test, doesn't matter what the result is
-                SecureObject secureObject = apiClient.GetSecureObjectByUId( Guid.NewGuid(), includeChildren: false ) as SecureObject;
+            txtStatus.Text = null;
 
+            if( SuplexSecurityDalClient.ValidateServiceConnection( txtWebApiUrl.Text, out string exception ) )
+            {
                 WebApiUrl = txtWebApiUrl.Text;
+                txtStatus.Text = $"Connected to {txtWebApiUrl.Text}!";
                 DialogResult = true;
                 Close();
             }
-            catch( Exception ex )
-            {
-                this.Title = ex.Message;
-            }
+            else
+                txtStatus.Text = exception;
         }
 
         private void cmdCancel_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = false;
             Close();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            txtStatus.Text = null;
         }
     }
 }

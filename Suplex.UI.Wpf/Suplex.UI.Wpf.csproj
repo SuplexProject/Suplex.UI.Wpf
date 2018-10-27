@@ -39,10 +39,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Suplex.Security.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Suplex.Security.Core.1.0.18291\lib\net45\Suplex.Security.Core.dll</HintPath>
+      <HintPath>..\packages\Suplex.Security.Core.1.0.18295\lib\net45\Suplex.Security.Core.dll</HintPath>
     </Reference>
     <Reference Include="Suplex.Security.FileSystemDal, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Suplex.Security.FileSystemDal.1.0.18292\lib\net45\Suplex.Security.FileSystemDal.dll</HintPath>
+      <HintPath>..\packages\Suplex.Security.FileSystemDal.1.0.18296\lib\net45\Suplex.Security.FileSystemDal.dll</HintPath>
+    </Reference>
+    <Reference Include="Suplex.Security.Utilities.Yaml, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Suplex.Security.Utilities.Yaml.1.0.18296\lib\net45\Suplex.Security.Utilities.Yaml.dll</HintPath>
     </Reference>
     <Reference Include="Suplex.Security.WebApi.HttpClient">
       <HintPath>..\..\Suplex.Security.WebApi\Suplex.Security.WebApi.HttpClient\bin\Debug\Suplex.Security.WebApi.HttpClient.dll</HintPath>
@@ -112,9 +115,11 @@
     </Compile>
     <Compile Include="Code\DialogViewModel.cs" />
     <Compile Include="Code\DialogTitleConverter.cs" />
+    <Compile Include="Code\ExceptionHelpers.cs" />
     <Compile Include="Code\FormattedBinding.cs" />
     <Compile Include="Code\LocalGroupVisibilityConverter.cs" />
     <Compile Include="Code\SaveImageConverter.cs" />
+    <Compile Include="Code\SuplexMru.cs" />
     <Compile Include="Code\SuplexSecurityDalClient.cs" />
     <Compile Include="Controls\AceRightsListBox.cs" />
     <Compile Include="Controls\FilterTextBox.xaml.cs">
