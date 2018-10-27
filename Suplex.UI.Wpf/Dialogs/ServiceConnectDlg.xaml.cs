@@ -15,8 +15,6 @@ namespace Suplex.UI.Wpf
 
         private void cmdOk_Click(object sender, RoutedEventArgs e)
         {
-            txtStatus.Text = null;
-
             if( SuplexSecurityDalClient.ValidateServiceConnection( txtWebApiUrl.Text, out string exception ) )
             {
                 WebApiUrl = txtWebApiUrl.Text;
@@ -32,11 +30,6 @@ namespace Suplex.UI.Wpf
         {
             DialogResult = false;
             Close();
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            txtStatus.Text = null;
         }
     }
 }
