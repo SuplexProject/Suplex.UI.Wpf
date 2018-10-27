@@ -226,7 +226,10 @@ namespace Suplex.UI.Wpf
         }
         public ISecureObject UpsertSecureObject(ISecureObject secureObject)
         {
-            return _dal.UpsertSecureObject( secureObject );
+            //if the Parent property is set the object won't serialize for a WebApi call
+            ISecureObject clone = secureObject.Clone();
+            clone.Parent = null;
+            return _dal.UpsertSecureObject( clone );
         }
         public void UpdateSecureObjectParentUId(ISecureObject secureObject, Guid? newParentUId)
         {
