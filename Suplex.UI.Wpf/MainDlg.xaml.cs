@@ -12,6 +12,7 @@ namespace Suplex.UI.Wpf
     {
         SuplexMru _mru = null;
         SuplexSecurityDalClient _dal = null;
+        readonly string _fileFilter = "Suplex Files|*.splx;*.xml|All Files|*.*";
 
         public MainDlg()
         {
@@ -58,9 +59,9 @@ namespace Suplex.UI.Wpf
             {
                 OpenFileDialog dlg = new OpenFileDialog
                 {
-                    Filter = "Suplex Files|*.splx;*.xml|All Files|*.*"
+                    Filter = _fileFilter 
                 };
-                if( dlg.ShowDialog( this ) == true )
+                if( dlg.ShowDialog( this ).Value )
                     OpenFile( dlg.FileName );
             }
         }
@@ -180,7 +181,16 @@ namespace Suplex.UI.Wpf
 
         private void tbbRemoteImport_Click(object sender, RoutedEventArgs e)
         {
-
+            OpenFileDialog dlg = new OpenFileDialog
+            {
+                Filter = _fileFilter
+            };
+            if( dlg.ShowDialog( this ).Value )
+            {
+                FileSystemDal file = FileSystemDal.LoadFromYamlFile( dlg.FileName );
+                _dal.ImportSuplexObjects( file );
+                _dal.RefreshStore();
+            }
         }
 
         private void tbbRemoteExport_Click(object sender, RoutedEventArgs e)

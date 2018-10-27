@@ -133,6 +133,25 @@ namespace Suplex.UI.Wpf
 
             return exception == null;
         }
+
+        public void ImportSuplexObjects(FileSystemDal source)
+        {
+            foreach( User user in source.Store.Users )
+                UpsertUser( user );
+            foreach( Group group in source.Store.Groups )
+                UpsertGroup( group );
+            foreach( GroupMembershipItem gmi in source.Store.GroupMembership )
+                UpsertGroupMembership( gmi );
+            RecurseSecureObjectsForImport( source.Store.SecureObjects );
+        }
+        void RecurseSecureObjectsForImport(IList<SecureObject> list)
+        {
+            foreach( SecureObject secureObject in list )
+            {
+                UpsertSecureObject( secureObject );
+                RecurseSecureObjectsForImport( secureObject.Children );
+            }
+        }
         #endregion
 
         #region ISuplexDal
