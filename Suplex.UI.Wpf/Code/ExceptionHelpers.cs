@@ -58,8 +58,8 @@ namespace Suplex.UI.Wpf
                             exceptions.Push( e.InnerException );
 
                         msg.Append( $"{e.Message}{lineEnd}" );
-                        if( e is WebApiClientException  clientException)
-                            msg.Append( $"Reason: {clientException.Details.Reason}, Message: {clientException.Details.Message}{lineEnd}" );
+                        if( e is WebApiClientException apiEx && apiEx.Details != null )
+                            msg.Append( $"Reason: {apiEx.Details.Reason}, Message: {apiEx.Details.Message}{lineEnd}" );
                     }
                 }
             }

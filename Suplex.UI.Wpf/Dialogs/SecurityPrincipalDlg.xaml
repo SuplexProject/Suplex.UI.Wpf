@@ -37,23 +37,23 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <Image Margin="0,0,4,0" Height="18" Width="18"
-                   Opacity="{local:FormattedBinding Path=DisplayItem.IsEnabled, ValueIfTrue=1, ValueIfFalse=.5}">
+                       Opacity="{local:FormattedBinding Path=DisplayItem.IsEnabled, ValueIfTrue=1, ValueIfFalse=.5}">
                     <Image.Source>
                         <MultiBinding Converter="{StaticResource securityPrincipalTypeConverter}"
-                                  ConverterParameter="/Suplex.UI.Wpf;component/Resources/,user_internal.png,group_internal.png,group_external.png">
+                                      ConverterParameter="/Suplex.UI.Wpf;component/Resources/,user_internal.png,group_internal.png,group_external.png">
                             <Binding Path="IsMemberUser" />
                             <Binding Path="DisplayItem.IsLocal" />
                         </MultiBinding>
                     </Image.Source>
                 </Image>
                 <TextBlock Grid.Column="1" Text="{Binding DisplayItem.Name}"
-                       Opacity="{local:FormattedBinding Path=DisplayItem.IsEnabled, ValueIfTrue=1, ValueIfFalse=.5}" />
+                           Opacity="{local:FormattedBinding Path=DisplayItem.IsEnabled, ValueIfTrue=1, ValueIfFalse=.5}" />
                 <Button Grid.Column="2" Command="Delete" CommandParameter="{Binding}" Cursor="Hand"
-                    VerticalAlignment="Center" HorizontalContentAlignment="Center" ToolTip="Delete">
+                        VerticalAlignment="Center" HorizontalContentAlignment="Center" ToolTip="Delete">
                     <Button.Template>
                         <ControlTemplate TargetType="{x:Type Button}">
                             <Image Height="14" Width="14" HorizontalAlignment="Center"
-                               Source="/Suplex.UI.Wpf;component/Resources/close_grey.png" />
+                                   Source="/Suplex.UI.Wpf;component/Resources/close_grey.png" />
                         </ControlTemplate>
                     </Button.Template>
                 </Button>
