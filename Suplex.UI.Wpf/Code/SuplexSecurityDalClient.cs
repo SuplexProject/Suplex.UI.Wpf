@@ -40,8 +40,10 @@ namespace Suplex.UI.Wpf
 
         public void RehostDalToFileSystemDal()
         {
+            List<GroupMembershipItem> gm = new List<GroupMembershipItem>( _dal.GetGroupMembership() ); ;
             _dal = new FileSystemDal();
             AsFileSystemDal.Store = Store;
+            AsFileSystemDal.Store.GroupMembership = gm;
             IsServiceConnection = false;
             ConnectionPath = null;
         }
@@ -189,6 +191,10 @@ namespace Suplex.UI.Wpf
             _dal.DeleteGroup( groupUId );
         }
 
+        public IEnumerable<GroupMembershipItem> GetGroupMembership()
+        {
+            return _dal.GetGroupMembership();
+        }
         public IEnumerable<GroupMembershipItem> GetGroupMembers(Guid groupUId, bool includeDisabledMembership = false)
         {
             return _dal.GetGroupMembers( groupUId, includeDisabledMembership );

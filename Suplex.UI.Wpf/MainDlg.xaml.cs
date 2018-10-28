@@ -199,6 +199,9 @@ namespace Suplex.UI.Wpf
             {
                 Store = _dal.Store
             };
+            export.Store.GroupMembership =
+                new System.Collections.Generic.List<Security.Principal.GroupMembershipItem>( _dal.GetGroupMembership() );
+
             SaveFileAs( export );
         }
 
