@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
+using System.Windows.Data;
 
 using ssa = Suplex.Security.AclModel;
 using ssp = Suplex.Security.Principal;
@@ -10,35 +9,60 @@ using ssp = Suplex.Security.Principal;
 using legacySplxSecurity = Suplex.Security;
 using legacySplxApi = Suplex.Forms.ObjectModel.Api;
 
-
 namespace Suplex.Legacy.Converter
 {
     class Program
     {
         static void Main(string[] args)
         {
-            Convert( "Security_Example.splx", "Security_Example_new.splx" );
+            if( args.Length == 2 && File.Exists( args[0] ) )
+                Convert( args[0], args[1] );
+            else
+                Console.WriteLine( "Syntax: Suplex.Legacy.Converter sourceLegacyFileName upgradeOutputFilename" );
         }
 
         public static void Convert(string legacyFile, string upgradeFile)
         {
-            legacySplxApi.SuplexApiClient _legacyApi = new legacySplxApi.SuplexApiClient();
-            legacySplxApi.SuplexStore _legacyStore = _legacyApi.LoadFile( legacyFile );
-            //_legacyStore = _legacyApi.GetSuplexStore();
+            legacySplxApi.SuplexApiClient legacyApi = new legacySplxApi.SuplexApiClient();
+            legacySplxApi.SuplexStore legacyStore = legacyApi.LoadFile( legacyFile );
 
-            FileSystemDal _fsd = new FileSystemDal
+            FileSystemDal fsd = new FileSystemDal
             {
                 CurrentPath = upgradeFile
             };
 
-            foreach( legacySplxApi.User legacyUser in _legacyStore.Users )
-                _fsd.Store.Users.Add( legacyUser.ToNewUser() );
-            foreach( legacySplxApi.Group legacyGroup in _legacyStore.Groups )
-                _fsd.Store.Groups.Add( legacyGroup.ToNewGroup() );
-            foreach( legacySplxApi.GroupMembershipItem legacyGmi in _legacyStore.GroupMembership.InnerList.Values )
-                _fsd.Store.GroupMembership.Add( legacyGmi.ToNewGroupMembership() );
+            foreach( legacySplxApi.User legacyUser in legacyStore.Users )
+                fsd.Store.Users.Add( legacyUser.ToNewUser() );
+            foreach( legacySplxApi.Group legacyGroup in legacyStore.Groups )
+                fsd.Store.Groups.Add( legacyGroup.ToNewGroup() );
+            foreach( legacySplxApi.GroupMembershipItem legacyGmi in legacyStore.GroupMembership.InnerList.Values )
+                fsd.Store.GroupMembership.Add( legacyGmi.ToNewGroupMembership() );
 
-            _fsd.ToYamlFile();
+            RecurseSecureObjectsForImport( legacyStore.UIElements, fsd.Store.SecureObjects );
+
+            fsd.ToYamlFile();
+        }
+
+        static void RecurseSecureObjectsForImport(IEnumerable<legacySplxApi.UIElement> uiElements, IList<ssa.SecureObject> secureObjects)
+        {
+            foreach( legacySplxApi.UIElement uie in uiElements )
+            {
+                ssa.SecureObject secureObject = uie.ToSecureObject();
+                secureObjects.Add( secureObject );
+
+                IEnumerable<legacySplxApi.UIElement> children = GetUIElementCollection( uie.ChildObjects );
+                if( children != null )
+                    RecurseSecureObjectsForImport( children, secureObject.Children );
+            }
+        }
+
+        static IEnumerable<legacySplxApi.UIElement> GetUIElementCollection(CompositeCollection childObjects)
+        {
+            foreach( CollectionContainer container in childObjects )
+                if( container.Collection is IEnumerable<legacySplxApi.UIElement> )
+                    return (IEnumerable<legacySplxApi.UIElement>)container.Collection;
+
+            return null;
         }
     }
 
