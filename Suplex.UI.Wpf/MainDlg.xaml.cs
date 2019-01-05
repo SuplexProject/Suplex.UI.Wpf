@@ -1,9 +1,11 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
 using Microsoft.Win32;
+
 using Telerik.Windows.Controls;
 
 namespace Suplex.UI.Wpf
@@ -27,6 +29,30 @@ namespace Suplex.UI.Wpf
             LoadMru();
 
             FileNew();
+
+            //note: when compiling SuplexAdmin as a dll, comment the below lines and remove App.xaml/App.xaml.cs from project
+            //best to backup/restore SuplexApp.csproj before/after compiling as dll, VisualStudio can sometimes fruit with project file in wierd ways
+            //comment from here:
+            if( App.StartUpDocumentIsValid )
+            {
+                OpenFile( App.StartUpDocument );
+            }
+            else if( App.CommandLineArgs.Count > 0 )
+            {
+                if( App.CommandLineArgs.Keys.Contains( "/config" ) )
+                {
+                    //placeholder
+                    //this.OpenConfig( App.CommandLineArgs["/config"] );
+                }
+                else if( App.CommandLineArgs.Keys.Contains( "/dbserver" ) && App.CommandLineArgs.Keys.Contains( "/dbname" ) )
+                {
+                    if( App.CommandLineArgs.Keys.Contains( "/dbuser" ) && App.CommandLineArgs.Keys.Contains( "/dbpswd" ) )
+                    {
+                        //placeholder
+                    }
+                }
+            }
+            //:to here
         }
 
         #region MainDlg handlers, Startup/Shutdown

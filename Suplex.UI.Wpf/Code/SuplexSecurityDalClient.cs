@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 
 using Suplex.Security.AclModel;
@@ -211,13 +210,17 @@ namespace Suplex.UI.Wpf
         {
             return _dal.UpsertGroupMembership( groupMembershipItem );
         }
-        public List<GroupMembershipItem> UpsertGroupMembership(List<GroupMembershipItem> groupMembershipItems)
+        public IEnumerable<GroupMembershipItem> UpsertGroupMembership(IEnumerable<GroupMembershipItem> groupMembershipItems)
         {
             return _dal.UpsertGroupMembership( groupMembershipItems );
         }
         public void DeleteGroupMembership(GroupMembershipItem groupMembershipItem)
         {
             _dal.DeleteGroupMembership( groupMembershipItem );
+        }
+        public void DeleteGroupMembership(IEnumerable<GroupMembershipItem> groupMembershipItems)
+        {
+            _dal.DeleteGroupMembership( groupMembershipItems );
         }
 
         public MembershipList<SecurityPrincipalBase> GetGroupMembersList(Guid groupUId, bool includeDisabledMembership = false)
@@ -256,6 +259,10 @@ namespace Suplex.UI.Wpf
             clone.Parent = null;
             return _dal.UpsertSecureObject( clone );
         }
+        public void UpdateSecureObjectParentUId(Guid secureObjectUId, Guid? newParentUId)
+        {
+            _dal.UpdateSecureObjectParentUId( secureObjectUId, newParentUId );
+        }
         public void UpdateSecureObjectParentUId(ISecureObject secureObject, Guid? newParentUId)
         {
             _dal.UpdateSecureObjectParentUId( secureObject, newParentUId );
@@ -263,6 +270,15 @@ namespace Suplex.UI.Wpf
         public void DeleteSecureObject(Guid secureObjectUId)
         {
             _dal.DeleteSecureObject( secureObjectUId );
+        }
+
+        public ISecureObject EvalSecureObjectSecurity(string uniqueName, string userName, IEnumerable<string> externalGroupMembership = null)
+        {
+            return _dal.EvalSecureObjectSecurity( uniqueName, userName, externalGroupMembership );
+        }
+        public ISecureObject EvalSecureObjectSecurity(Guid secureObjectUId, Guid userUId, IEnumerable<string> externalGroupMembership = null)
+        {
+            return _dal.EvalSecureObjectSecurity( secureObjectUId, userUId, externalGroupMembership );
         }
         #endregion
     }
