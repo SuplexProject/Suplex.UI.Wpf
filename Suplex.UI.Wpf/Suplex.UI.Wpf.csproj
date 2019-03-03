@@ -98,6 +98,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Controls\AceConverter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\FilterTextBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -131,6 +135,10 @@
     <Compile Include="Code\SaveImageConverter.cs" />
     <Compile Include="Code\SuplexMru.cs" />
     <Compile Include="Code\SuplexSecurityDalClient.cs" />
+    <Compile Include="Controls\AceConverter.xaml.cs">
+      <DependentUpon>AceConverter.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\AceConverterRightTypeListBox.cs" />
     <Compile Include="Controls\AceRightsListBox.cs" />
     <Compile Include="Controls\FilterTextBox.xaml.cs">
       <DependentUpon>FilterTextBox.xaml</DependentUpon>

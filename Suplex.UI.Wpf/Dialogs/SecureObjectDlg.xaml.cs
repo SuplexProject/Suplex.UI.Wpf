@@ -212,6 +212,33 @@ namespace Suplex.UI.Wpf
         #endregion
 
 
+        #region DaclConverters
+        private void AceConverterDlg_Created(object sender, EventArgs e)
+        {
+            if( sender is AceConverterDlg aceConverter )
+            {
+                IAccessControlEntryConverter converter =
+                    AccessControlEntryConverterUtilities.MakeGenericAceFromType( aceConverter.SourceRightType, aceConverter.TargetRightType );
+                converter.UId = Guid.NewGuid();
+                converter.SetSourceRightValue( 1.ToString() );  //arbitrary minimum right
+                converter.SetTargetRightValue( 1.ToString() );  //arbitrary minimum right
+
+                CurrentSecureObject.Security.DaclConverters.Add( converter );
+
+                grdDaclConverters.SelectedItem = converter;
+                grdDaclConverters.Focus();
+
+                cmdNewDaclAceConverter.IsOpen = false;
+            }
+        }
+
+        private void AclConverter_RowEditEnded(object sender, GridViewRowEditEndedEventArgs e)
+        {
+            CurrentSecureObject.IsDirty = true;
+        }
+        #endregion
+
+
         #region save/discard
         private void cmdSave_Click(object sender, RoutedEventArgs e)
         {

@@ -18,6 +18,14 @@
         <DataTemplate x:Key="aceRight">
             <TextBlock Text="{Binding RightData.FriendlyTypeNameValue, Mode=OneWay}"/>
         </DataTemplate>
+
+        <DataTemplate x:Key="aceConverterSourceRight">
+            <TextBlock Text="{Binding FriendlySourceRightTypeNameValue, Mode=OneWay}"/>
+        </DataTemplate>
+
+        <DataTemplate x:Key="aceConverterTargetRight">
+            <TextBlock Text="{Binding FriendlyTargetRightTypeNameValue, Mode=OneWay}"/>
+        </DataTemplate>
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -133,6 +141,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
@@ -208,7 +217,7 @@
                                     <telerik:RadDropDownButton.DropDownContentTemplate>
                                         <DataTemplate>
                                             <ListBox ItemsSource="{Binding}"
-                                                 SelectionChanged="cmdNewDaclAce_SelectionChanged">
+                                                     SelectionChanged="cmdNewDaclAce_SelectionChanged">
                                                 <ListBox.ItemTemplate>
                                                     <DataTemplate>
                                                         <TextBlock Text="{Binding Name}" />
@@ -223,8 +232,8 @@
                     </GroupBox.Header>
 
                     <telerik:RadGridView x:Name="grdDacl" AutoGenerateColumns="False" ShowGroupPanel="False"
-                                     ItemsSource="{Binding Security.Dacl}"
-                                     RowEditEnded="Acl_RowEditEnded">
+                                         ItemsSource="{Binding Security.Dacl}"
+                                         RowEditEnded="Acl_RowEditEnded">
                         <telerik:RadGridView.Columns>
                             <telerik:GridViewComboBoxColumn Header="Group" UniqueName="Groups"
                                                             SelectedValueMemberPath="UId" DisplayMemberPath="Name"
@@ -243,9 +252,58 @@
                 </GroupBox>
 
 
-                <!--   Sacl   -->
+                <!--   DaclConverters   -->
 
                 <GroupBox Grid.Row="2">
+                    <GroupBox.Header>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="Permission Converters" Style="{DynamicResource Header}" />
+
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                                <telerik:RadDropDownButton Name="cmdNewDaclAceConverter"
+                                                       Content="New Converter" Width="125" Margin="7,5,5,5">
+                                    <telerik:RadDropDownButton.DropDownContentTemplate>
+                                        <DataTemplate>
+                                            <local:AceConverterDlg Created="AceConverterDlg_Created"/>
+                                        </DataTemplate>
+                                    </telerik:RadDropDownButton.DropDownContentTemplate>
+                                </telerik:RadDropDownButton>
+                            </StackPanel>
+                        </Grid>
+                    </GroupBox.Header>
+
+                    <telerik:RadGridView x:Name="grdDaclConverters" AutoGenerateColumns="False" ShowGroupPanel="False"
+                                     ItemsSource="{Binding Security.DaclConverters}"
+                                     RowEditEnded="AclConverter_RowEditEnded">
+                        <telerik:RadGridView.Columns>
+                            <telerik:GridViewDataColumn Header="Source Right" Width="Auto" DataMemberBinding="{Binding SourceRight}" CellTemplate="{StaticResource aceConverterSourceRight}">
+                                <telerik:GridViewDataColumn.CellEditTemplate>
+                                    <DataTemplate>
+                                        <local:AceConverterRightTypeListBox Margin="3" MinWidth="250" BorderThickness="0" AceConverter="{Binding}" IsSourceRight="True"/>
+                                    </DataTemplate>
+                                </telerik:GridViewDataColumn.CellEditTemplate>
+                            </telerik:GridViewDataColumn>
+                            <telerik:GridViewDataColumn Header="Target Right" Width="Auto" DataMemberBinding="{Binding TargetRight}" CellTemplate="{StaticResource aceConverterTargetRight}">
+                                <telerik:GridViewDataColumn.CellEditTemplate>
+                                    <DataTemplate>
+                                        <local:AceConverterRightTypeListBox Margin="3" MinWidth="250" BorderThickness="0" AceConverter="{Binding}" IsSourceRight="False"/>
+                                    </DataTemplate>
+                                </telerik:GridViewDataColumn.CellEditTemplate>
+                            </telerik:GridViewDataColumn>
+                            <telerik:GridViewDataColumn Header="Inheritable" Width="Auto" DataMemberBinding="{Binding Inheritable}" />
+                        </telerik:RadGridView.Columns>
+                    </telerik:RadGridView>
+                </GroupBox>
+
+
+                <!--   Sacl   -->
+
+                <GroupBox Grid.Row="3" Margin="0,10">
                     <GroupBox.Header>
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -265,7 +323,7 @@
                                     <telerik:RadDropDownButton.DropDownContentTemplate>
                                         <DataTemplate>
                                             <ListBox ItemsSource="{Binding}"
-                                                 SelectionChanged="cmdNewSaclAce_SelectionChanged">
+                                                     SelectionChanged="cmdNewSaclAce_SelectionChanged">
                                                 <ListBox.ItemTemplate>
                                                     <DataTemplate>
                                                         <TextBlock Text="{Binding Name}" />

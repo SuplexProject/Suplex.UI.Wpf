@@ -234,7 +234,7 @@
                     </Grid.ColumnDefinitions>
 
                     <TextBlock Grid.Row="0" Grid.Column="0" Margin="5,0,0,0"
-                               Text="UniqueName" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                               Text="Name" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                     <TextBox Grid.Row="0" Grid.Column="1" Name="txtPrincipalName"
                              Margin="8" Padding="3"
                              Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
