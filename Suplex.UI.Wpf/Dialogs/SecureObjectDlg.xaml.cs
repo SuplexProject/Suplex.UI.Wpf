@@ -218,7 +218,7 @@ namespace Suplex.UI.Wpf
             if( sender is AceConverterDlg aceConverter )
             {
                 IAccessControlEntryConverter converter =
-                    AccessControlEntryConverterUtilities.MakeGenericAceFromType( aceConverter.SourceRightType, aceConverter.TargetRightType );
+                    AccessControlEntryConverterUtilities.MakeGenericAceConvertreFromType( aceConverter.SourceRightType, aceConverter.TargetRightType );
                 converter.UId = Guid.NewGuid();
                 converter.SetSourceRightValue( 1.ToString() );  //arbitrary minimum right
                 converter.SetTargetRightValue( 1.ToString() );  //arbitrary minimum right

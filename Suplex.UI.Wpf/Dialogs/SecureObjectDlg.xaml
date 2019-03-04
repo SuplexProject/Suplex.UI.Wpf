@@ -266,7 +266,7 @@
 
                             <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                                 <telerik:RadDropDownButton Name="cmdNewDaclAceConverter"
-                                                       Content="New Converter" Width="125" Margin="7,5,5,5">
+                                                           Content="New Converter" Width="125" Margin="7,5,5,5">
                                     <telerik:RadDropDownButton.DropDownContentTemplate>
                                         <DataTemplate>
                                             <local:AceConverterDlg Created="AceConverterDlg_Created"/>
@@ -278,8 +278,8 @@
                     </GroupBox.Header>
 
                     <telerik:RadGridView x:Name="grdDaclConverters" AutoGenerateColumns="False" ShowGroupPanel="False"
-                                     ItemsSource="{Binding Security.DaclConverters}"
-                                     RowEditEnded="AclConverter_RowEditEnded">
+                                         ItemsSource="{Binding Security.DaclConverters}"
+                                         RowEditEnded="AclConverter_RowEditEnded">
                         <telerik:RadGridView.Columns>
                             <telerik:GridViewDataColumn Header="Source Right" Width="Auto" DataMemberBinding="{Binding SourceRight}" CellTemplate="{StaticResource aceConverterSourceRight}">
                                 <telerik:GridViewDataColumn.CellEditTemplate>

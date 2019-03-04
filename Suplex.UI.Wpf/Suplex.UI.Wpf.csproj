@@ -42,16 +42,16 @@
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Suplex.Security.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Suplex.Security.Core.1.0.18355\lib\net461\Suplex.Security.Core.dll</HintPath>
+      <HintPath>..\packages\Suplex.Security.Core.1.0.19063\lib\net461\Suplex.Security.Core.dll</HintPath>
     </Reference>
     <Reference Include="Suplex.Security.FileSystemDal, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Suplex.Security.FileSystemDal.1.0.19001\lib\net461\Suplex.Security.FileSystemDal.dll</HintPath>
+      <HintPath>..\packages\Suplex.Security.FileSystemDal.1.0.19063\lib\net461\Suplex.Security.FileSystemDal.dll</HintPath>
     </Reference>
     <Reference Include="Suplex.Security.Utilities.Json, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Suplex.Security.Utilities.Json.1.0.19001\lib\net461\Suplex.Security.Utilities.Json.dll</HintPath>
     </Reference>
     <Reference Include="Suplex.Security.Utilities.Yaml, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Suplex.Security.Utilities.Yaml.1.0.19001\lib\net461\Suplex.Security.Utilities.Yaml.dll</HintPath>
+      <HintPath>..\packages\Suplex.Security.Utilities.Yaml.1.0.19063\lib\net461\Suplex.Security.Utilities.Yaml.dll</HintPath>
     </Reference>
     <Reference Include="Suplex.Security.WebApi.HttpClient, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Suplex.Security.WebApi.HttpClient.1.0.19001\lib\net461\Suplex.Security.WebApi.HttpClient.dll</HintPath>
