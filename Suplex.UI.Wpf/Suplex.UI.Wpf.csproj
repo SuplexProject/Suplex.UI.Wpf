@@ -42,19 +42,19 @@
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Suplex.Security.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Suplex.Security.Core.1.0.19063\lib\net461\Suplex.Security.Core.dll</HintPath>
+      <HintPath>..\packages\Suplex.Security.Core.1.0.19075\lib\net461\Suplex.Security.Core.dll</HintPath>
     </Reference>
     <Reference Include="Suplex.Security.FileSystemDal, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Suplex.Security.FileSystemDal.1.0.19063\lib\net461\Suplex.Security.FileSystemDal.dll</HintPath>
+      <HintPath>..\packages\Suplex.Security.FileSystemDal.1.0.19109\lib\net461\Suplex.Security.FileSystemDal.dll</HintPath>
     </Reference>
     <Reference Include="Suplex.Security.Utilities.Json, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Suplex.Security.Utilities.Json.1.0.19001\lib\net461\Suplex.Security.Utilities.Json.dll</HintPath>
+      <HintPath>..\packages\Suplex.Security.Utilities.Json.1.0.19109\lib\net461\Suplex.Security.Utilities.Json.dll</HintPath>
     </Reference>
     <Reference Include="Suplex.Security.Utilities.Yaml, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Suplex.Security.Utilities.Yaml.1.0.19063\lib\net461\Suplex.Security.Utilities.Yaml.dll</HintPath>
+      <HintPath>..\packages\Suplex.Security.Utilities.Yaml.1.0.19109\lib\net461\Suplex.Security.Utilities.Yaml.dll</HintPath>
     </Reference>
     <Reference Include="Suplex.Security.WebApi.HttpClient, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Suplex.Security.WebApi.HttpClient.1.0.19001\lib\net461\Suplex.Security.WebApi.HttpClient.dll</HintPath>
+      <HintPath>..\packages\Suplex.Security.WebApi.HttpClient.1.0.19064\lib\net461\Suplex.Security.WebApi.HttpClient.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -89,8 +89,8 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="YamlDotNet, Version=5.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
-      <HintPath>..\packages\YamlDotNet.Signed.5.2.1\lib\net45\YamlDotNet.dll</HintPath>
+    <Reference Include="YamlDotNet">
+      <HintPath>..\packages\YamlDotNet.6.0.0\lib\net45\YamlDotNet.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -105,6 +105,10 @@
     <Page Include="Controls\FilterTextBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\FileSaveSignedDlg.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Dialogs\SecureObjectDlg.xaml">
       <SubType>Designer</SubType>
@@ -144,6 +148,9 @@
       <DependentUpon>FilterTextBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\SplitButton.cs" />
+    <Compile Include="Dialogs\FileSaveSignedDlg.xaml.cs">
+      <DependentUpon>FileSaveSignedDlg.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Dialogs\SecureObjectDlg.xaml.cs">
       <DependentUpon>SecureObjectDlg.xaml</DependentUpon>
     </Compile>

@@ -277,7 +277,7 @@
 
                     <!--   Member Of   -->
 
-                    <TextBlock Grid.Row="4" Grid.Column="0" Text="Member Of" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,9" />
+                    <TextBlock Grid.Row="4" Grid.Column="0" Text="Member Of" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="8,9,0,9" />
                     <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Vertical" Margin="8,4,8,8">
                         <Grid Margin="0,0,0,4">
                             <Grid.ColumnDefinitions>
